@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 NXP
+ * Copyright 2019-2020, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,6 +14,9 @@
 
 /*
  * Change log:
+ *
+ *   1.1.0
+ *     - Support the new DBI transfer interface.
  *
  *   1.0.1
  *     - Fix MISRA-C 2012 issues.
@@ -30,6 +33,7 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
+#if MCUX_DBI_LEGACY
 /*! @brief FLEXIO DBI interface (MCU LCD) transfer operation. */
 typedef struct _dbi_flexio_edma_xfer_handle
 {
@@ -41,6 +45,9 @@ typedef struct _dbi_flexio_edma_xfer_handle
 
 /*! @brief FLEXIO DBI interface (MCU LCD) transfer operation. */
 extern const dbi_xfer_ops_t g_dbiFlexioEdmaXferOps;
+#else
+extern const dbi_iface_xfer_ops_t g_dbiIfaceFlesioEdmaXferOps;
+#endif
 
 /*******************************************************************************
  * API
@@ -49,6 +56,7 @@ extern const dbi_xfer_ops_t g_dbiFlexioEdmaXferOps;
 extern "C" {
 #endif
 
+#if MCUX_DBI_LEGACY
 /*!
  * @brief Create FLEXIO DBI transfer handle.
  *
@@ -121,6 +129,35 @@ status_t DBI_FLEXIO_EDMA_ReadMemory(void *dbiXferHandle, uint32_t command, void 
  * @param[in] userData Parameter of the callback.
  */
 void DBI_FLEXIO_EDMA_SetMemoryDoneCallback(void *dbiXferHandle, dbi_mem_done_callback_t callback, void *userData);
+
+#else
+
+/*!
+ * @brief Create FLEXIO MCULCD EDMA DBI transfer handle.
+ *
+ * @param[out] dbiIface Pointer to the DBI interface.
+ * @param[in] base Pointer to the FLEXIO MCULCD base.
+ * @param[in] flexioHandle Transfer handle used as the private data for the controller, maintains the info it needs for
+ the memory write, uppwer layer only need to pass in it, the driver will initialize it.
+ * @param[in] txDmaHandle Pointer to tx dma handle.
+ * @param[in] rxDmaHandle Pointer to rx dma handle. Set to NULL if not using the read operation.
+ *
+ */
+status_t DBI_FLEXIO_EDMA_CreateHandle(dbi_iface_t *dbiIface,
+                                      FLEXIO_MCULCD_Type *base,
+                                      flexio_mculcd_edma_handle_t *flexioHandle,
+                                      edma_handle_t *txDmaHandle,
+                                      edma_handle_t *rxDmaHandle);
+
+status_t DBI_FLEXIO_EDMA_WriteCommandData(dbi_iface_t *dbiIface, uint32_t command, const void *data, uint32_t len_byte);
+
+#if MCUX_DBI_IFACE_ENABLE_READ
+status_t DBI_FLEXIO_EDMA_ReadData(dbi_iface_t *dbiIface, uint32_t command, void *data, uint32_t len_byte);
+#endif /* MCUX_DBI_IFACE_ENABLE_READ */
+
+status_t DBI_FLEXIO_EDMA_WriteMemory(dbi_iface_t *dbiIface, uint32_t command, const void *data, uint32_t len_byte);
+
+#endif
 
 #if defined(__cplusplus)
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,26 +22,42 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines GDET driver version 2.0.0.
+/*! @brief Defines GDET driver version 2.1.0.
  *
  * Change log:
+ *
+ * - Version 2.1.0
+ *   - Update for multiple instances
+ *   - Fix bug in isolation off API
+ *   - Add enable and disable APIs
+ *
+ * - 2.0.1
+ *   - Fix MISRA in GDET_ReconfigureVoltageMode()
+ *
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_GDET_DRIVER_VERSION (MAKE_VERSION(2, 0, 0))
+#define FSL_GDET_DRIVER_VERSION (MAKE_VERSION(2, 1, 0))
 /*! @} */
 
 /*!
  * @brief GDET Core Voltage.
  *
  * These constants are used to define core voltage argument to be used with
- * GDET_ReconfigureVoltageMode().
+ * GDET_ReconfigureVoltageMode(). Different SoC may support various volatages, refer to documentation.
  */
 
 typedef uint32_t gdet_core_voltage_t;
-#define kGDET_MidVoltage       ((gdet_core_voltage_t)0x0u) /*!< Mid Voltage (1.0V) */
-#define kGDET_NormalVoltage    ((gdet_core_voltage_t)0x1u) /*!< Normal Voltage (1.1V) */
-#define kGDET_OverDriveVoltage ((gdet_core_voltage_t)0x2u) /*!< Over Drive Voltage (1.2V) */
+
+#if !(defined(FSL_GDET_RANGE_START_1V) && (FSL_GDET_RANGE_START_1V > 0))
+#define kGDET_0_9v ((gdet_core_voltage_t)0x0u) /*!< Voltage (0.9V) */
+#define kGDET_1_0v ((gdet_core_voltage_t)0x1u) /*!< Voltage (1.0V) */
+#define kGDET_1_1v ((gdet_core_voltage_t)0x2u) /*!< Voltage (1.1V) */
+#else
+#define kGDET_1_0v ((gdet_core_voltage_t)0x0u) /*!< Voltage (1.0V) */
+#define kGDET_1_1v ((gdet_core_voltage_t)0x1u) /*!< Voltage (1.1V) */
+#define kGDET_1_2v ((gdet_core_voltage_t)0x2u) /*!< Voltage (1.2V) */
+#endif
 
 /*******************************************************************************
  * API
@@ -76,12 +92,34 @@ status_t GDET_Init(GDET_Type *base);
  * @param base GDET peripheral base address
  */
 void GDET_Deinit(GDET_Type *base);
+
+/*!
+ * @brief Enable GDET
+ *
+ * This function enables GDET and interrupts.
+ *
+ * @param base GDET peripheral base address
+ * @return Status of the enable operation
+ */
+status_t GDET_Enable(GDET_Type *base);
+
+/*!
+ * @brief Disable GDET
+ *
+ * This function disables GDET and interrupts.
+ *
+ * @param base GDET peripheral base address
+ * @return Status of the disable operation
+ */
+status_t GDET_Disable(GDET_Type *base);
+
 /*!
  * @brief Turn on GDET isolation
  *
  * This function turns on isolation of GDET peripheral
  *
  * @param base GDET peripheral base address
+ * @return Status of the operation
  */
 status_t GDET_IsolateOn(GDET_Type *base);
 
@@ -91,6 +129,7 @@ status_t GDET_IsolateOn(GDET_Type *base);
  * This function turns off isolation of GDET peripheral
  *
  * @param base GDET peripheral base address
+ * @return Status of the operation
  */
 status_t GDET_IsolateOff(GDET_Type *base);
 

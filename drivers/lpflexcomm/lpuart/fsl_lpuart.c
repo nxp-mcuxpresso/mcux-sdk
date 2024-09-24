@@ -121,7 +121,7 @@ uint32_t LPUART_GetInstance(LPUART_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_lpuartBases); instance++)
     {
-        if (s_lpuartBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_lpuartBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

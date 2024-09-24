@@ -354,157 +354,157 @@ void GPIOD_INT1_IRQHandler(void)
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 0U)
-void GPIO00_IRQHandler(void);
-void GPIO00_IRQHandler(void)
+void GPIO00_DriverIRQHandler(void);
+void GPIO00_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(0);
     SDK_ISR_EXIT_BARRIER;
 }
 
-void GPIO01_IRQHandler(void);
-void GPIO01_IRQHandler(void)
+void GPIO01_DriverIRQHandler(void);
+void GPIO01_DriverIRQHandler(void)
 {
-    GPIO00_IRQHandler();
+    GPIO00_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 1U)
-void GPIO10_IRQHandler(void);
-void GPIO10_IRQHandler(void)
+void GPIO10_DriverIRQHandler(void);
+void GPIO10_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(1);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO11_IRQHandler(void);
-void GPIO11_IRQHandler(void)
+void GPIO11_DriverIRQHandler(void);
+void GPIO11_DriverIRQHandler(void)
 {
-    GPIO10_IRQHandler();
+    GPIO10_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 2U)
-void GPIO20_IRQHandler(void);
-void GPIO20_IRQHandler(void)
+void GPIO20_DriverIRQHandler(void);
+void GPIO20_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(2);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO21_IRQHandler(void);
-void GPIO21_IRQHandler(void)
+void GPIO21_DriverIRQHandler(void);
+void GPIO21_DriverIRQHandler(void)
 {
-    GPIO20_IRQHandler();
+    GPIO20_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 3U)
-void GPIO30_IRQHandler(void);
-void GPIO30_IRQHandler(void)
+void GPIO30_DriverIRQHandler(void);
+void GPIO30_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(3);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO31_IRQHandler(void);
-void GPIO31_IRQHandler(void)
+void GPIO31_DriverIRQHandler(void);
+void GPIO31_DriverIRQHandler(void)
 {
-    GPIO30_IRQHandler();
+    GPIO30_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 4U)
-void GPIO40_IRQHandler(void);
-void GPIO40_IRQHandler(void)
+void GPIO40_DriverIRQHandler(void);
+void GPIO40_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(4);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO41_IRQHandler(void);
-void GPIO41_IRQHandler(void)
+void GPIO41_DriverIRQHandler(void);
+void GPIO41_DriverIRQHandler(void)
 {
-    GPIO40_IRQHandler();
+    GPIO40_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 5U)
-void GPIO50_IRQHandler(void);
-void GPIO50_IRQHandler(void)
+void GPIO50_DriverIRQHandler(void);
+void GPIO50_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(5);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO51_IRQHandler(void);
-void GPIO51_IRQHandler(void)
+void GPIO51_DriverIRQHandler(void);
+void GPIO51_DriverIRQHandler(void)
 {
-    GPIO50_IRQHandler();
+    GPIO50_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 6U)
-void GPIO60_IRQHandler(void);
-void GPIO60_IRQHandler(void)
+void GPIO60_DriverIRQHandler(void);
+void GPIO60_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(6);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO61_IRQHandler(void);
-void GPIO61_IRQHandler(void)
+void GPIO61_DriverIRQHandler(void);
+void GPIO61_DriverIRQHandler(void)
 {
-    GPIO60_IRQHandler();
+    GPIO60_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 7U)
-void GPIO70_IRQHandler(void);
-void GPIO70_IRQHandler(void)
+void GPIO70_DriverIRQHandler(void);
+void GPIO70_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(7);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO71_IRQHandler(void);
-void GPIO71_IRQHandler(void)
+void GPIO71_DriverIRQHandler(void);
+void GPIO71_DriverIRQHandler(void)
 {
-    GPIO70_IRQHandler();
+    GPIO70_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 8U)
-void GPIO80_IRQHandler(void);
-void GPIO80_IRQHandler(void)
+void GPIO80_DriverIRQHandler(void);
+void GPIO80_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(8);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO81_IRQHandler(void);
-void GPIO81_IRQHandler(void)
+void GPIO81_DriverIRQHandler(void);
+void GPIO81_DriverIRQHandler(void)
 {
-    GPIO80_IRQHandler();
+    GPIO80_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 9U)
-void GPIO90_IRQHandler(void);
-void GPIO90_IRQHandler(void)
+void GPIO90_DriverIRQHandler(void);
+void GPIO90_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(9);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO91_IRQHandler(void);
-void GPIO91_IRQHandler(void)
+void GPIO91_DriverIRQHandler(void);
+void GPIO91_DriverIRQHandler(void)
 {
-    GPIO90_IRQHandler();
+    GPIO90_DriverIRQHandler();
 }
 #endif
 
 #if (FSL_FEATURE_SOC_GPIO_COUNT > 10U)
-void GPIO100_IRQHandler(void);
-void GPIO100_IRQHandler(void)
+void GPIO100_DriverIRQHandler(void);
+void GPIO100_DriverIRQHandler(void)
 {
     HAL_GpioInterruptHandle(10);
     SDK_ISR_EXIT_BARRIER;
 }
-void GPIO101_IRQHandler(void);
-void GPIO101_IRQHandler(void)
+void GPIO101_DriverIRQHandler(void);
+void GPIO101_DriverIRQHandler(void)
 {
-    GPIO100_IRQHandler();
+    GPIO100_DriverIRQHandler();
 }
 #endif
 

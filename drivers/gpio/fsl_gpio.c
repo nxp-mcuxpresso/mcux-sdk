@@ -77,7 +77,7 @@ static uint32_t GPIO_GetInstance(GPIO_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_gpioBases); instance++)
     {
-        if (s_gpioBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_gpioBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
@@ -316,7 +316,7 @@ static uint32_t FGPIO_GetInstance(FGPIO_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_fgpioBases); instance++)
     {
-        if (s_fgpioBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_fgpioBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

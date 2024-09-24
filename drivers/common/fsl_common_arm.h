@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -525,6 +525,22 @@ _Pragma("diag_suppress=Pm120")
 #endif /* defined(__ICCARM__) */
 /*! @} */
 
+/*!
+ * @def MSDK_REG_SECURE_ADDR(x)
+ * Convert the register address to the one used in secure mode.
+ *
+ * @def MSDK_REG_NONSECURE_ADDR(x)
+ * Convert the register address to the one used in non-secure mode.
+ */
+
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+#define MSDK_REG_SECURE_ADDR(x) ((uintptr_t)(x) | (0x1UL << 28))
+#define MSDK_REG_NONSECURE_ADDR(x) ((uintptr_t)(x) & ~(0x1UL << 28))
+#else
+#define MSDK_REG_SECURE_ADDR(x) (x)
+#define MSDK_REG_NONSECURE_ADDR(x) (x)
+#endif
+
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
         void DefaultISR(void);
 #endif
@@ -541,6 +557,11 @@ _Pragma("diag_suppress=Pm120")
 #if ((defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0)) || \
      (defined(FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT) && (FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT > 0)))
 #include "fsl_reset.h"
+#endif
+
+#if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
+void IRQSTEER_EnableInterrupt(int32_t instIdx, IRQn_Type irq);
+void IRQSTEER_DisableInterrupt(int32_t instIdx, IRQn_Type irq);
 #endif
 
 /*******************************************************************************
@@ -579,7 +600,13 @@ static inline status_t EnableIRQ(IRQn_Type interrupt)
 #if defined(FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS) && (FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS > 0)
     else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
     {
+#if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
+        int32_t irqsteerInstIdx = (int32_t)((interrupt + 1 - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) / FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM);
+
+        IRQSTEER_EnableInterrupt(irqsteerInstIdx, interrupt);
+#else
         status = kStatus_Fail;
+#endif
     }
 #endif
 
@@ -623,7 +650,13 @@ static inline status_t DisableIRQ(IRQn_Type interrupt)
 #if defined(FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS) && (FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS > 0)
     else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
     {
+#if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
+        int32_t irqsteerInstIdx = (int32_t)((interrupt - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) / FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM);
+
+        IRQSTEER_DisableInterrupt(irqsteerInstIdx, interrupt);
+#else
         status = kStatus_Fail;
+#endif
     }
 #endif
 

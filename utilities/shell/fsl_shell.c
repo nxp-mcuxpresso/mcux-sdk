@@ -543,7 +543,7 @@ void SHELL_Task(shell_handle_t shellHandle)
                 else if ((ch == KET_DEL) || ((char)ch == '\b'))
                 {
                     /* There must be at last one char */
-                    if (shellContextHandle->c_pos == 0U)
+                    if ((shellContextHandle->c_pos == 0U) || (shellContextHandle->l_pos == 0U))
                     {
                         continue;
                     }

@@ -83,7 +83,7 @@ static uint32_t OSTIMER_GetInstance(OSTIMER_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_ostimerBases); instance++)
     {
-        if (s_ostimerBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_ostimerBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

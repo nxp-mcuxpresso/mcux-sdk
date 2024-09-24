@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2017,2020,2021 NXP. Not a Contribution.
+ * Copyright 2016-2017,2020,2021,2024 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -25,9 +25,17 @@
 #define FSL_COMPONENT_ID "platform.drivers.lpspi_cmsis"
 #endif
 
-#if ((defined(RTE_SPI0) && RTE_SPI0 && defined(LPSPI0)) || (defined(RTE_SPI1) && RTE_SPI1 && defined(LPSPI1)) || \
-     (defined(RTE_SPI2) && RTE_SPI2 && defined(LPSPI2)) || (defined(RTE_SPI3) && RTE_SPI3 && defined(LPSPI3)) || \
-     (defined(RTE_SPI4) && RTE_SPI4 && defined(LPSPI4)) || (defined(RTE_SPI5) && RTE_SPI5 && defined(LPSPI5)))
+#if ((defined(RTE_SPI0) && RTE_SPI0 && defined(LPSPI0)) || (defined(RTE_SPI1) && RTE_SPI1 && defined(LPSPI1)) ||       \
+     (defined(RTE_SPI2) && RTE_SPI2 && defined(LPSPI2)) || (defined(RTE_SPI3) && RTE_SPI3 && defined(LPSPI3)) ||       \
+     (defined(RTE_SPI4) && RTE_SPI4 && defined(LPSPI4)) || (defined(RTE_SPI5) && RTE_SPI5 && defined(LPSPI5)) ||       \
+     (defined(RTE_SPI6) && RTE_SPI6 && defined(LPSPI6)) || (defined(RTE_SPI7) && RTE_SPI7 && defined(LPSPI7)) ||       \
+     (defined(RTE_SPI8) && RTE_SPI8 && defined(LPSPI8)) || (defined(RTE_SPI9) && RTE_SPI9 && defined(LPSPI9)) ||       \
+     (defined(RTE_SPI10) && RTE_SPI10 && defined(LPSPI10)) || (defined(RTE_SPI11) && RTE_SPI11 && defined(LPSPI11)) || \
+     (defined(RTE_SPI12) && RTE_SPI12 && defined(LPSPI12)) || (defined(RTE_SPI13) && RTE_SPI13 && defined(LPSPI13)) || \
+     (defined(RTE_SPI14) && RTE_SPI14 && defined(LPSPI14)) || (defined(RTE_SPI15) && RTE_SPI15 && defined(LPSPI15)) || \
+     (defined(RTE_SPI16) && RTE_SPI16 && defined(LPSPI16)) || (defined(RTE_SPI17) && RTE_SPI17 && defined(LPSPI17)) || \
+     (defined(RTE_SPI18) && RTE_SPI18 && defined(LPSPI18)) || (defined(RTE_SPI19) && RTE_SPI19 && defined(LPSPI19)) || \
+     (defined(RTE_SPI20) && RTE_SPI20 && defined(LPSPI20)))
 
 #define ARM_LPSPI_DRV_VERSION ARM_DRIVER_VERSION_MAJOR_MINOR((2), (9)) /* driver version */
 
@@ -449,9 +457,17 @@ static ARM_SPI_CAPABILITIES LPSPIx_GetCapabilities(void)
 
 #endif
 
-#if ((defined(RTE_SPI0_DMA_EN) && RTE_SPI0_DMA_EN) || (defined(RTE_SPI1_DMA_EN) && RTE_SPI1_DMA_EN) || \
-     (defined(RTE_SPI2_DMA_EN) && RTE_SPI2_DMA_EN) || (defined(RTE_SPI3_DMA_EN) && RTE_SPI3_DMA_EN) || \
-     (defined(RTE_SPI4_DMA_EN) && RTE_SPI4_DMA_EN) || (defined(RTE_SPI5_DMA_EN) && RTE_SPI5_DMA_EN))
+#if ((defined(RTE_SPI0_DMA_EN) && RTE_SPI0_DMA_EN) || (defined(RTE_SPI1_DMA_EN) && RTE_SPI1_DMA_EN) ||     \
+     (defined(RTE_SPI2_DMA_EN) && RTE_SPI2_DMA_EN) || (defined(RTE_SPI3_DMA_EN) && RTE_SPI3_DMA_EN) ||     \
+     (defined(RTE_SPI4_DMA_EN) && RTE_SPI4_DMA_EN) || (defined(RTE_SPI5_DMA_EN) && RTE_SPI5_DMA_EN) ||     \
+     (defined(RTE_SPI6_DMA_EN) && RTE_SPI6_DMA_EN) || (defined(RTE_SPI7_DMA_EN) && RTE_SPI7_DMA_EN) ||     \
+     (defined(RTE_SPI8_DMA_EN) && RTE_SPI8_DMA_EN) || (defined(RTE_SPI9_DMA_EN) && RTE_SPI9_DMA_EN) ||     \
+     (defined(RTE_SPI10_DMA_EN) && RTE_SPI10_DMA_EN) || (defined(RTE_SPI11_DMA_EN) && RTE_SPI11_DMA_EN) || \
+     (defined(RTE_SPI12_DMA_EN) && RTE_SPI12_DMA_EN) || (defined(RTE_SPI13_DMA_EN) && RTE_SPI13_DMA_EN) || \
+     (defined(RTE_SPI14_DMA_EN) && RTE_SPI14_DMA_EN) || (defined(RTE_SPI15_DMA_EN) && RTE_SPI15_DMA_EN) || \
+     (defined(RTE_SPI16_DMA_EN) && RTE_SPI16_DMA_EN) || (defined(RTE_SPI17_DMA_EN) && RTE_SPI17_DMA_EN) || \
+     (defined(RTE_SPI18_DMA_EN) && RTE_SPI18_DMA_EN) || (defined(RTE_SPI19_DMA_EN) && RTE_SPI19_DMA_EN) || \
+     (defined(RTE_SPI20_DMA_EN) && RTE_SPI20_DMA_EN))
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 
@@ -875,7 +891,19 @@ static ARM_SPI_STATUS LPSPI_EdmaGetStatus(cmsis_lpspi_edma_driver_state_t *lpspi
 
 #if ((defined(RTE_SPI0) && RTE_SPI0 && !RTE_SPI0_DMA_EN) || (defined(RTE_SPI1) && RTE_SPI1 && !RTE_SPI1_DMA_EN) || \
      (defined(RTE_SPI2) && RTE_SPI2 && !RTE_SPI2_DMA_EN) || (defined(RTE_SPI3) && RTE_SPI3 && !RTE_SPI3_DMA_EN) || \
-     (defined(RTE_SPI4) && RTE_SPI4 && !RTE_SPI4_DMA_EN) || (defined(RTE_SPI5) && RTE_SPI5 && !RTE_SPI5_DMA_EN))
+     (defined(RTE_SPI4) && RTE_SPI4 && !RTE_SPI4_DMA_EN) || (defined(RTE_SPI5) && RTE_SPI5 && !RTE_SPI5_DMA_EN) || \
+     (defined(RTE_SPI6) && RTE_SPI6 && !RTE_SPI6_DMA_EN) || (defined(RTE_SPI7) && RTE_SPI7 && !RTE_SPI7_DMA_EN) || \
+     (defined(RTE_SPI8) && RTE_SPI8 && !RTE_SPI8_DMA_EN) || (defined(RTE_SPI9) && RTE_SPI9 && !RTE_SPI9_DMA_EN) || \
+     (defined(RTE_SPI10) && RTE_SPI10 && !RTE_SPI10_DMA_EN) ||                                                     \
+     (defined(RTE_SPI11) && RTE_SPI11 && !RTE_SPI11_DMA_EN) ||                                                     \
+     (defined(RTE_SPI12) && RTE_SPI12 && !RTE_SPI12_DMA_EN) ||                                                     \
+     (defined(RTE_SPI13) && RTE_SPI13 && !RTE_SPI13_DMA_EN) ||                                                     \
+     (defined(RTE_SPI14) && RTE_SPI14 && !RTE_SPI14_DMA_EN) ||                                                     \
+     (defined(RTE_SPI15) && RTE_SPI15 && !RTE_SPI15_DMA_EN) ||                                                     \
+     (defined(RTE_SPI16) && RTE_SPI16 && !RTE_SPI16_DMA_EN) ||                                                     \
+     (defined(RTE_SPI17) && RTE_SPI17 && !RTE_SPI17_DMA_EN) ||                                                     \
+     (defined(RTE_SPI18) && RTE_SPI18 && !RTE_SPI18_DMA_EN) ||                                                     \
+     (defined(RTE_SPI19) && RTE_SPI19 && !RTE_SPI19_DMA_EN) || (defined(RTE_SPI20) && RTE_SPI20 && !RTE_SPI20_DMA_EN))
 
 static void KSDK_LPSPI_MasterInterruptCallback(LPSPI_Type *base,
                                                lpspi_master_handle_t *handle,
@@ -1251,12 +1279,12 @@ static ARM_SPI_STATUS LPSPI_InterruptGetStatus(cmsis_lpspi_interrupt_driver_stat
 
     if (LPSPI_IsMaster(lpspi->resource->base))
     {
-        stat.busy = ((uint8_t)kLPSPI_Busy == lpspi->handle->masterHandle.state) ? (1U) : (0U);
+        stat.busy      = ((uint8_t)kLPSPI_Busy == lpspi->handle->masterHandle.state) ? (1U) : (0U);
         stat.data_lost = ((uint8_t)kLPSPI_Error == lpspi->handle->masterHandle.state) ? (1U) : (0U);
     }
     else
     {
-        stat.busy = ((uint8_t)kLPSPI_Busy == lpspi->handle->slaveHandle.state) ? (1U) : (0U);
+        stat.busy      = ((uint8_t)kLPSPI_Busy == lpspi->handle->slaveHandle.state) ? (1U) : (0U);
         stat.data_lost = ((uint8_t)kLPSPI_Error == lpspi->handle->slaveHandle.state) ? (1U) : (0U);
     }
     stat.mode_fault = 0U;
@@ -1279,9 +1307,8 @@ static cmsis_lpspi_resource_t LPSPI0_Resource = {LPSPI0, 0, LPSPI0_GetFreq};
 
 #if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
 static cmsis_lpspi_edma_resource_t LPSPI0_EdmaResource = {
-    RTE_SPI0_DMA_TX_DMA_BASE,    RTE_SPI0_DMA_TX_CH,          RTE_SPI0_DMA_TX_PERI_SEL,
-    RTE_SPI0_DMA_RX_DMA_BASE,    RTE_SPI0_DMA_RX_CH,          RTE_SPI0_DMA_RX_PERI_SEL,
-
+    RTE_SPI0_DMA_TX_DMA_BASE,    RTE_SPI0_DMA_TX_CH,          (uint16_t)RTE_SPI0_DMA_TX_PERI_SEL,
+    RTE_SPI0_DMA_RX_DMA_BASE,    RTE_SPI0_DMA_RX_CH,          (uint16_t)RTE_SPI0_DMA_RX_PERI_SEL,
 #if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
     RTE_SPI0_DMA_TX_DMAMUX_BASE, RTE_SPI0_DMA_RX_DMAMUX_BASE,
 #endif
@@ -2457,3 +2484,2394 @@ ARM_DRIVER_SPI Driver_SPI6 = {
 };
 
 #endif /*  LPSPI6  */
+
+#if defined(LPSPI7) && defined(RTE_SPI7) && RTE_SPI7
+
+/* User needs to provide the implementation for LPSPI7_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI7_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI7_Resource = {LPSPI7, 7, LPSPI7_GetFreq};
+
+#if defined(RTE_SPI7_DMA_EN) && RTE_SPI7_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI7_EdmaResource = {
+    RTE_SPI7_DMA_TX_DMA_BASE,    RTE_SPI7_DMA_TX_CH,          (uint16_t)RTE_SPI7_DMA_TX_PERI_SEL,
+    RTE_SPI7_DMA_RX_DMA_BASE,    RTE_SPI7_DMA_RX_CH,          (uint16_t)RTE_SPI7_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI7_DMA_TX_DMAMUX_BASE, RTE_SPI7_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI7_EdmaHandle);
+static edma_handle_t LPSPI7_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI7_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi7_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI7_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI7_EdmaDriverState = {
+#endif
+    &LPSPI7_Resource,
+    &LPSPI7_EdmaResource,
+    &LPSPI7_EdmaHandle,
+    &LPSPI7_EdmaRxRegToRxDataHandle,
+    &LPSPI7_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI7_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI7_PIN_INIT
+    RTE_SPI7_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI7_EdmaDriverState);
+}
+
+static int32_t LPSPI7_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI7_PIN_DEINIT
+    RTE_SPI7_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI7_EdmaDriverState);
+}
+
+static int32_t LPSPI7_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI7_EdmaDriverState);
+}
+
+static int32_t LPSPI7_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI7_EdmaDriverState);
+}
+
+static int32_t LPSPI7_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI7_EdmaDriverState);
+}
+
+static int32_t LPSPI7_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI7_EdmaDriverState);
+}
+
+static uint32_t LPSPI7_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI7_EdmaDriverState);
+}
+
+static int32_t LPSPI7_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI7_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI7_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI7_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI7_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi7_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI7_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI7_InterruptDriverState = {
+#endif
+    &LPSPI7_Resource,
+    &LPSPI7_Handle,
+};
+
+static int32_t LPSPI7_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI7_PIN_INIT
+    RTE_SPI7_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI7_InterruptDriverState);
+}
+
+static int32_t LPSPI7_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI7_PIN_DEINIT
+    RTE_SPI7_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI7_InterruptDriverState);
+}
+
+static int32_t LPSPI7_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI7_InterruptDriverState);
+}
+
+static int32_t LPSPI7_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI7_InterruptDriverState);
+}
+
+static int32_t LPSPI7_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI7_InterruptDriverState);
+}
+
+static int32_t LPSPI7_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI7_InterruptDriverState);
+}
+
+static uint32_t LPSPI7_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI7_InterruptDriverState);
+}
+
+static int32_t LPSPI7_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI7_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI7_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI7_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI7 = {
+    LPSPIx_GetVersion,     LPSPIx_GetCapabilities,
+#if defined(RTE_SPI7_DMA_EN) && RTE_SPI7_DMA_EN
+    LPSPI7_EdmaInitialize, LPSPI7_EdmaUninitialize, LPSPI7_EdmaPowerControl, LPSPI7_EdmaSend,     LPSPI7_EdmaReceive,
+    LPSPI7_EdmaTransfer,   LPSPI7_EdmaGetCount,     LPSPI7_EdmaControl,      LPSPI7_EdmaGetStatus
+#else
+    LPSPI7_InterruptInitialize, LPSPI7_InterruptUninitialize, LPSPI7_InterruptPowerControl, LPSPI7_InterruptSend,
+    LPSPI7_InterruptReceive,    LPSPI7_InterruptTransfer,     LPSPI7_InterruptGetCount,     LPSPI7_InterruptControl,
+    LPSPI7_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI7  */
+
+#if defined(LPSPI8) && defined(RTE_SPI8) && RTE_SPI8
+
+/* User needs to provide the implementation for LPSPI8_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI8_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI8_Resource = {LPSPI8, 8, LPSPI8_GetFreq};
+
+#if defined(RTE_SPI8_DMA_EN) && RTE_SPI8_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI8_EdmaResource = {
+    RTE_SPI8_DMA_TX_DMA_BASE,    RTE_SPI8_DMA_TX_CH,          (uint16_t)RTE_SPI8_DMA_TX_PERI_SEL,
+    RTE_SPI8_DMA_RX_DMA_BASE,    RTE_SPI8_DMA_RX_CH,          (uint16_t)RTE_SPI8_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI8_DMA_TX_DMAMUX_BASE, RTE_SPI8_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI8_EdmaHandle);
+static edma_handle_t LPSPI8_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI8_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi8_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI8_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI8_EdmaDriverState = {
+#endif
+    &LPSPI8_Resource,
+    &LPSPI8_EdmaResource,
+    &LPSPI8_EdmaHandle,
+    &LPSPI8_EdmaRxRegToRxDataHandle,
+    &LPSPI8_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI8_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI8_PIN_INIT
+    RTE_SPI8_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI8_EdmaDriverState);
+}
+
+static int32_t LPSPI8_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI8_PIN_DEINIT
+    RTE_SPI8_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI8_EdmaDriverState);
+}
+
+static int32_t LPSPI8_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI8_EdmaDriverState);
+}
+
+static int32_t LPSPI8_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI8_EdmaDriverState);
+}
+
+static int32_t LPSPI8_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI8_EdmaDriverState);
+}
+
+static int32_t LPSPI8_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI8_EdmaDriverState);
+}
+
+static uint32_t LPSPI8_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI8_EdmaDriverState);
+}
+
+static int32_t LPSPI8_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI8_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI8_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI8_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI8_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi8_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI8_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI8_InterruptDriverState = {
+#endif
+    &LPSPI8_Resource,
+    &LPSPI8_Handle,
+};
+
+static int32_t LPSPI8_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI8_PIN_INIT
+    RTE_SPI8_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI8_InterruptDriverState);
+}
+
+static int32_t LPSPI8_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI8_PIN_DEINIT
+    RTE_SPI8_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI8_InterruptDriverState);
+}
+
+static int32_t LPSPI8_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI8_InterruptDriverState);
+}
+
+static int32_t LPSPI8_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI8_InterruptDriverState);
+}
+
+static int32_t LPSPI8_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI8_InterruptDriverState);
+}
+
+static int32_t LPSPI8_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI8_InterruptDriverState);
+}
+
+static uint32_t LPSPI8_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI8_InterruptDriverState);
+}
+
+static int32_t LPSPI8_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI8_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI8_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI8_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI8 = {
+    LPSPIx_GetVersion,     LPSPIx_GetCapabilities,
+#if defined(RTE_SPI8_DMA_EN) && RTE_SPI8_DMA_EN
+    LPSPI8_EdmaInitialize, LPSPI8_EdmaUninitialize, LPSPI8_EdmaPowerControl, LPSPI8_EdmaSend,     LPSPI8_EdmaReceive,
+    LPSPI8_EdmaTransfer,   LPSPI8_EdmaGetCount,     LPSPI8_EdmaControl,      LPSPI8_EdmaGetStatus
+#else
+    LPSPI8_InterruptInitialize, LPSPI8_InterruptUninitialize, LPSPI8_InterruptPowerControl, LPSPI8_InterruptSend,
+    LPSPI8_InterruptReceive,    LPSPI8_InterruptTransfer,     LPSPI8_InterruptGetCount,     LPSPI8_InterruptControl,
+    LPSPI8_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI8  */
+
+#if defined(LPSPI9) && defined(RTE_SPI9) && RTE_SPI9
+
+/* User needs to provide the implementation for LPSPI9_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI9_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI9_Resource = {LPSPI9, 9, LPSPI9_GetFreq};
+
+#if defined(RTE_SPI9_DMA_EN) && RTE_SPI9_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI9_EdmaResource = {
+    RTE_SPI9_DMA_TX_DMA_BASE,    RTE_SPI9_DMA_TX_CH,          (uint16_t)RTE_SPI9_DMA_TX_PERI_SEL,
+    RTE_SPI9_DMA_RX_DMA_BASE,    RTE_SPI9_DMA_RX_CH,          (uint16_t)RTE_SPI9_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI9_DMA_TX_DMAMUX_BASE, RTE_SPI9_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI9_EdmaHandle);
+static edma_handle_t LPSPI9_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI9_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi9_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI9_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI9_EdmaDriverState = {
+#endif
+    &LPSPI9_Resource,
+    &LPSPI9_EdmaResource,
+    &LPSPI9_EdmaHandle,
+    &LPSPI9_EdmaRxRegToRxDataHandle,
+    &LPSPI9_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI9_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI9_PIN_INIT
+    RTE_SPI9_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI9_EdmaDriverState);
+}
+
+static int32_t LPSPI9_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI9_PIN_DEINIT
+    RTE_SPI9_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI9_EdmaDriverState);
+}
+
+static int32_t LPSPI9_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI9_EdmaDriverState);
+}
+
+static int32_t LPSPI9_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI9_EdmaDriverState);
+}
+
+static int32_t LPSPI9_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI9_EdmaDriverState);
+}
+
+static int32_t LPSPI9_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI9_EdmaDriverState);
+}
+
+static uint32_t LPSPI9_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI9_EdmaDriverState);
+}
+
+static int32_t LPSPI9_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI9_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI9_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI9_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI9_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi9_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI9_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI9_InterruptDriverState = {
+#endif
+    &LPSPI9_Resource,
+    &LPSPI9_Handle,
+};
+
+static int32_t LPSPI9_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI9_PIN_INIT
+    RTE_SPI9_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI9_InterruptDriverState);
+}
+
+static int32_t LPSPI9_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI9_PIN_DEINIT
+    RTE_SPI9_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI9_InterruptDriverState);
+}
+
+static int32_t LPSPI9_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI9_InterruptDriverState);
+}
+
+static int32_t LPSPI9_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI9_InterruptDriverState);
+}
+
+static int32_t LPSPI9_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI9_InterruptDriverState);
+}
+
+static int32_t LPSPI9_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI9_InterruptDriverState);
+}
+
+static uint32_t LPSPI9_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI9_InterruptDriverState);
+}
+
+static int32_t LPSPI9_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI9_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI9_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI9_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI9 = {
+    LPSPIx_GetVersion,     LPSPIx_GetCapabilities,
+#if defined(RTE_SPI9_DMA_EN) && RTE_SPI9_DMA_EN
+    LPSPI9_EdmaInitialize, LPSPI9_EdmaUninitialize, LPSPI9_EdmaPowerControl, LPSPI9_EdmaSend,     LPSPI9_EdmaReceive,
+    LPSPI9_EdmaTransfer,   LPSPI9_EdmaGetCount,     LPSPI9_EdmaControl,      LPSPI9_EdmaGetStatus
+#else
+    LPSPI9_InterruptInitialize, LPSPI9_InterruptUninitialize, LPSPI9_InterruptPowerControl, LPSPI9_InterruptSend,
+    LPSPI9_InterruptReceive,    LPSPI9_InterruptTransfer,     LPSPI9_InterruptGetCount,     LPSPI9_InterruptControl,
+    LPSPI9_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI9  */
+
+#if defined(LPSPI10) && defined(RTE_SPI10) && RTE_SPI10
+
+/* User needs to provide the implementation for LPSPI10_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI10_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI10_Resource = {LPSPI10, 10, LPSPI10_GetFreq};
+
+#if defined(RTE_SPI10_DMA_EN) && RTE_SPI10_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI10_EdmaResource = {
+    RTE_SPI10_DMA_TX_DMA_BASE,    RTE_SPI10_DMA_TX_CH,          (uint16_t)RTE_SPI10_DMA_TX_PERI_SEL,
+    RTE_SPI10_DMA_RX_DMA_BASE,    RTE_SPI10_DMA_RX_CH,          (uint16_t)RTE_SPI10_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI10_DMA_TX_DMAMUX_BASE, RTE_SPI10_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI10_EdmaHandle);
+static edma_handle_t LPSPI10_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI10_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi10_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI10_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI10_EdmaDriverState = {
+#endif
+    &LPSPI10_Resource,
+    &LPSPI10_EdmaResource,
+    &LPSPI10_EdmaHandle,
+    &LPSPI10_EdmaRxRegToRxDataHandle,
+    &LPSPI10_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI10_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI10_PIN_INIT
+    RTE_SPI10_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI10_EdmaDriverState);
+}
+
+static int32_t LPSPI10_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI10_PIN_DEINIT
+    RTE_SPI10_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI10_EdmaDriverState);
+}
+
+static int32_t LPSPI10_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI10_EdmaDriverState);
+}
+
+static int32_t LPSPI10_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI10_EdmaDriverState);
+}
+
+static int32_t LPSPI10_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI10_EdmaDriverState);
+}
+
+static int32_t LPSPI10_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI10_EdmaDriverState);
+}
+
+static uint32_t LPSPI10_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI10_EdmaDriverState);
+}
+
+static int32_t LPSPI10_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI10_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI10_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI10_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI10_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi10_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI10_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI10_InterruptDriverState = {
+#endif
+    &LPSPI10_Resource,
+    &LPSPI10_Handle,
+};
+
+static int32_t LPSPI10_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI10_PIN_INIT
+    RTE_SPI10_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI10_InterruptDriverState);
+}
+
+static int32_t LPSPI10_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI10_PIN_DEINIT
+    RTE_SPI10_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI10_InterruptDriverState);
+}
+
+static int32_t LPSPI10_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI10_InterruptDriverState);
+}
+
+static int32_t LPSPI10_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI10_InterruptDriverState);
+}
+
+static int32_t LPSPI10_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI10_InterruptDriverState);
+}
+
+static int32_t LPSPI10_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI10_InterruptDriverState);
+}
+
+static uint32_t LPSPI10_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI10_InterruptDriverState);
+}
+
+static int32_t LPSPI10_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI10_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI10_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI10_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI10 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI10_DMA_EN) && RTE_SPI10_DMA_EN
+    LPSPI10_EdmaInitialize, LPSPI10_EdmaUninitialize, LPSPI10_EdmaPowerControl, LPSPI10_EdmaSend,
+    LPSPI10_EdmaReceive,    LPSPI10_EdmaTransfer,     LPSPI10_EdmaGetCount,     LPSPI10_EdmaControl,
+    LPSPI10_EdmaGetStatus
+#else
+    LPSPI10_InterruptInitialize, LPSPI10_InterruptUninitialize, LPSPI10_InterruptPowerControl, LPSPI10_InterruptSend,
+    LPSPI10_InterruptReceive,    LPSPI10_InterruptTransfer,     LPSPI10_InterruptGetCount,     LPSPI10_InterruptControl,
+    LPSPI10_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI10  */
+
+#if defined(LPSPI11) && defined(RTE_SPI11) && RTE_SPI11
+
+/* User needs to provide the implementation for LPSPI11_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI11_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI11_Resource = {LPSPI11, 11, LPSPI11_GetFreq};
+
+#if defined(RTE_SPI11_DMA_EN) && RTE_SPI11_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI11_EdmaResource = {
+    RTE_SPI11_DMA_TX_DMA_BASE,    RTE_SPI11_DMA_TX_CH,          (uint16_t)RTE_SPI11_DMA_TX_PERI_SEL,
+    RTE_SPI11_DMA_RX_DMA_BASE,    RTE_SPI11_DMA_RX_CH,          (uint16_t)RTE_SPI11_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI11_DMA_TX_DMAMUX_BASE, RTE_SPI11_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI11_EdmaHandle);
+static edma_handle_t LPSPI11_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI11_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi11_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI11_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI11_EdmaDriverState = {
+#endif
+    &LPSPI11_Resource,
+    &LPSPI11_EdmaResource,
+    &LPSPI11_EdmaHandle,
+    &LPSPI11_EdmaRxRegToRxDataHandle,
+    &LPSPI11_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI11_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI11_PIN_INIT
+    RTE_SPI11_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI11_EdmaDriverState);
+}
+
+static int32_t LPSPI11_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI11_PIN_DEINIT
+    RTE_SPI11_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI11_EdmaDriverState);
+}
+
+static int32_t LPSPI11_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI11_EdmaDriverState);
+}
+
+static int32_t LPSPI11_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI11_EdmaDriverState);
+}
+
+static int32_t LPSPI11_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI11_EdmaDriverState);
+}
+
+static int32_t LPSPI11_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI11_EdmaDriverState);
+}
+
+static uint32_t LPSPI11_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI11_EdmaDriverState);
+}
+
+static int32_t LPSPI11_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI11_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI11_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI11_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI11_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi11_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI11_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI11_InterruptDriverState = {
+#endif
+    &LPSPI11_Resource,
+    &LPSPI11_Handle,
+};
+
+static int32_t LPSPI11_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI11_PIN_INIT
+    RTE_SPI11_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI11_InterruptDriverState);
+}
+
+static int32_t LPSPI11_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI11_PIN_DEINIT
+    RTE_SPI11_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI11_InterruptDriverState);
+}
+
+static int32_t LPSPI11_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI11_InterruptDriverState);
+}
+
+static int32_t LPSPI11_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI11_InterruptDriverState);
+}
+
+static int32_t LPSPI11_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI11_InterruptDriverState);
+}
+
+static int32_t LPSPI11_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI11_InterruptDriverState);
+}
+
+static uint32_t LPSPI11_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI11_InterruptDriverState);
+}
+
+static int32_t LPSPI11_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI11_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI11_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI11_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI11 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI11_DMA_EN) && RTE_SPI11_DMA_EN
+    LPSPI11_EdmaInitialize, LPSPI11_EdmaUninitialize, LPSPI11_EdmaPowerControl, LPSPI11_EdmaSend,
+    LPSPI11_EdmaReceive,    LPSPI11_EdmaTransfer,     LPSPI11_EdmaGetCount,     LPSPI11_EdmaControl,
+    LPSPI11_EdmaGetStatus
+#else
+    LPSPI11_InterruptInitialize, LPSPI11_InterruptUninitialize, LPSPI11_InterruptPowerControl, LPSPI11_InterruptSend,
+    LPSPI11_InterruptReceive,    LPSPI11_InterruptTransfer,     LPSPI11_InterruptGetCount,     LPSPI11_InterruptControl,
+    LPSPI11_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI11  */
+
+#if defined(LPSPI12) && defined(RTE_SPI12) && RTE_SPI12
+
+/* User needs to provide the implementation for LPSPI12_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI12_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI12_Resource = {LPSPI12, 12, LPSPI12_GetFreq};
+
+#if defined(RTE_SPI12_DMA_EN) && RTE_SPI12_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI12_EdmaResource = {
+    RTE_SPI12_DMA_TX_DMA_BASE,    RTE_SPI12_DMA_TX_CH,          (uint16_t)RTE_SPI12_DMA_TX_PERI_SEL,
+    RTE_SPI12_DMA_RX_DMA_BASE,    RTE_SPI12_DMA_RX_CH,          (uint16_t)RTE_SPI12_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI12_DMA_TX_DMAMUX_BASE, RTE_SPI12_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI12_EdmaHandle);
+static edma_handle_t LPSPI12_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI12_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi12_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI12_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI12_EdmaDriverState = {
+#endif
+    &LPSPI12_Resource,
+    &LPSPI12_EdmaResource,
+    &LPSPI12_EdmaHandle,
+    &LPSPI12_EdmaRxRegToRxDataHandle,
+    &LPSPI12_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI12_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI12_PIN_INIT
+    RTE_SPI12_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI12_EdmaDriverState);
+}
+
+static int32_t LPSPI12_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI12_PIN_DEINIT
+    RTE_SPI12_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI12_EdmaDriverState);
+}
+
+static int32_t LPSPI12_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI12_EdmaDriverState);
+}
+
+static int32_t LPSPI12_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI12_EdmaDriverState);
+}
+
+static int32_t LPSPI12_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI12_EdmaDriverState);
+}
+
+static int32_t LPSPI12_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI12_EdmaDriverState);
+}
+
+static uint32_t LPSPI12_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI12_EdmaDriverState);
+}
+
+static int32_t LPSPI12_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI12_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI12_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI12_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI12_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi12_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI12_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI12_InterruptDriverState = {
+#endif
+    &LPSPI12_Resource,
+    &LPSPI12_Handle,
+};
+
+static int32_t LPSPI12_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI12_PIN_INIT
+    RTE_SPI12_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI12_InterruptDriverState);
+}
+
+static int32_t LPSPI12_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI12_PIN_DEINIT
+    RTE_SPI12_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI12_InterruptDriverState);
+}
+
+static int32_t LPSPI12_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI12_InterruptDriverState);
+}
+
+static int32_t LPSPI12_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI12_InterruptDriverState);
+}
+
+static int32_t LPSPI12_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI12_InterruptDriverState);
+}
+
+static int32_t LPSPI12_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI12_InterruptDriverState);
+}
+
+static uint32_t LPSPI12_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI12_InterruptDriverState);
+}
+
+static int32_t LPSPI12_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI12_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI12_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI12_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI12 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI12_DMA_EN) && RTE_SPI12_DMA_EN
+    LPSPI12_EdmaInitialize, LPSPI12_EdmaUninitialize, LPSPI12_EdmaPowerControl, LPSPI12_EdmaSend,
+    LPSPI12_EdmaReceive,    LPSPI12_EdmaTransfer,     LPSPI12_EdmaGetCount,     LPSPI12_EdmaControl,
+    LPSPI12_EdmaGetStatus
+#else
+    LPSPI12_InterruptInitialize, LPSPI12_InterruptUninitialize, LPSPI12_InterruptPowerControl, LPSPI12_InterruptSend,
+    LPSPI12_InterruptReceive,    LPSPI12_InterruptTransfer,     LPSPI12_InterruptGetCount,     LPSPI12_InterruptControl,
+    LPSPI12_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI12  */
+
+#if defined(LPSPI13) && defined(RTE_SPI13) && RTE_SPI13
+
+/* User needs to provide the implementation for LPSPI13_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI13_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI13_Resource = {LPSPI13, 13, LPSPI13_GetFreq};
+
+#if defined(RTE_SPI13_DMA_EN) && RTE_SPI13_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI13_EdmaResource = {
+    RTE_SPI13_DMA_TX_DMA_BASE,    RTE_SPI13_DMA_TX_CH,          (uint16_t)RTE_SPI13_DMA_TX_PERI_SEL,
+    RTE_SPI13_DMA_RX_DMA_BASE,    RTE_SPI13_DMA_RX_CH,          (uint16_t)RTE_SPI13_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI13_DMA_TX_DMAMUX_BASE, RTE_SPI13_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI13_EdmaHandle);
+static edma_handle_t LPSPI13_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI13_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi13_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI13_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI13_EdmaDriverState = {
+#endif
+    &LPSPI13_Resource,
+    &LPSPI13_EdmaResource,
+    &LPSPI13_EdmaHandle,
+    &LPSPI13_EdmaRxRegToRxDataHandle,
+    &LPSPI13_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI13_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI13_PIN_INIT
+    RTE_SPI13_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI13_EdmaDriverState);
+}
+
+static int32_t LPSPI13_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI13_PIN_DEINIT
+    RTE_SPI13_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI13_EdmaDriverState);
+}
+
+static int32_t LPSPI13_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI13_EdmaDriverState);
+}
+
+static int32_t LPSPI13_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI13_EdmaDriverState);
+}
+
+static int32_t LPSPI13_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI13_EdmaDriverState);
+}
+
+static int32_t LPSPI13_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI13_EdmaDriverState);
+}
+
+static uint32_t LPSPI13_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI13_EdmaDriverState);
+}
+
+static int32_t LPSPI13_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI13_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI13_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI13_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI13_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi13_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI13_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI13_InterruptDriverState = {
+#endif
+    &LPSPI13_Resource,
+    &LPSPI13_Handle,
+};
+
+static int32_t LPSPI13_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI13_PIN_INIT
+    RTE_SPI13_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI13_InterruptDriverState);
+}
+
+static int32_t LPSPI13_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI13_PIN_DEINIT
+    RTE_SPI13_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI13_InterruptDriverState);
+}
+
+static int32_t LPSPI13_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI13_InterruptDriverState);
+}
+
+static int32_t LPSPI13_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI13_InterruptDriverState);
+}
+
+static int32_t LPSPI13_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI13_InterruptDriverState);
+}
+
+static int32_t LPSPI13_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI13_InterruptDriverState);
+}
+
+static uint32_t LPSPI13_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI13_InterruptDriverState);
+}
+
+static int32_t LPSPI13_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI13_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI13_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI13_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI13 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI13_DMA_EN) && RTE_SPI13_DMA_EN
+    LPSPI13_EdmaInitialize, LPSPI13_EdmaUninitialize, LPSPI13_EdmaPowerControl, LPSPI13_EdmaSend,
+    LPSPI13_EdmaReceive,    LPSPI13_EdmaTransfer,     LPSPI13_EdmaGetCount,     LPSPI13_EdmaControl,
+    LPSPI13_EdmaGetStatus
+#else
+    LPSPI13_InterruptInitialize, LPSPI13_InterruptUninitialize, LPSPI13_InterruptPowerControl, LPSPI13_InterruptSend,
+    LPSPI13_InterruptReceive,    LPSPI13_InterruptTransfer,     LPSPI13_InterruptGetCount,     LPSPI13_InterruptControl,
+    LPSPI13_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI13  */
+
+#if defined(LPSPI14) && defined(RTE_SPI14) && RTE_SPI14
+
+/* User needs to provide the implementation for LPSPI14_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI14_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI14_Resource = {LPSPI14, 14, LPSPI14_GetFreq};
+
+#if defined(RTE_SPI14_DMA_EN) && RTE_SPI14_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI14_EdmaResource = {
+    RTE_SPI14_DMA_TX_DMA_BASE,    RTE_SPI14_DMA_TX_CH,          (uint16_t)RTE_SPI14_DMA_TX_PERI_SEL,
+    RTE_SPI14_DMA_RX_DMA_BASE,    RTE_SPI14_DMA_RX_CH,          (uint16_t)RTE_SPI14_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI14_DMA_TX_DMAMUX_BASE, RTE_SPI14_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI14_EdmaHandle);
+static edma_handle_t LPSPI14_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI14_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi14_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI14_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI14_EdmaDriverState = {
+#endif
+    &LPSPI14_Resource,
+    &LPSPI14_EdmaResource,
+    &LPSPI14_EdmaHandle,
+    &LPSPI14_EdmaRxRegToRxDataHandle,
+    &LPSPI14_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI14_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI14_PIN_INIT
+    RTE_SPI14_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI14_EdmaDriverState);
+}
+
+static int32_t LPSPI14_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI14_PIN_DEINIT
+    RTE_SPI14_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI14_EdmaDriverState);
+}
+
+static int32_t LPSPI14_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI14_EdmaDriverState);
+}
+
+static int32_t LPSPI14_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI14_EdmaDriverState);
+}
+
+static int32_t LPSPI14_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI14_EdmaDriverState);
+}
+
+static int32_t LPSPI14_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI14_EdmaDriverState);
+}
+
+static uint32_t LPSPI14_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI14_EdmaDriverState);
+}
+
+static int32_t LPSPI14_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI14_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI14_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI14_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI14_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi14_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI14_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI14_InterruptDriverState = {
+#endif
+    &LPSPI14_Resource,
+    &LPSPI14_Handle,
+};
+
+static int32_t LPSPI14_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI14_PIN_INIT
+    RTE_SPI14_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI14_InterruptDriverState);
+}
+
+static int32_t LPSPI14_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI14_PIN_DEINIT
+    RTE_SPI14_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI14_InterruptDriverState);
+}
+
+static int32_t LPSPI14_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI14_InterruptDriverState);
+}
+
+static int32_t LPSPI14_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI14_InterruptDriverState);
+}
+
+static int32_t LPSPI14_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI14_InterruptDriverState);
+}
+
+static int32_t LPSPI14_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI14_InterruptDriverState);
+}
+
+static uint32_t LPSPI14_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI14_InterruptDriverState);
+}
+
+static int32_t LPSPI14_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI14_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI14_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI14_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI14 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI14_DMA_EN) && RTE_SPI14_DMA_EN
+    LPSPI14_EdmaInitialize, LPSPI14_EdmaUninitialize, LPSPI14_EdmaPowerControl, LPSPI14_EdmaSend,
+    LPSPI14_EdmaReceive,    LPSPI14_EdmaTransfer,     LPSPI14_EdmaGetCount,     LPSPI14_EdmaControl,
+    LPSPI14_EdmaGetStatus
+#else
+    LPSPI14_InterruptInitialize, LPSPI14_InterruptUninitialize, LPSPI14_InterruptPowerControl, LPSPI14_InterruptSend,
+    LPSPI14_InterruptReceive,    LPSPI14_InterruptTransfer,     LPSPI14_InterruptGetCount,     LPSPI14_InterruptControl,
+    LPSPI14_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI14  */
+
+#if defined(LPSPI15) && defined(RTE_SPI15) && RTE_SPI15
+
+/* User needs to provide the implementation for LPSPI15_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI15_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI15_Resource = {LPSPI15, 15, LPSPI15_GetFreq};
+
+#if defined(RTE_SPI15_DMA_EN) && RTE_SPI15_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI15_EdmaResource = {
+    RTE_SPI15_DMA_TX_DMA_BASE,    RTE_SPI15_DMA_TX_CH,          (uint16_t)RTE_SPI15_DMA_TX_PERI_SEL,
+    RTE_SPI15_DMA_RX_DMA_BASE,    RTE_SPI15_DMA_RX_CH,          (uint16_t)RTE_SPI15_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI15_DMA_TX_DMAMUX_BASE, RTE_SPI15_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI15_EdmaHandle);
+static edma_handle_t LPSPI15_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI15_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi15_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI15_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI15_EdmaDriverState = {
+#endif
+    &LPSPI15_Resource,
+    &LPSPI15_EdmaResource,
+    &LPSPI15_EdmaHandle,
+    &LPSPI15_EdmaRxRegToRxDataHandle,
+    &LPSPI15_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI15_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI15_PIN_INIT
+    RTE_SPI15_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI15_EdmaDriverState);
+}
+
+static int32_t LPSPI15_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI15_PIN_DEINIT
+    RTE_SPI15_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI15_EdmaDriverState);
+}
+
+static int32_t LPSPI15_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI15_EdmaDriverState);
+}
+
+static int32_t LPSPI15_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI15_EdmaDriverState);
+}
+
+static int32_t LPSPI15_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI15_EdmaDriverState);
+}
+
+static int32_t LPSPI15_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI15_EdmaDriverState);
+}
+
+static uint32_t LPSPI15_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI15_EdmaDriverState);
+}
+
+static int32_t LPSPI15_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI15_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI15_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI15_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI15_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi15_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI15_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI15_InterruptDriverState = {
+#endif
+    &LPSPI15_Resource,
+    &LPSPI15_Handle,
+};
+
+static int32_t LPSPI15_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI15_PIN_INIT
+    RTE_SPI15_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI15_InterruptDriverState);
+}
+
+static int32_t LPSPI15_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI15_PIN_DEINIT
+    RTE_SPI15_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI15_InterruptDriverState);
+}
+
+static int32_t LPSPI15_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI15_InterruptDriverState);
+}
+
+static int32_t LPSPI15_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI15_InterruptDriverState);
+}
+
+static int32_t LPSPI15_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI15_InterruptDriverState);
+}
+
+static int32_t LPSPI15_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI15_InterruptDriverState);
+}
+
+static uint32_t LPSPI15_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI15_InterruptDriverState);
+}
+
+static int32_t LPSPI15_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI15_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI15_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI15_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI15 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI15_DMA_EN) && RTE_SPI15_DMA_EN
+    LPSPI15_EdmaInitialize, LPSPI15_EdmaUninitialize, LPSPI15_EdmaPowerControl, LPSPI15_EdmaSend,
+    LPSPI15_EdmaReceive,    LPSPI15_EdmaTransfer,     LPSPI15_EdmaGetCount,     LPSPI15_EdmaControl,
+    LPSPI15_EdmaGetStatus
+#else
+    LPSPI15_InterruptInitialize, LPSPI15_InterruptUninitialize, LPSPI15_InterruptPowerControl, LPSPI15_InterruptSend,
+    LPSPI15_InterruptReceive,    LPSPI15_InterruptTransfer,     LPSPI15_InterruptGetCount,     LPSPI15_InterruptControl,
+    LPSPI15_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI15  */
+
+#if defined(LPSPI16) && defined(RTE_SPI16) && RTE_SPI16
+
+/* User needs to provide the implementation for LPSPI16_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI16_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI16_Resource = {LPSPI16, 16, LPSPI16_GetFreq};
+
+#if defined(RTE_SPI16_DMA_EN) && RTE_SPI16_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI16_EdmaResource = {
+    RTE_SPI16_DMA_TX_DMA_BASE,    RTE_SPI16_DMA_TX_CH,          (uint16_t)RTE_SPI16_DMA_TX_PERI_SEL,
+    RTE_SPI16_DMA_RX_DMA_BASE,    RTE_SPI16_DMA_RX_CH,          (uint16_t)RTE_SPI16_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI16_DMA_TX_DMAMUX_BASE, RTE_SPI16_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI16_EdmaHandle);
+static edma_handle_t LPSPI16_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI16_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi16_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI16_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI16_EdmaDriverState = {
+#endif
+    &LPSPI16_Resource,
+    &LPSPI16_EdmaResource,
+    &LPSPI16_EdmaHandle,
+    &LPSPI16_EdmaRxRegToRxDataHandle,
+    &LPSPI16_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI16_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI16_PIN_INIT
+    RTE_SPI16_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI16_EdmaDriverState);
+}
+
+static int32_t LPSPI16_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI16_PIN_DEINIT
+    RTE_SPI16_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI16_EdmaDriverState);
+}
+
+static int32_t LPSPI16_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI16_EdmaDriverState);
+}
+
+static int32_t LPSPI16_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI16_EdmaDriverState);
+}
+
+static int32_t LPSPI16_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI16_EdmaDriverState);
+}
+
+static int32_t LPSPI16_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI16_EdmaDriverState);
+}
+
+static uint32_t LPSPI16_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI16_EdmaDriverState);
+}
+
+static int32_t LPSPI16_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI16_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI16_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI16_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI16_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi16_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI16_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI16_InterruptDriverState = {
+#endif
+    &LPSPI16_Resource,
+    &LPSPI16_Handle,
+};
+
+static int32_t LPSPI16_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI16_PIN_INIT
+    RTE_SPI16_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI16_InterruptDriverState);
+}
+
+static int32_t LPSPI16_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI16_PIN_DEINIT
+    RTE_SPI16_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI16_InterruptDriverState);
+}
+
+static int32_t LPSPI16_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI16_InterruptDriverState);
+}
+
+static int32_t LPSPI16_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI16_InterruptDriverState);
+}
+
+static int32_t LPSPI16_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI16_InterruptDriverState);
+}
+
+static int32_t LPSPI16_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI16_InterruptDriverState);
+}
+
+static uint32_t LPSPI16_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI16_InterruptDriverState);
+}
+
+static int32_t LPSPI16_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI16_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI16_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI16_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI16 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI16_DMA_EN) && RTE_SPI16_DMA_EN
+    LPSPI16_EdmaInitialize, LPSPI16_EdmaUninitialize, LPSPI16_EdmaPowerControl, LPSPI16_EdmaSend,
+    LPSPI16_EdmaReceive,    LPSPI16_EdmaTransfer,     LPSPI16_EdmaGetCount,     LPSPI16_EdmaControl,
+    LPSPI16_EdmaGetStatus
+#else
+    LPSPI16_InterruptInitialize, LPSPI16_InterruptUninitialize, LPSPI16_InterruptPowerControl, LPSPI16_InterruptSend,
+    LPSPI16_InterruptReceive,    LPSPI16_InterruptTransfer,     LPSPI16_InterruptGetCount,     LPSPI16_InterruptControl,
+    LPSPI16_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI16  */
+
+#if defined(LPSPI17) && defined(RTE_SPI17) && RTE_SPI17
+
+/* User needs to provide the implementation for LPSPI17_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI17_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI17_Resource = {LPSPI17, 17, LPSPI17_GetFreq};
+
+#if defined(RTE_SPI17_DMA_EN) && RTE_SPI17_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI17_EdmaResource = {
+    RTE_SPI17_DMA_TX_DMA_BASE,    RTE_SPI17_DMA_TX_CH,          (uint16_t)RTE_SPI17_DMA_TX_PERI_SEL,
+    RTE_SPI17_DMA_RX_DMA_BASE,    RTE_SPI17_DMA_RX_CH,          (uint16_t)RTE_SPI17_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI17_DMA_TX_DMAMUX_BASE, RTE_SPI17_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI17_EdmaHandle);
+static edma_handle_t LPSPI17_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI17_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi17_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI17_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI17_EdmaDriverState = {
+#endif
+    &LPSPI17_Resource,
+    &LPSPI17_EdmaResource,
+    &LPSPI17_EdmaHandle,
+    &LPSPI17_EdmaRxRegToRxDataHandle,
+    &LPSPI17_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI17_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI17_PIN_INIT
+    RTE_SPI17_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI17_EdmaDriverState);
+}
+
+static int32_t LPSPI17_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI17_PIN_DEINIT
+    RTE_SPI17_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI17_EdmaDriverState);
+}
+
+static int32_t LPSPI17_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI17_EdmaDriverState);
+}
+
+static int32_t LPSPI17_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI17_EdmaDriverState);
+}
+
+static int32_t LPSPI17_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI17_EdmaDriverState);
+}
+
+static int32_t LPSPI17_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI17_EdmaDriverState);
+}
+
+static uint32_t LPSPI17_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI17_EdmaDriverState);
+}
+
+static int32_t LPSPI17_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI17_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI17_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI17_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI17_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi17_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI17_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI17_InterruptDriverState = {
+#endif
+    &LPSPI17_Resource,
+    &LPSPI17_Handle,
+};
+
+static int32_t LPSPI17_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI17_PIN_INIT
+    RTE_SPI17_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI17_InterruptDriverState);
+}
+
+static int32_t LPSPI17_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI17_PIN_DEINIT
+    RTE_SPI17_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI17_InterruptDriverState);
+}
+
+static int32_t LPSPI17_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI17_InterruptDriverState);
+}
+
+static int32_t LPSPI17_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI17_InterruptDriverState);
+}
+
+static int32_t LPSPI17_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI17_InterruptDriverState);
+}
+
+static int32_t LPSPI17_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI17_InterruptDriverState);
+}
+
+static uint32_t LPSPI17_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI17_InterruptDriverState);
+}
+
+static int32_t LPSPI17_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI17_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI17_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI17_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI17 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI17_DMA_EN) && RTE_SPI17_DMA_EN
+    LPSPI17_EdmaInitialize, LPSPI17_EdmaUninitialize, LPSPI17_EdmaPowerControl, LPSPI17_EdmaSend,
+    LPSPI17_EdmaReceive,    LPSPI17_EdmaTransfer,     LPSPI17_EdmaGetCount,     LPSPI17_EdmaControl,
+    LPSPI17_EdmaGetStatus
+#else
+    LPSPI17_InterruptInitialize, LPSPI17_InterruptUninitialize, LPSPI17_InterruptPowerControl, LPSPI17_InterruptSend,
+    LPSPI17_InterruptReceive,    LPSPI17_InterruptTransfer,     LPSPI17_InterruptGetCount,     LPSPI17_InterruptControl,
+    LPSPI17_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI17  */
+
+#if defined(LPSPI18) && defined(RTE_SPI18) && RTE_SPI18
+
+/* User needs to provide the implementation for LPSPI18_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI18_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI18_Resource = {LPSPI18, 18, LPSPI18_GetFreq};
+
+#if defined(RTE_SPI18_DMA_EN) && RTE_SPI18_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI18_EdmaResource = {
+    RTE_SPI18_DMA_TX_DMA_BASE,    RTE_SPI18_DMA_TX_CH,          (uint16_t)RTE_SPI18_DMA_TX_PERI_SEL,
+    RTE_SPI18_DMA_RX_DMA_BASE,    RTE_SPI18_DMA_RX_CH,          (uint16_t)RTE_SPI18_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI18_DMA_TX_DMAMUX_BASE, RTE_SPI18_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI18_EdmaHandle);
+static edma_handle_t LPSPI18_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI18_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi18_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI18_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI18_EdmaDriverState = {
+#endif
+    &LPSPI18_Resource,
+    &LPSPI18_EdmaResource,
+    &LPSPI18_EdmaHandle,
+    &LPSPI18_EdmaRxRegToRxDataHandle,
+    &LPSPI18_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI18_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI18_PIN_INIT
+    RTE_SPI18_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI18_EdmaDriverState);
+}
+
+static int32_t LPSPI18_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI18_PIN_DEINIT
+    RTE_SPI18_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI18_EdmaDriverState);
+}
+
+static int32_t LPSPI18_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI18_EdmaDriverState);
+}
+
+static int32_t LPSPI18_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI18_EdmaDriverState);
+}
+
+static int32_t LPSPI18_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI18_EdmaDriverState);
+}
+
+static int32_t LPSPI18_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI18_EdmaDriverState);
+}
+
+static uint32_t LPSPI18_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI18_EdmaDriverState);
+}
+
+static int32_t LPSPI18_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI18_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI18_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI18_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI18_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi18_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI18_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI18_InterruptDriverState = {
+#endif
+    &LPSPI18_Resource,
+    &LPSPI18_Handle,
+};
+
+static int32_t LPSPI18_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI18_PIN_INIT
+    RTE_SPI18_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI18_InterruptDriverState);
+}
+
+static int32_t LPSPI18_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI18_PIN_DEINIT
+    RTE_SPI18_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI18_InterruptDriverState);
+}
+
+static int32_t LPSPI18_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI18_InterruptDriverState);
+}
+
+static int32_t LPSPI18_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI18_InterruptDriverState);
+}
+
+static int32_t LPSPI18_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI18_InterruptDriverState);
+}
+
+static int32_t LPSPI18_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI18_InterruptDriverState);
+}
+
+static uint32_t LPSPI18_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI18_InterruptDriverState);
+}
+
+static int32_t LPSPI18_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI18_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI18_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI18_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI18 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI18_DMA_EN) && RTE_SPI18_DMA_EN
+    LPSPI18_EdmaInitialize, LPSPI18_EdmaUninitialize, LPSPI18_EdmaPowerControl, LPSPI18_EdmaSend,
+    LPSPI18_EdmaReceive,    LPSPI18_EdmaTransfer,     LPSPI18_EdmaGetCount,     LPSPI18_EdmaControl,
+    LPSPI18_EdmaGetStatus
+#else
+    LPSPI18_InterruptInitialize, LPSPI18_InterruptUninitialize, LPSPI18_InterruptPowerControl, LPSPI18_InterruptSend,
+    LPSPI18_InterruptReceive,    LPSPI18_InterruptTransfer,     LPSPI18_InterruptGetCount,     LPSPI18_InterruptControl,
+    LPSPI18_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI18  */
+
+#if defined(LPSPI19) && defined(RTE_SPI19) && RTE_SPI19
+
+/* User needs to provide the implementation for LPSPI19_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI19_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI19_Resource = {LPSPI19, 19, LPSPI19_GetFreq};
+
+#if defined(RTE_SPI19_DMA_EN) && RTE_SPI19_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI19_EdmaResource = {
+    RTE_SPI19_DMA_TX_DMA_BASE,    RTE_SPI19_DMA_TX_CH,          (uint16_t)RTE_SPI19_DMA_TX_PERI_SEL,
+    RTE_SPI19_DMA_RX_DMA_BASE,    RTE_SPI19_DMA_RX_CH,          (uint16_t)RTE_SPI19_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI19_DMA_TX_DMAMUX_BASE, RTE_SPI19_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI19_EdmaHandle);
+static edma_handle_t LPSPI19_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI19_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi19_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI19_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI19_EdmaDriverState = {
+#endif
+    &LPSPI19_Resource,
+    &LPSPI19_EdmaResource,
+    &LPSPI19_EdmaHandle,
+    &LPSPI19_EdmaRxRegToRxDataHandle,
+    &LPSPI19_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI19_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI19_PIN_INIT
+    RTE_SPI19_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI19_EdmaDriverState);
+}
+
+static int32_t LPSPI19_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI19_PIN_DEINIT
+    RTE_SPI19_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI19_EdmaDriverState);
+}
+
+static int32_t LPSPI19_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI19_EdmaDriverState);
+}
+
+static int32_t LPSPI19_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI19_EdmaDriverState);
+}
+
+static int32_t LPSPI19_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI19_EdmaDriverState);
+}
+
+static int32_t LPSPI19_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI19_EdmaDriverState);
+}
+
+static uint32_t LPSPI19_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI19_EdmaDriverState);
+}
+
+static int32_t LPSPI19_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI19_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI19_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI19_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI19_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi19_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI19_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI19_InterruptDriverState = {
+#endif
+    &LPSPI19_Resource,
+    &LPSPI19_Handle,
+};
+
+static int32_t LPSPI19_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI19_PIN_INIT
+    RTE_SPI19_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI19_InterruptDriverState);
+}
+
+static int32_t LPSPI19_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI19_PIN_DEINIT
+    RTE_SPI19_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI19_InterruptDriverState);
+}
+
+static int32_t LPSPI19_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI19_InterruptDriverState);
+}
+
+static int32_t LPSPI19_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI19_InterruptDriverState);
+}
+
+static int32_t LPSPI19_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI19_InterruptDriverState);
+}
+
+static int32_t LPSPI19_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI19_InterruptDriverState);
+}
+
+static uint32_t LPSPI19_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI19_InterruptDriverState);
+}
+
+static int32_t LPSPI19_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI19_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI19_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI19_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI19 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI19_DMA_EN) && RTE_SPI19_DMA_EN
+    LPSPI19_EdmaInitialize, LPSPI19_EdmaUninitialize, LPSPI19_EdmaPowerControl, LPSPI19_EdmaSend,
+    LPSPI19_EdmaReceive,    LPSPI19_EdmaTransfer,     LPSPI19_EdmaGetCount,     LPSPI19_EdmaControl,
+    LPSPI19_EdmaGetStatus
+#else
+    LPSPI19_InterruptInitialize, LPSPI19_InterruptUninitialize, LPSPI19_InterruptPowerControl, LPSPI19_InterruptSend,
+    LPSPI19_InterruptReceive,    LPSPI19_InterruptTransfer,     LPSPI19_InterruptGetCount,     LPSPI19_InterruptControl,
+    LPSPI19_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI19  */
+
+#if defined(LPSPI20) && defined(RTE_SPI20) && RTE_SPI20
+
+/* User needs to provide the implementation for LPSPI20_GetFreq/InitPins/DeinitPins
+in the application for enabling according instance. */
+extern uint32_t LPSPI20_GetFreq(void);
+
+static cmsis_lpspi_resource_t LPSPI20_Resource = {LPSPI20, 20, LPSPI20_GetFreq};
+
+#if defined(RTE_SPI20_DMA_EN) && RTE_SPI20_DMA_EN
+
+#if (defined(FSL_FEATURE_SOC_EDMA_COUNT) && FSL_FEATURE_SOC_EDMA_COUNT)
+static cmsis_lpspi_edma_resource_t LPSPI20_EdmaResource = {
+    RTE_SPI20_DMA_TX_DMA_BASE,    RTE_SPI20_DMA_TX_CH,          (uint16_t)RTE_SPI20_DMA_TX_PERI_SEL,
+    RTE_SPI20_DMA_RX_DMA_BASE,    RTE_SPI20_DMA_RX_CH,          (uint16_t)RTE_SPI20_DMA_RX_PERI_SEL,
+#if (defined(FSL_FEATURE_SOC_DMAMUX_COUNT) && FSL_FEATURE_SOC_DMAMUX_COUNT)
+    RTE_SPI20_DMA_TX_DMAMUX_BASE, RTE_SPI20_DMA_RX_DMAMUX_BASE,
+#endif
+};
+
+AT_NONCACHEABLE_SECTION(static cmsis_lpspi_edma_handle_t LPSPI20_EdmaHandle);
+static edma_handle_t LPSPI20_EdmaTxDataToTxRegHandle;
+static edma_handle_t LPSPI20_EdmaRxRegToRxDataHandle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi20_edma_driver_state")
+static cmsis_lpspi_edma_driver_state_t LPSPI20_EdmaDriverState = {
+#else
+static cmsis_lpspi_edma_driver_state_t LPSPI20_EdmaDriverState = {
+#endif
+    &LPSPI20_Resource,
+    &LPSPI20_EdmaResource,
+    &LPSPI20_EdmaHandle,
+    &LPSPI20_EdmaRxRegToRxDataHandle,
+    &LPSPI20_EdmaTxDataToTxRegHandle,
+};
+
+static int32_t LPSPI20_EdmaInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI20_PIN_INIT
+    RTE_SPI20_PIN_INIT();
+#endif
+    return LPSPI_EdmaInitialize(cb_event, &LPSPI20_EdmaDriverState);
+}
+
+static int32_t LPSPI20_EdmaUninitialize(void)
+{
+#ifdef RTE_SPI20_PIN_DEINIT
+    RTE_SPI20_PIN_DEINIT();
+#endif
+    return LPSPI_EdmaUninitialize(&LPSPI20_EdmaDriverState);
+}
+
+static int32_t LPSPI20_EdmaPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_EdmaPowerControl(state, &LPSPI20_EdmaDriverState);
+}
+
+static int32_t LPSPI20_EdmaSend(const void *data, uint32_t num)
+{
+    return LPSPI_EdmaSend(data, num, &LPSPI20_EdmaDriverState);
+}
+
+static int32_t LPSPI20_EdmaReceive(void *data, uint32_t num)
+{
+    return LPSPI_EdmaReceive(data, num, &LPSPI20_EdmaDriverState);
+}
+
+static int32_t LPSPI20_EdmaTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_EdmaTransfer(data_out, data_in, num, &LPSPI20_EdmaDriverState);
+}
+
+static uint32_t LPSPI20_EdmaGetCount(void)
+{
+    return LPSPI_EdmaGetCount(&LPSPI20_EdmaDriverState);
+}
+
+static int32_t LPSPI20_EdmaControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_EdmaControl(control, arg, &LPSPI20_EdmaDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI20_EdmaGetStatus(void)
+{
+    return LPSPI_EdmaGetStatus(&LPSPI20_EdmaDriverState);
+}
+
+#endif
+
+#else
+
+static cmsis_lpspi_handle_t LPSPI20_Handle;
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION)
+ARMCC_SECTION("lpspi20_interrupt_driver_state")
+static cmsis_lpspi_interrupt_driver_state_t LPSPI20_InterruptDriverState = {
+#else
+static cmsis_lpspi_interrupt_driver_state_t LPSPI20_InterruptDriverState = {
+#endif
+    &LPSPI20_Resource,
+    &LPSPI20_Handle,
+};
+
+static int32_t LPSPI20_InterruptInitialize(ARM_SPI_SignalEvent_t cb_event)
+{
+#ifdef RTE_SPI20_PIN_INIT
+    RTE_SPI20_PIN_INIT();
+#endif
+    return LPSPI_InterruptInitialize(cb_event, &LPSPI20_InterruptDriverState);
+}
+
+static int32_t LPSPI20_InterruptUninitialize(void)
+{
+#ifdef RTE_SPI20_PIN_DEINIT
+    RTE_SPI20_PIN_DEINIT();
+#endif
+    return LPSPI_InterruptUninitialize(&LPSPI20_InterruptDriverState);
+}
+
+static int32_t LPSPI20_InterruptPowerControl(ARM_POWER_STATE state)
+{
+    return LPSPI_InterruptPowerControl(state, &LPSPI20_InterruptDriverState);
+}
+
+static int32_t LPSPI20_InterruptSend(const void *data, uint32_t num)
+{
+    return LPSPI_InterruptSend(data, num, &LPSPI20_InterruptDriverState);
+}
+
+static int32_t LPSPI20_InterruptReceive(void *data, uint32_t num)
+{
+    return LPSPI_InterruptReceive(data, num, &LPSPI20_InterruptDriverState);
+}
+
+static int32_t LPSPI20_InterruptTransfer(const void *data_out, void *data_in, uint32_t num)
+{
+    return LPSPI_InterruptTransfer(data_out, data_in, num, &LPSPI20_InterruptDriverState);
+}
+
+static uint32_t LPSPI20_InterruptGetCount(void)
+{
+    return LPSPI_InterruptGetCount(&LPSPI20_InterruptDriverState);
+}
+
+static int32_t LPSPI20_InterruptControl(uint32_t control, uint32_t arg)
+{
+    return LPSPI_InterruptControl(control, arg, &LPSPI20_InterruptDriverState);
+}
+
+static ARM_SPI_STATUS LPSPI20_InterruptGetStatus(void)
+{
+    return LPSPI_InterruptGetStatus(&LPSPI20_InterruptDriverState);
+}
+
+#endif
+
+ARM_DRIVER_SPI Driver_SPI20 = {
+    LPSPIx_GetVersion,      LPSPIx_GetCapabilities,
+#if defined(RTE_SPI20_DMA_EN) && RTE_SPI20_DMA_EN
+    LPSPI20_EdmaInitialize, LPSPI20_EdmaUninitialize, LPSPI20_EdmaPowerControl, LPSPI20_EdmaSend,
+    LPSPI20_EdmaReceive,    LPSPI20_EdmaTransfer,     LPSPI20_EdmaGetCount,     LPSPI20_EdmaControl,
+    LPSPI20_EdmaGetStatus
+#else
+    LPSPI20_InterruptInitialize, LPSPI20_InterruptUninitialize, LPSPI20_InterruptPowerControl, LPSPI20_InterruptSend,
+    LPSPI20_InterruptReceive,    LPSPI20_InterruptTransfer,     LPSPI20_InterruptGetCount,     LPSPI20_InterruptControl,
+    LPSPI20_InterruptGetStatus
+#endif
+};
+
+#endif /*  LPSPI20  */

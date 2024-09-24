@@ -22,9 +22,11 @@
 
 /*! @name Driver version */
 /*! @{ */
-/*! @brief Defines ITRC driver version 2.3.0.
+/*! @brief Defines ITRC driver version 2.4.0.
  *
  * Change log:
+ * - Version 2.4.0
+ *   - Rework the input signal definition for better flexibility
  * - Version 2.3.0
  *   - Update names of kITRC_SwEvent1/2 to kITRC_SwEvent0/1 to align with RM
  * - Version 2.2.0
@@ -34,91 +36,155 @@
  * - Version 2.0.0
  *   - initial version
  */
-#define FSL_ITRC_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
+#define FSL_ITRC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*! @} */
 
 typedef enum _itrc_input_signals
 {
-    kITRC_Glitch   = 0U,
-    kITRC_Tamper   = 1U,
-    kITRC_Cdog     = 2U,
-    kITRC_BodVbat  = 3u,
-    kITRC_BodVdd   = 4u,
-    kITRC_Watchdog = 5u,
-    kITRC_FlashEcc = 6u,
-    kITRC_Ahb      = 7u,
-    kITRC_ElsErr   = 8u,
-#if defined(FSL_FEATURE_ITRC_HAS_SYSCON_GLITCH) && (FSL_FEATURE_ITRC_HAS_SYSCON_GLITCH > 0)
-    kITRC_SysconGlitch = 9u,
+#ifdef ITRC_OUT_SEL_IN0_SELn_MASK
+    kITRC_In0 = 0U,
 #endif
-    kITRC_Pkc = 10u,
-#if defined(ITRC_OUTX_SEL_OUTX_SELY_OUT_SEL_IN11_SELn_MASK)
-    kITRC_Cdog1 = 11u,
-#endif /* ITRC_OUTX_SEL_OUTX_SELY_OUT_SEL_IN11_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_OUTX_SELY_OUT_SEL_IN12_SELn_MASK)
-    kITRC_Watchdog1 = 12u,
-#endif /* ITRC_OUTX_SEL_OUTX_SELY_OUT_SEL_IN12_SELn_MASK*/
-#if defined(ITRC_OUTX_SEL_OUTX_SELY_OUT_SEL_IN13_SELn_MASK)
-    kITRC_Freqme = 13u,
-#endif /* ITRC_OUTX_SEL_OUTX_SELY_OUT_SEL_IN13_SELn_MASK */
-    kITRC_SwEvent0 = 14u,
-    kITRC_SwEvent1 = 15u,
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN16_SELn_MASK)
-    kITRC_VddSysLow = 16u,
-#endif /* ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN16_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN17_SELn_MASK)
-    kITRC_VddIoLow = 17u,
-#endif /* ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN17_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN19_SELn_MASK)
-    kITRC_VddTemp = 19u,
-#endif /* ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN19_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN20_SELn_MASK)
-    kITRC_VddClock = 20u,
-#endif /* ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN20_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN21_SELn_MASK)
-    kITRC_INTM0 = 21u,
-#endif /* ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN21_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN22_SELn_MASK)
-    kITRC_INTM1 = 22u,
-#endif /* ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN22_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN23_SELn_MASK)
-    kITRC_INTM2 = 23u,
-#endif /* ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN23_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN24_SELn_MASK)
-    kITRC_INTM3 = 24u,
-#endif /* ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN24_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_IN25_SELn_MASK) && \
-    defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN32_SELn_MASK)
-    kITRC_SoCTrim0 = 25u,
-    kITRC_SoCTrim1 = 26u,
-    kITRC_SoCTrim2 = 27u,
-    kITRC_SoCTrim3 = 28u,
-    kITRC_SoCTrim4 = 29u,
-    kITRC_SoCTrim5 = 30u,
-    kITRC_SoCTrim6 = 31u,
-    kITRC_SoCTrim7 = 32u,
-#endif /* ITRC_OUTX_SEL_x_OUTX_SELY_OUT_SEL_INxx_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN33_SELn_MASK)
-    kITRC_GdetSfr = 33u,
-#endif /* ITRC_OUTX_SEL_x_OUTX_SELY_OUT_SEL_INxx_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN34_SELn_MASK)
-    kITRC_VddCore = 34u,
-#endif /* ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN34_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN35_SELn_MASK)
-    kITRC_VddSys = 35u,
-#endif /* ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN35_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN36_SELn_MASK)
-    kITRC_VddIo = 36u,
-#endif /* ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN36_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN37_SELn_MASK)
-    kITRC_FlexspiGcm = 37u,
-#endif /* ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN37_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN46_SELn_MASK)
-    kITRC_Sm3Err = 46u,
-#endif /* ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN46_SELn_MASK */
-#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_IN47_SELn_MASK)
-    kITRC_TrngErr = 47u,
-#endif /*  */
+#ifdef ITRC_OUT_SEL_IN1_SELn_MASK
+    kITRC_In1 = 1U,
+#endif
+#ifdef ITRC_OUT_SEL_IN2_SELn_MASK
+    kITRC_In2 = 2U,
+#endif
+#ifdef ITRC_OUT_SEL_IN3_SELn_MASK
+    kITRC_In3 = 3U,
+#endif
+#ifdef ITRC_OUT_SEL_IN4_SELn_MASK
+    kITRC_In4 = 4U,
+#endif
+#ifdef ITRC_OUT_SEL_IN5_SELn_MASK
+    kITRC_In5 = 5U,
+#endif
+#ifdef ITRC_OUT_SEL_IN6_SELn_MASK
+    kITRC_In6 = 6U,
+#endif
+#ifdef ITRC_OUT_SEL_IN7_SELn_MASK
+    kITRC_In7 = 7U,
+#endif
+#ifdef ITRC_OUT_SEL_IN8_SELn_MASK
+    kITRC_In8 = 8U,
+#endif
+#ifdef ITRC_OUT_SEL_IN9_SELn_MASK
+    kITRC_In9 = 9U,
+#endif
+#ifdef ITRC_OUT_SEL_IN10_SELn_MASK
+    kITRC_In10 = 10U,
+#endif
+#ifdef ITRC_OUT_SEL_IN11_SELn_MASK
+    kITRC_In11 = 11U,
+#endif
+#ifdef ITRC_OUT_SEL_IN12_SELn_MASK
+    kITRC_In12 = 12U,
+#endif
+#ifdef ITRC_OUT_SEL_IN13_SELn_MASK
+    kITRC_In13 = 13U,
+#endif
+#ifdef ITRC_OUT_SEL_IN14_SELn_MASK
+    kITRC_In14 = 14U,
+#endif
+#ifdef ITRC_OUT_SEL_IN15_SELn_MASK
+    kITRC_In15 = 15U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN16_SELn_MASK
+    kITRC_In16 = 16U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN17_SELn_MASK
+    kITRC_In17 = 17U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN18_SELn_MASK
+    kITRC_In18 = 18U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN19_SELn_MASK
+    kITRC_In19 = 19U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN20_SELn_MASK
+    kITRC_In20 = 20U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN21_SELn_MASK
+    kITRC_In21 = 21U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN22_SELn_MASK
+    kITRC_In22 = 22U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN23_SELn_MASK
+    kITRC_In23 = 23U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN24_SELn_MASK
+    kITRC_In24 = 24U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN25_SELn_MASK
+    kITRC_In25 = 25U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN26_SELn_MASK
+    kITRC_In26 = 26U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN27_SELn_MASK
+    kITRC_In27 = 27U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN28_SELn_MASK
+    kITRC_In28 = 28U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN29_SELn_MASK
+    kITRC_In29 = 29U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN30_SELn_MASK
+    kITRC_In30 = 30U,
+#endif
+#ifdef ITRC_OUT_SEL_1_IN31_SELn_MASK
+    kITRC_In31 = 31U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN32_SELn_MASK
+    kITRC_In32 = 32U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN33_SELn_MASK
+    kITRC_In33 = 33U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN34_SELn_MASK
+    kITRC_In34 = 34U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN35_SELn_MASK
+    kITRC_In35 = 35U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN36_SELn_MASK
+    kITRC_In36 = 36U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN37_SELn_MASK
+    kITRC_In37 = 37U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN38_SELn_MASK
+    kITRC_In38 = 38U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN39_SELn_MASK
+    kITRC_In39 = 39U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN40_SELn_MASK
+    kITRC_In40 = 40U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN41_SELn_MASK
+    kITRC_In41 = 41U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN42_SELn_MASK
+    kITRC_In42 = 42U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN43_SELn_MASK
+    kITRC_In43 = 43U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN44_SELn_MASK
+    kITRC_In44 = 44U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN45_SELn_MASK
+    kITRC_In45 = 45U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN46_SELn_MASK
+    kITRC_In46 = 46U,
+#endif
+#ifdef ITRC_OUT_SEL_2_IN47_SELn_MASK
+    kITRC_In47 = 47U,
+#endif
 } itrc_input_signals_t;
 
 typedef enum _itrc_lock
@@ -144,30 +210,55 @@ typedef enum _itrc_out_signals
     kITRC_TamperOut1 = 6u,
 } itrc_out_signals_t;
 
+/* Macros to avoid build failures because some platforms don't implement some IN signals */
+#ifndef ITRC_STATUS_IN2_STATUS_MASK
+#define ITRC_STATUS_IN2_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS_IN3_STATUS_MASK
+#define ITRC_STATUS_IN3_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS_IN9_STATUS_MASK
+#define ITRC_STATUS_IN9_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS1_IN17_STATUS_MASK
+#define ITRC_STATUS1_IN17_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS1_IN19_STATUS_MASK
+#define ITRC_STATUS1_IN19_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS1_IN24_21_STATUS_MASK
+#define ITRC_STATUS1_IN24_21_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS1_IN32_25_STATUS_MASK
+#define ITRC_STATUS1_IN32_25_STATUS_MASK (0u)
+#endif
+
+#ifndef ITRC_STATUS1_IN46_STATUS_MASK
+#define ITRC_STATUS1_IN46_STATUS_MASK (0u)
+#endif
+
 /* Inputs 0 to 15 events mask */
-#if defined(FSL_FEATURE_ITRC_HAS_SYSCON_GLITCH) && (FSL_FEATURE_ITRC_HAS_SYSCON_GLITCH > 0)
 #define IN_0_15_EVENTS_MASK                                                                      \
     (ITRC_STATUS_IN0_STATUS_MASK | ITRC_STATUS_IN1_STATUS_MASK | ITRC_STATUS_IN2_STATUS_MASK |   \
      ITRC_STATUS_IN3_STATUS_MASK | ITRC_STATUS_IN4_STATUS_MASK | ITRC_STATUS_IN5_STATUS_MASK |   \
      ITRC_STATUS_IN6_STATUS_MASK | ITRC_STATUS_IN7_STATUS_MASK | ITRC_STATUS_IN8_STATUS_MASK |   \
      ITRC_STATUS_IN9_STATUS_MASK | ITRC_STATUS_IN10_STATUS_MASK | ITRC_STATUS_IN14_STATUS_MASK | \
      ITRC_STATUS_IN15_STATUS_MASK)
-#else
-#define IN_0_15_EVENTS_MASK                                                                    \
-    (ITRC_STATUS_IN0_STATUS_MASK | ITRC_STATUS_IN1_STATUS_MASK | ITRC_STATUS_IN2_STATUS_MASK | \
-     ITRC_STATUS_IN3_STATUS_MASK | ITRC_STATUS_IN4_STATUS_MASK | ITRC_STATUS_IN5_STATUS_MASK | \
-     ITRC_STATUS_IN6_STATUS_MASK | ITRC_STATUS_IN7_STATUS_MASK | ITRC_STATUS_IN8_STATUS_MASK | \
-     ITRC_STATUS_IN10_STATUS_MASK | ITRC_STATUS_IN14_STATUS_MASK | ITRC_STATUS_IN15_STATUS_MASK)
-#endif /* FSL_FEATURE_ITRC_HAS_SYSCON_GLITCH */
 
 /* Inputs 15 to 47 events mask */
 #if defined(ITRC_STATUS1_IN16_STATUS_MASK) && defined(ITRC_STATUS1_IN47_STATUS)
-#define IN_16_47_EVENTS_MASK                                                                               \
-    (ITRC_STATUS1_IN16_STATUS_MASK | ITRC_STATUS1_IN17_STATUS_MASK | ITRC_STATUS1_IN18_STATUS_MASK |       \
-     ITRC_STATUS1_IN19_STATUS_MASK | ITRC_STATUS1_IN20_STATUS_MASK | ITRC_STATUS1_IN24_21_STATUS_MASK |    \
-     ITRC_STATUS1_IN24_21_STATUS_MASK | ITRC_STATUS1_IN32_25_STATUS_MASK | ITRC_STATUS1_IN33_STATUS_MASK | \
-     ITRC_STATUS1_IN34_STATUS_MASK | ITRC_STATUS1_IN35_STATUS_MASK | ITRC_STATUS1_IN36_STATUS_MASK |       \
-     ITRC_STATUS1_IN37_STATUS_MASK | ITRC_STATUS1_IN46_STATUS_MASK | ITRC_STATUS1_IN47_STATUS_MASK)
+#define IN_16_47_EVENTS_MASK                                                                            \
+    (ITRC_STATUS1_IN16_STATUS_MASK | ITRC_STATUS1_IN17_STATUS_MASK | ITRC_STATUS1_IN18_STATUS_MASK |    \
+     ITRC_STATUS1_IN19_STATUS_MASK | ITRC_STATUS1_IN20_STATUS_MASK | ITRC_STATUS1_IN24_21_STATUS_MASK | \
+     ITRC_STATUS1_IN32_25_STATUS_MASK | ITRC_STATUS1_IN33_STATUS_MASK | ITRC_STATUS1_IN34_STATUS_MASK | \
+     ITRC_STATUS1_IN35_STATUS_MASK | ITRC_STATUS1_IN36_STATUS_MASK | ITRC_STATUS1_IN37_STATUS_MASK |    \
+     ITRC_STATUS1_IN46_STATUS_MASK | ITRC_STATUS1_IN47_STATUS_MASK)
 #endif /* ITRC_STATUS1_IN16_STATUS_MASK && ITRC_STATUS1_IN47_STATUS */
 
 /* Output actions mask */
@@ -315,8 +406,8 @@ void ITRC_Deinit(ITRC_Type *base);
 
 #if defined(__cplusplus)
 }
-#endif /* __cplusplus */
+#endif   /* __cplusplus */
 
 /*! @}*/ /* end of group itrc */
 
-#endif /* FSL_ITRC_H_ */
+#endif   /* FSL_ITRC_H_ */

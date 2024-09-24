@@ -238,7 +238,7 @@ status_t ITRC_SetActionToEvent(
                 base->OUT_SEL[i][1] |= sel1 << index;
                 break;
             }
-#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_COUNT)
+#if defined(ITRC_OUTX_SEL_1_OUTX_SELY_OUT_SEL_1_COUNT) || defined(ITRC_OUT_SEL_1_COUNT)
             else if (OUT_SEL_0_COUNT <= (uint32_t)in && (uint32_t)in < OUT_SEL_1_COUNT)
             {
                 base->OUT_SEL_1[i][0] = (base->OUT_SEL[i][0] & select_AND_mask) | (sel0 << index);
@@ -246,7 +246,7 @@ status_t ITRC_SetActionToEvent(
                 break;
             }
 #endif /* defined(OUT_SEL_1) */
-#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_COUNT)
+#if defined(ITRC_OUTX_SEL_2_OUTX_SELY_OUT_SEL_2_COUNT) || defined(ITRC_OUT_SEL_2_COUNT)
             else if (OUT_SEL_1_COUNT <= (uint32_t)in && (uint32_t)in < OUT_SEL_2_COUNT)
             {
                 base->OUT_SEL_2[i][0] = (base->OUT_SEL[i][0] & select_AND_mask) | (sel0 << index);

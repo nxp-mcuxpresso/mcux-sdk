@@ -10,7 +10,7 @@ manifest:
     remote: nxp-mcuxpresso
   projects:
   - name: mcux-sdk-examples
-    revision: MCUX_2.16.000
+    revision: MCUX_2.16.000_RT700
     path: examples
   - name: FreeRTOS-Kernel
     revision: MCUX_2.16.000
@@ -29,7 +29,7 @@ manifest:
     url: https://github.com/EmbeddedRPC/erpc
     revision: 1.13.0
   - name: mcux-soc-svd
-    revision: MCUX_2.16.000
+    revision: MCUX_2.16.000_RT700
     path: svd
   - name: fatfs
     path: middleware/fatfs
@@ -106,7 +106,7 @@ manifest:
     remote: nxp_zephyr
   - name: CMSIS_5
     path: core/CMSIS
-    revision: MCUX_2.16.000
+    revision: MCUX_2.16.000_RT700
   - name: EAP
     path: middleware/EAP
     revision: MCUX_2.14.0
@@ -124,7 +124,7 @@ manifest:
     revision: MCUX_2.16.000
   - name: mcux-sdk-middleware-connectivity-framework
     path: middleware/wireless/framework
-    revision: MCUX_2.16.000
+    revision: MCUX_2.16.000_UpdRev0
     remote: nxp
   - name: mcux-sdk-middleware-bluetooth-controller
     revision: MCUX_2.16.000

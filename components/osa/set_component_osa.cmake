@@ -66,30 +66,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_component_osa_free_rtos)
-# Add set(CONFIG_USE_component_osa_free_rtos true) in config.cmake to use this component
-
-message("component_osa_free_rtos component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_middleware_freertos-kernel AND CONFIG_USE_driver_common AND CONFIG_USE_component_lists AND CONFIG_USE_component_osa_interface)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./fsl_os_abstraction_free_rtos.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./.
-)
-
-else()
-
-message(SEND_ERROR "component_osa_free_rtos dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_component_osa)
 # Add set(CONFIG_USE_component_osa true) in config.cmake to use this component
 
@@ -100,12 +76,6 @@ if(CONFIG_USE_driver_common AND CONFIG_USE_component_lists)
 if(CONFIG_USE_middleware_baremetal)
   target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
       ${CMAKE_CURRENT_LIST_DIR}/./fsl_os_abstraction_bm.c
-  )
-endif()
-
-if(CONFIG_USE_middleware_freertos-kernel)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./fsl_os_abstraction_free_rtos.c
   )
 endif()
 
@@ -136,30 +106,6 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 else()
 
 message(SEND_ERROR "component_osa_interface dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
-if (CONFIG_USE_component_osa_thread)
-# Add set(CONFIG_USE_component_osa_thread true) in config.cmake to use this component
-
-message("component_osa_thread component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_common AND CONFIG_USE_component_lists AND CONFIG_USE_component_osa_interface AND (CONFIG_USE_middleware_azure_rtos_tx OR CONFIG_USE_middleware_azure_rtos_tx_sp))
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/./fsl_os_abstraction_threadx.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/./.
-)
-
-else()
-
-message(SEND_ERROR "component_osa_thread dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

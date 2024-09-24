@@ -23,11 +23,13 @@
  */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief PUFv3 driver version. Version 2.0.2.
+/*! @brief PUFv3 driver version. Version 2.0.3.
  *
- * Current version: 2.0.2
+ * Current version: 2.0.3
  *
  * Change log:
+ * - 2.0.3
+ *   - Update for various PUF CTRL wrapper
  * - 2.0.2
  *   - Fix MISRA issue in driver.
  * - 2.0.1
@@ -35,7 +37,7 @@
  * - 2.0.0
  *   - Initial version.
  */
-#define FSL_PUF_V3_DRIVER_VERSION (MAKE_VERSION(2, 0, 2))
+#define FSL_PUF_V3_DRIVER_VERSION (MAKE_VERSION(2, 0, 3))
 /*! @} */
 
 #define kPUF_EndianLittle (0x0u)
@@ -149,7 +151,8 @@ void PUF_Deinit(PUF_Type *base, puf_config_t *conf);
  *
  * @param base PUF peripheral base address
  * @param[out] activationCode Word aligned address of the resulting activation code.
- * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes.
+ * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE
+ * bytes.
  * @param score Value of the PUF Score that was obtained during the enroll operation.
  * @return Status of enroll operation.
  */
@@ -164,7 +167,8 @@ status_t PUF_Enroll(PUF_Type *base, uint8_t *activationCode, size_t activationCo
  *
  * @param base PUF peripheral base address
  * @param[in] activationCode Word aligned address of the input activation code.
- * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes.
+ * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE
+ * bytes.
  * @param score Value of the PUF Score that was obtained during the start operation.
  * return Status of start operation.
  */

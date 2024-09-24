@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017, 2020-2021 NXP
+ * Copyright 2016-2017, 2020-2021,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -153,6 +153,8 @@ static uint32_t SSD1963_GetPllDivider(uint8_t *multi, uint8_t *div, uint32_t src
 
     return pllFreqCandidate;
 }
+
+#if MCUX_DBI_LEGACY
 
 status_t SSD1963_Init(ssd1963_handle_t *handle,
                       const ssd1963_config_t *config,
@@ -476,7 +478,7 @@ status_t SSD1963_SetPixelFormat(ssd1963_handle_t *handle, ssd1963_pixel_interfac
     /* Address mode. */
     handle->addrMode &= (uint8_t)(~SSD1963_ADDR_MODE_BGR);
 #if (8 == SSD1963_DATA_WITDH)
-    if (kSSD1963_RGB888 == pixelFormat)
+    if (kSSD1963_BGR888 == pixelFormat)
     {
         handle->addrMode |= SSD1963_ADDR_MODE_BGR;
     }
@@ -501,3 +503,153 @@ status_t SSD1963_WriteMemory(ssd1963_handle_t *handle, const uint8_t *data, uint
 {
     return handle->xferOps->writeMemory(handle->xferOpsData, SSD1963_WRITE_MEMORY_START, data, length);
 }
+
+#else
+
+status_t SSD1963_Init(dbi_iface_t *iface, const ssd1963_config_t *config, uint32_t srcClock_Hz)
+{
+    assert(config);
+
+    uint8_t multi, div;
+    uint32_t pllFreq_Hz;
+    uint32_t fpr; /* Pixel clock = PLL clock * ((fpr + 1) / 2^20) */
+    float fprFloat;
+#if (16 == SSD1963_DATA_WITDH)
+    uint16_t commandParam[8];
+#else
+    uint8_t commandParam[8];
+#endif
+    uint16_t vt, vps, ht, hps;
+    status_t status;
+
+    pllFreq_Hz = SSD1963_GetPllDivider(&multi, &div, srcClock_Hz);
+
+    /* Could not set the PLL to desired frequency. */
+    if (0U == pllFreq_Hz)
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    fprFloat = ((float)config->pclkFreq_Hz / (float)pllFreq_Hz) * (float)1048576.0f; /* 1048576 = 1<<20 */
+    fpr      = (uint32_t)fprFloat;
+
+    if ((fpr < 1U) || (fpr > (SSD1963_LCDC_FPR_MAX + 1U)))
+    {
+        return kStatus_InvalidArgument;
+    }
+
+    fpr--;
+
+    /* Soft reset. Command only */
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SOFT_RESET, NULL, 0U));
+    SSD1963_Delay(50000);
+
+    /* Setup the PLL. */
+    /* Set the multiplier and divider. */
+    commandParam[0] = multi;
+    commandParam[1] = (uint8_t)(div | (1U << 5U));
+    commandParam[2] = 1U << 2U;
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SET_PLL_MN, commandParam, 3U * SSD1963_DATA_WITDH_BYTE));
+
+    /* Enable PLL. */
+    commandParam[0] = 0x01U;
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SET_PLL, commandParam, 1U * SSD1963_DATA_WITDH_BYTE));
+
+    /* Delay at least 100us, to wait for the PLL stable. */
+    SSD1963_Delay(500);
+
+    /* Use the PLL. */
+    commandParam[0] = 0x03U;
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SET_PLL, commandParam, 1U * SSD1963_DATA_WITDH_BYTE));
+
+    /* Configure the pixel clock. */
+    commandParam[0] = (uint8_t)((fpr & 0xFF0000U) >> 16U);
+    commandParam[1] = (uint8_t)((fpr & 0xFF00U) >> 8U);
+    commandParam[2] = (uint8_t)((fpr & 0xFFU));
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SET_LSHIFT_FREQ, commandParam, 3U * SSD1963_DATA_WITDH_BYTE));
+
+    /* Configure LCD panel. */
+    commandParam[0] =
+        (uint8_t)((uint8_t)config->panelDataWidth | (uint8_t)config->polarityFlags); /* Not enable FRC, dithering. */
+    commandParam[1] = 0x20U;                                                         /* TFT mode. */
+    commandParam[2] = (uint8_t)((config->panelWidth - 1U) >> 8);
+    commandParam[3] = (uint8_t)((config->panelWidth - 1U) & 0xFFU);
+    commandParam[4] = (uint8_t)((config->panelHeight - 1U) >> 8);
+    commandParam[5] = (uint8_t)((config->panelHeight - 1U) & 0xFFU);
+    commandParam[6] = 0;
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SET_LCD_MODE, commandParam, 7U * SSD1963_DATA_WITDH_BYTE));
+
+    /* Horizontal period setting. */
+    ht              = config->panelWidth + config->hsw + config->hfp + config->hbp;
+    hps             = config->hsw + config->hbp;
+    commandParam[0] = (uint8_t)((ht - 1U) >> 8U);
+    commandParam[1] = (uint8_t)((ht - 1U) & 0xFFU);
+    commandParam[2] = (uint8_t)(hps >> 8U);
+    commandParam[3] = (uint8_t)(hps & 0xFFU);
+    commandParam[4] = (uint8_t)(config->hsw - 1U);
+    commandParam[5] = 0U;
+    commandParam[6] = 0U;
+    commandParam[7] = 0U;
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SET_HORI_PERIOD, commandParam, 8U * SSD1963_DATA_WITDH_BYTE));
+
+    /* Vertical period setting. */
+    vt              = config->panelHeight + config->vsw + config->vfp + config->vbp;
+    vps             = config->vsw + config->vbp;
+    commandParam[0] = (uint8_t)((vt - 1U) >> 8U);
+    commandParam[1] = (uint8_t)((vt - 1U) & 0xFFU);
+    commandParam[2] = (uint8_t)(vps >> 8U);
+    commandParam[3] = (uint8_t)(vps & 0xFFU);
+    commandParam[4] = (uint8_t)(config->vsw - 1U);
+    commandParam[5] = 0U;
+    commandParam[6] = 0U;
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SET_VERT_PERIOD, commandParam, 7U * SSD1963_DATA_WITDH_BYTE));
+
+    /* Pixel format. */
+    return SSD1963_SetPixelFormat(iface, config->pixelInterface);
+}
+
+status_t SSD1963_SetPixelFormat(dbi_iface_t *iface, ssd1963_pixel_interface_t pixelFormat)
+{
+    status_t status;
+#if (16 == SSD1963_DATA_WITDH)
+    uint16_t commandParam[1];
+#else
+    uint8_t commandParam[1];
+#endif
+
+    /* Data interface. */
+#if (8 == SSD1963_DATA_WITDH)
+    commandParam[0] = 0;
+#else
+    commandParam[0] = 3;
+#endif
+    SSD1963_RET(iface->xferOps->writeCommandData(iface, SSD1963_SET_PIXEL_DATA_INTERFACE, commandParam, 1U * SSD1963_DATA_WITDH_BYTE));
+
+    /* Address mode. */
+#if (8 == SSD1963_DATA_WITDH)
+    if (kSSD1963_BGR888 == pixelFormat)
+    {
+        commandParam[0] = SSD1963_ADDR_MODE_BGR;
+    }
+#else
+    if (kSSD1963_BGR565 == pixelFormat)
+    {
+        commandParam[0] = SSD1963_ADDR_MODE_BGR;
+    }
+#endif
+
+    return iface->xferOps->writeCommandData(iface, SSD1963_SET_ADDRESS_MODE, commandParam, 1U * SSD1963_DATA_WITDH_BYTE);
+}
+
+status_t SSD1963_SetBackLight(dbi_iface_t *iface, uint8_t value)
+{
+#if (16 == SSD1963_DATA_WITDH)
+    uint16_t commandParam[] = {0x06U, value, 0x01U, 0xFFU, 0x00U, 0x01U};
+#else
+    uint8_t commandParam[] = {0x06U, value, 0x01U, 0xFFU, 0x00U, 0x01U};
+#endif
+
+    return iface->xferOps->writeCommandData(iface, SSD1963_SET_PWM_CONF, commandParam, sizeof(commandParam));
+}
+
+#endif

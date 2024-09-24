@@ -1,7 +1,6 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2024 NXP
  * All rights reserved.
- *
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -21,7 +20,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief SYSPM driver version */
-#define FSL_SYSPM_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_SYSPM_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 
 /*! @} */
 /*! @brief syspm select control monitor */
@@ -155,6 +154,19 @@ void SYSPM_DisableCounter(SYSPM_Type *base, syspm_monitor_t monitor);
  * @return                  get the the 40 bits of eventx counter.
  */
 uint64_t SYSPM_GetEventCounter(SYSPM_Type *base, syspm_monitor_t monitor, syspm_event_t event);
+
+#if (defined(FSL_FEATURE_SYSPM_HAS_PMICTR) && FSL_FEATURE_SYSPM_HAS_PMICTR)
+/*!
+ * @brief This is the the 40-bits of instructionx counter.
+         The value in this register increments each time the CPU count
+         signals occurs.
+ *
+ * @param base              SYSPM peripheral base address.
+ * @param monitor           syspm control monitor, see to #syspm_monitor_t.
+ * @return                  get the the 40 bits of instruction counter.
+ */
+uint64_t SYSPM_GetInstructionCounter(SYSPM_Type *base, syspm_monitor_t monitor);
+#endif
 
 #if defined(__cplusplus)
 }

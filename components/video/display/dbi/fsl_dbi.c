@@ -29,12 +29,12 @@ status_t DBI_IFACE_SelectArea(dbi_iface_t *dbiIface, uint16_t startX, uint16_t s
     status_t status;
 
     /*Column addresses*/
-    data[0] = (uint8_t)(startX >> 8U) & 0xFFU;
-    data[1] = (uint8_t)startX & 0xFFU;
-    data[2] = (uint8_t)(endX >> 8U) & 0xFFU;
-    data[3] = (uint8_t)endX & 0xFFU;
+    data[0] = (startX >> 8) & 0xFF;
+    data[1] = startX & 0xFF;
+    data[2] = (endX >> 8) & 0xFF;
+    data[3] = endX & 0xFF;
 
-    status = DBI_IFACE_WriteCmdData(dbiIface, (uint8_t)kMIPI_DBI_SetColumnAddress, data, 4U);
+    status = DBI_IFACE_WriteCmdData(dbiIface, kMIPI_DBI_SetColumnAddress, data, 4);
 
     if (status != kStatus_Success)
     {
@@ -42,12 +42,12 @@ status_t DBI_IFACE_SelectArea(dbi_iface_t *dbiIface, uint16_t startX, uint16_t s
     }
 
     /*Page addresses*/
-    data[0] = (uint8_t)(startY >> 8U) & 0xFFU;
-    data[1] = (uint8_t)startY & 0xFFU;
-    data[2] = (uint8_t)(endY >> 8U) & 0xFFU;
-    data[3] = (uint8_t)endY & 0xFFU;
+    data[0] = (startY >> 8) & 0xFF;
+    data[1] = startY & 0xFF;
+    data[2] = (endY >> 8) & 0xFF;
+    data[3] = endY & 0xFF;
 
-    status = DBI_IFACE_WriteCmdData(dbiIface, (uint8_t)kMIPI_DBI_SetPageAddress, data, 4U);
+    status = DBI_IFACE_WriteCmdData(dbiIface, kMIPI_DBI_SetPageAddress, data, 4);
 
     return status;
 }

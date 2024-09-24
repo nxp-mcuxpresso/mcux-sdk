@@ -54,7 +54,7 @@ status_t DC_FB_DBI_Init(const dc_fb_t *dc)
     if (0U == dcDbiHandle->initTimes++)
     {
         /* Initialize the panel. */
-        DBI_IFACE_SetMemoryDoneCallback(dcDbiHandle->dbiIface, DC_FB_DBI_FrameDoneCallback, dcDbiHandle);
+        DBI_IFACE_SetMemoryDoneCallback(&(dcDbiHandle->dbiIface), DC_FB_DBI_FrameDoneCallback, dcDbiHandle);
     }
 
     return status;
@@ -70,7 +70,7 @@ status_t DC_FB_DBI_Deinit(const dc_fb_t *dc)
     {
         if (--dcDbiHandle->initTimes == 0U)
         {
-            status = DBI_IFACE_SetDiplayOn(dcDbiHandle->dbiIface, false);
+            status = DBI_IFACE_SetDiplayOn(&(dcDbiHandle->dbiIface), false);
         }
     }
 
@@ -80,23 +80,37 @@ status_t DC_FB_DBI_Deinit(const dc_fb_t *dc)
 status_t DC_FB_DBI_EnableLayer(const dc_fb_t *dc, uint8_t layer)
 {
     dc_fb_dbi_handle_t *dcDbiHandle = (dc_fb_dbi_handle_t *)dc->prvData;
-    return DBI_IFACE_SetDiplayOn(dcDbiHandle->dbiIface, true);
+    return DBI_IFACE_SetDiplayOn(&(dcDbiHandle->dbiIface), true);
 }
 
 status_t DC_FB_DBI_DisableLayer(const dc_fb_t *dc, uint8_t layer)
 {
     dc_fb_dbi_handle_t *dcDbiHandle = (dc_fb_dbi_handle_t *)dc->prvData;
-    return DBI_IFACE_SetDiplayOn(dcDbiHandle->dbiIface, false);
+    return DBI_IFACE_SetDiplayOn(&(dcDbiHandle->dbiIface), false);
 }
 
 status_t DC_FB_DBI_SetLayerConfig(const dc_fb_t *dc, uint8_t layer, dc_fb_info_t *fbInfo)
 {
+    status_t status = kStatus_Success;
+
     dc_fb_dbi_handle_t *dcDbiHandle = (dc_fb_dbi_handle_t *)dc->prvData;
 
     dcDbiHandle->fbInfo = *fbInfo;
 
-    return DBI_IFACE_SelectArea(dcDbiHandle->dbiIface, fbInfo->startX, fbInfo->startY,
-                                fbInfo->startX + fbInfo->width - 1U, fbInfo->startY + fbInfo->height - 1U);
+    if (dcDbiHandle->dbiIface.configOps != NULL)
+    {
+        status = DBI_IFACE_SetPixelFormat(&(dcDbiHandle->dbiIface), fbInfo->pixelFormat);
+    }
+
+    if (status == kStatus_Success)
+    {
+        return DBI_IFACE_SelectArea(&(dcDbiHandle->dbiIface), fbInfo->startX, fbInfo->startY,
+                                    fbInfo->startX + fbInfo->width - 1U, fbInfo->startY + fbInfo->height - 1U);
+    }
+    else
+    {
+        return status;
+    }
 }
 
 status_t DC_FB_DBI_GetLayerDefaultConfig(const dc_fb_t *dc, uint8_t layer, dc_fb_info_t *fbInfo)
@@ -120,6 +134,7 @@ status_t DC_FB_DBI_SetFrameBuffer(const dc_fb_t *dc, uint8_t layer, void *frameB
     dc_fb_dbi_handle_t *dcDbiHandle = (dc_fb_dbi_handle_t *)dc->prvData;
     dc_fb_info_t *fbInfo;
     dcDbiHandle->frameBuffer = frameBuffer;
+    uint32_t bytesPerLine;
 
     if (dcDbiHandle->useTEPin)
     {
@@ -129,9 +144,22 @@ status_t DC_FB_DBI_SetFrameBuffer(const dc_fb_t *dc, uint8_t layer, void *frameB
     }
     else
     {
-        fbInfo = &dcDbiHandle->fbInfo;
-        status = DBI_IFACE_WriteMemory(dcDbiHandle->dbiIface, (const uint8_t *)frameBuffer,
-                                       (uint32_t)fbInfo->strideBytes * (uint32_t)fbInfo->height);
+        fbInfo       = &dcDbiHandle->fbInfo;
+        bytesPerLine = fbInfo->width * VIDEO_GetPixelSizeBits(fbInfo->pixelFormat) / 8U;
+        if (bytesPerLine < fbInfo->strideBytes)
+        {
+            status = DBI_IFACE_WriteMemory2D(&(dcDbiHandle->dbiIface), (const uint8_t *)frameBuffer,
+                                             fbInfo->strideBytes * fbInfo->height, fbInfo->strideBytes);
+        }
+        else if (bytesPerLine == fbInfo->strideBytes)
+        {
+            status = DBI_IFACE_WriteMemory(&(dcDbiHandle->dbiIface), (const uint8_t *)frameBuffer,
+                                           fbInfo->strideBytes * fbInfo->height);
+        }
+        else
+        {
+            status = kStatus_InvalidArgument;
+        }
     }
 
     return status;
@@ -154,11 +182,25 @@ void DC_FB_DBI_TE_IRQHandler(const dc_fb_t *dc)
 {
     dc_fb_dbi_handle_t *dcDbiHandle = (dc_fb_dbi_handle_t *)dc->prvData;
     dc_fb_info_t *fbInfo            = &dcDbiHandle->fbInfo;
+    uint32_t bytesPerLine           = fbInfo->width * VIDEO_GetPixelSizeBits(fbInfo->pixelFormat) / 8U;
 
     if (dcDbiHandle->fbWaitTE)
     {
-        dcDbiHandle->fbWaitTE = false;
-        (void)DBI_IFACE_WriteMemory(dcDbiHandle->dbiIface, (const uint8_t *)dcDbiHandle->frameBuffer,
-                              (uint32_t)fbInfo->strideBytes * (uint32_t)fbInfo->height);
+        if (bytesPerLine < fbInfo->strideBytes)
+        {
+            dcDbiHandle->fbWaitTE = false;
+            DBI_IFACE_WriteMemory2D(&(dcDbiHandle->dbiIface), (const uint8_t *)dcDbiHandle->frameBuffer,
+                                    fbInfo->strideBytes * fbInfo->height, fbInfo->strideBytes);
+        }
+        else if (bytesPerLine == fbInfo->strideBytes)
+        {
+            dcDbiHandle->fbWaitTE = false;
+            DBI_IFACE_WriteMemory(&(dcDbiHandle->dbiIface), (const uint8_t *)dcDbiHandle->frameBuffer,
+                                  fbInfo->strideBytes * fbInfo->height);
+        }
+        else
+        {
+            /* Do nothing. */
+        }
     }
 }

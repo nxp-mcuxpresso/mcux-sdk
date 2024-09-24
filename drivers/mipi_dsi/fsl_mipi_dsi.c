@@ -230,7 +230,7 @@ static uint32_t DSI_GetInstance(const MIPI_DSI_HOST_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_dsiBases); instance++)
     {
-        if (s_dsiBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_dsiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
@@ -533,7 +533,7 @@ void DSI_SetDpiConfig(MIPI_DSI_HOST_Type *base,
     assert(NULL != config);
 
     /* coefficient DPI event size to number of DSI bytes. */
-    float coff = ((float)numLanes * (float)dsiHsBitClkFreq_Hz) / ((float)dpiPixelClkFreq_Hz * 8);
+    float coff = ((float)numLanes * (float)dsiHsBitClkFreq_Hz) / ((float)dpiPixelClkFreq_Hz * 8.0f);
 
 #if (defined(FSL_FEATURE_MIPI_DSI_HOST_HAS_PXL2DPI) && FSL_FEATURE_MIPI_DSI_HOST_HAS_PXL2DPI)
     SOC_MIPI_DSI_SetPixelDpiMap(base, (uint32_t)config->dpiColorCoding);
@@ -589,19 +589,6 @@ void DSI_SetDpiConfig(MIPI_DSI_HOST_Type *base,
     base->CFG_DPI_VACTIVE = config->panelHeight - 1UL;
     base->CFG_DPI_VC      = config->virtualChannel;
 }
-
-#if defined(FSL_FEATURE_MIPI_DSI_HOST_DBI_HAS_PIXEL_FORMAT) && FSL_FEATURE_MIPI_DSI_HOST_DBI_HAS_PIXEL_FORMAT
-/*!
- * brief Configure the DBI pixel format.
- *
- * param base MIPI DSI host peripheral base address.
- * param format of the pixel.
- */
-void DSI_SetDbiPixelFormat(MIPI_DSI_HOST_Type *base, dsi_dbi_pixel_format_t format)
-{
-    base->CFG_DBI_PIXEL_FORMAT = (uint32_t)format;
-}
-#endif
 
 /*!
  * brief Initializes the D-PHY

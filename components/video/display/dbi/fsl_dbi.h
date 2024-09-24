@@ -9,6 +9,7 @@
 #define _FSL_DBI_H_
 
 #include "fsl_common.h"
+#include "fsl_video_common.h"
 
 /*!
  * @addtogroup dbi
@@ -149,29 +150,42 @@ typedef struct _dbi_iface dbi_iface_t;
 typedef struct _dbi_iface_xfer_ops
 {
     status_t (*writeCommandData)(dbi_iface_t *dbiIface,
-                                 uint8_t command,
+                                 uint32_t command,
                                  const void *data,
                                  uint32_t len_byte); /*!< Write command and data in blocking way. MUST Have */
 
 #if MCUX_DBI_IFACE_ENABLE_READ
     status_t (*readData)(dbi_iface_t *dbiIface,
-                         uint8_t command,
+                         uint32_t command,
                          void *data,
                          uint32_t len_byte); /*!< Read data from LCD controller in blocking way. It can be
                          used to read ID of LCD controller. Optional. */
 #endif /* MCUX_DBI_IFACE_ENABLE_READ */
 
     status_t (*writeMemory)(dbi_iface_t *dbiIface,
-                            uint8_t command,
+                            uint32_t command,
                             const void *data,
                             uint32_t len_byte); /*!< Write to the memory. MUST Have */
+
+    status_t (*writeMemory2D)(dbi_iface_t *dbiIface,
+                              uint32_t command,
+                              const void *data,
+                              uint32_t len_byte,
+                              uint32_t stride); /*!< Write to the memory. Optional. */
 } dbi_iface_xfer_ops_t;
+
+typedef struct _dbi_config_ops
+{
+    status_t (*setPixelFormat)(dbi_iface_t *dbiIface, video_pixel_format_t format);
+} dbi_config_ops_t;
 
 /*@brief DBI transfer interface.*/
 struct _dbi_iface
 {
-    const dbi_iface_xfer_ops_t *xferOps;     /*!< Pointer to the DBI transfer operations. */
-    void *prvData;                           /*!< DBI interface specific private data. */
+    const dbi_iface_xfer_ops_t *xferOps; /*!< Pointer to the DBI transfer operations. */
+    const dbi_config_ops_t
+        *configOps; /*!< Pointer to the DBI configuration operations. Can be NULL if the IP does not support. */
+    void *prvData;  /*!< DBI interface specific private data. */
     dbi_mem_done_callback_t memDoneCallback; /*!< The callback function when video memory access done. */
     void *memDoneCallbackParam;              /*!< Parameter of @ref memDoneCallback */
 };
@@ -235,7 +249,7 @@ static inline status_t DBI_IFACE_SoftReset(dbi_iface_t *dbiIface)
  */
 static inline status_t DBI_IFACE_SetDiplayOn(dbi_iface_t *dbiIface, bool on)
 {
-    uint8_t cmd = (on ? (uint8_t)kMIPI_DBI_SetDisplayOn : (uint8_t)kMIPI_DBI_SetDisplayOff);
+    uint8_t cmd = (on ? kMIPI_DBI_SetDisplayOn : kMIPI_DBI_SetDisplayOff);
 
     return dbiIface->xferOps->writeCommandData(dbiIface, cmd, NULL, 0);
 }
@@ -253,6 +267,25 @@ static inline status_t DBI_IFACE_SetDiplayOn(dbi_iface_t *dbiIface, bool on)
 status_t DBI_IFACE_SelectArea(dbi_iface_t *dbiIface, uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY);
 
 /*!
+ * @brief Set the pixel format of the source image.
+ *
+ * @param[in] dbiIface Pointer to the DBI interface.
+ * @param[in] format Pixel format.
+ * @return Execution status.
+ */
+static inline status_t DBI_IFACE_SetPixelFormat(dbi_iface_t *dbiIface, video_pixel_format_t format)
+{
+    if (dbiIface->configOps->setPixelFormat != NULL)
+    {
+        return dbiIface->configOps->setPixelFormat(dbiIface, format);
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
+}
+
+/*!
  * @brief Write data to the LCD controller video memory.
  *
  * @param[in] dbiIface Pointer to the DBI device.
@@ -264,6 +297,32 @@ status_t DBI_IFACE_SelectArea(dbi_iface_t *dbiIface, uint16_t startX, uint16_t s
 static inline status_t DBI_IFACE_WriteMemory(dbi_iface_t *dbiIface, const uint8_t *data, uint32_t length)
 {
     return dbiIface->xferOps->writeMemory(dbiIface, kMIPI_DBI_WriteMemoryStart, data, length);
+}
+
+/*!
+ * @brief Write data to the LCD controller video memory in 2-dimensions.
+ *
+ * The stride bytes are larger than the bytes of each line. Each line of pixel is interleaved.
+ *
+ * @param[in] dbiIface Pointer to the DBI device.
+ * @param[in] data The data to be sent.
+ * @param[in] length The length of the data to be sent.
+ * @return Execution status.
+ * @note This function is non-blocking, upper layer could be notified by callback when transfer done.
+ */
+static inline status_t DBI_IFACE_WriteMemory2D(dbi_iface_t *dbiIface,
+                                               const uint8_t *data,
+                                               uint32_t length,
+                                               uint32_t stride)
+{
+    if (dbiIface->xferOps->writeMemory2D != NULL)
+    {
+        return dbiIface->xferOps->writeMemory2D(dbiIface, kMIPI_DBI_WriteMemoryStart, data, length, stride);
+    }
+    else
+    {
+        return kStatus_Fail;
+    }
 }
 
 /*!

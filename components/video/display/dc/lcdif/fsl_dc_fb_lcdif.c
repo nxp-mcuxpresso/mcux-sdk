@@ -289,6 +289,18 @@ status_t DC_FB_LCDIF_SetLayerConfig(const dc_fb_t *dc, uint8_t layer, dc_fb_info
     dcHandle->layers[layer].fbConfig.height          = fbInfo->height;
     /* gamma is disabled by default, no need to configure. */
 
+    if (pixelFormat == kLCDIF_PixelFormatRGB888)
+    {
+        if ((fbInfo->strideBytes % 3) != 0U)
+        {
+            return kStatus_InvalidArgument;
+        }
+        else
+        {
+            fbInfo->strideBytes = fbInfo->strideBytes / 3U * 4U;
+        }
+    }
+    
     switch (layer)
     {
         case 0U:

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019, 2021 NXP
+ * Copyright 2016-2019, 2021, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -37,10 +37,10 @@ static uint32_t UTICK_GetInstance(UTICK_Type *base);
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* Array of UTICK handle. */
-static utick_callback_t s_utickHandle[FSL_FEATURE_SOC_UTICK_COUNT];
 /* Array of UTICK peripheral base address. */
 static UTICK_Type *const s_utickBases[] = UTICK_BASE_PTRS;
+/* Array of UTICK handle. */
+static utick_callback_t s_utickHandle[ARRAY_SIZE(s_utickBases)];
 /* Array of UTICK IRQ number. */
 static const IRQn_Type s_utickIRQ[] = UTICK_IRQS;
 #if !(defined(FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL) && FSL_SDK_DISABLE_DRIVER_CLOCK_CONTROL)
@@ -70,7 +70,7 @@ static uint32_t UTICK_GetInstance(UTICK_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_utickBases); instance++)
     {
-        if (s_utickBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_utickBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

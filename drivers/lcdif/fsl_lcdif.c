@@ -78,7 +78,7 @@ static uint32_t LCDIF_GetInstance(LCDIF_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_lcdifBases); instance++)
     {
-        if (s_lcdifBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_lcdifBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
@@ -279,11 +279,11 @@ void LCDIF_FrameBufferGetDefaultConfig(lcdif_fb_config_t *config)
     config->alpha.srcAlphaMode       = kLCDIF_AlphaStraight;
     config->alpha.srcGlobalAlphaMode = kLCDIF_AlphaLocal;
     config->alpha.srcFactorMode      = kLCDIF_AlphaFactorOne;
-    config->alpha.useSrcAlpha        = true;
+    config->alpha.useSrcAlpha        = (uint32_t) true;
     config->alpha.dstAlphaMode       = kLCDIF_AlphaStraight;
     config->alpha.dstGlobalAlphaMode = kLCDIF_AlphaLocal;
     config->alpha.dstFactorMode      = kLCDIF_AlphaFactorZero;
-    config->alpha.useDstAlpha        = true;
+    config->alpha.useDstAlpha        = (uint32_t) true;
 }
 
 static uint32_t LCDIF_GetLayerConfig(const lcdif_fb_config_t *config)
@@ -292,7 +292,7 @@ static uint32_t LCDIF_GetLayerConfig(const lcdif_fb_config_t *config)
            LCDIF_FRAMEBUFFERCONFIG0_UV_SWIZZLE(config->enableUVSwizzle) |
            LCDIF_FRAMEBUFFERCONFIG0_SWIZZLE(config->inOrder) |
            LCDIF_FRAMEBUFFERCONFIG0_COLOR_KEY_EN(config->colorkey.enable) |
-           LCDIF_FRAMEBUFFERCONFIG0_ENABLE(config->enable) | (uint32_t)(config->format & 0x7U);
+           LCDIF_FRAMEBUFFERCONFIG0_ENABLE((uint32_t)config->enable) | ((uint32_t)config->format & 0x7UL);
 }
 
 /*!
@@ -323,7 +323,7 @@ void LCDIF_SetFrameBufferConfig(LCDIF_Type *base, uint8_t displayIndex, const lc
     base->FRAMEBUFFERCOLORKEYHIGH = config->colorkey.highValue;
     base->VIDEOGLOBALALPHA        = (uint32_t)(pid._u32 >> 16U);
     base->VIDEOALPHABLENDCONFIG   = (pid._u32 & 0xFFFFUL);
-    base->DCTILEINCFG0            = (config->format >> 3U) | LCDIF_DCTILEINCFG0_YUV_STANDARD(config->standard);
+    base->DCTILEINCFG0 = ((uint32_t)config->format >> 3U) | LCDIF_DCTILEINCFG0_YUV_STANDARD((uint32_t)config->standard);
 }
 
 /*!
@@ -382,7 +382,8 @@ void LCDIF_SetOverlayLayerConfig(LCDIF_Type *base,
             base->OVERLAYCOLORKEYHIGH     = config->colorkey.highValue;
             base->OVERLAYGLOBALALPHA      = (uint32_t)(pid._u32 >> 16U);
             base->OVERLAYALPHABLENDCONFIG = (pid._u32 & 0xFFFFUL);
-            base->DCOVERLAYTILEINCFG      = (config->format >> 3U) | LCDIF_DCTILEINCFG0_YUV_STANDARD(config->standard);
+            base->DCOVERLAYTILEINCFG =
+                ((uint32_t)config->format >> 3U) | LCDIF_DCTILEINCFG0_YUV_STANDARD((uint32_t)config->standard);
             break;
 
         case 1U:
@@ -895,7 +896,8 @@ void LCDIF_DbiSelectArea(LCDIF_Type *base,
     base->HDISPLAY0 = LCDIF_HDISPLAY0_DISPLAY_END((uint32_t)width) | LCDIF_HDISPLAY0_TOTAL((uint32_t)width);
     base->HSYNC0    = LCDIF_HSYNC0_START((uint32_t)startX) | LCDIF_HSYNC0_END((uint32_t)endX + 1UL);
 
-    base->VDISPLAY0 = LCDIF_VDISPLAY0_DISPLAY_END((uint32_t)height) | LCDIF_VDISPLAY0_TOTAL((uint32_t)height + (uint32_t)vDisplayExtra);
+    base->VDISPLAY0 = LCDIF_VDISPLAY0_DISPLAY_END((uint32_t)height) |
+                      LCDIF_VDISPLAY0_TOTAL((uint32_t)height + (uint32_t)vDisplayExtra);
 
     if (isTiled)
     {

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2020, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -90,8 +90,6 @@
 /* Macros for compatibility. */
 #define NVIC_SetPriorityGrouping(value) do {} while(0)
 #define NVIC_GetPriorityGrouping() do {} while(0)
-#define NVIC_SetPriority(irq, value) do {} while(0)
-#define NVIC_GetPriority(irq) do {} while(0)
 #define NVIC_EnableIRQ(value) do {} while(0)
 #define NVIC_GetEnableIRQ(value) do {} while(0)
 #define NVIC_DisableIRQ(value) do {} while(0)
@@ -99,6 +97,8 @@
 #define NVIC_SetPendingIRQ(value) do {} while(0)
 #define NVIC_ClearPendingIRQ(value) do {} while(0)
 #define NVIC_GetActive(value) do {} while(0)
+#define MSDK_REG_SECURE_ADDR(x) (x)
+#define MSDK_REG_NONSECURE_ADDR(x) (x)
 
 /*
  * The fsl_clock.h is included here because it needs MAKE_VERSION/MAKE_STATUS/status_t

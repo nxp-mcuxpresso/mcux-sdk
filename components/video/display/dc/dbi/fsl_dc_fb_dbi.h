@@ -35,11 +35,11 @@ typedef struct _dc_fb_dbi_handle
     dc_fb_info_t fbInfo;        /*!< Frame buffer info. */
     dc_fb_callback_t callback;  /*!< Callback for frame data sent done. */
     void *cbParam;              /*!< Callback parameter. */
-    uint8_t *frameBuffer; /*!< The frame buffer currently used. */
+    const uint8_t *frameBuffer; /*!< The frame buffer currently used. */
     volatile bool fbWaitTE;     /*!< There is frame buffer wait to send at next TE. */
 
     /* These items are initialized by application. */
-    dbi_iface_t *dbiIface;            /*!< DBI interface. */
+    dbi_iface_t dbiIface;             /*!< DBI interface. */
     uint16_t width;                   /*!< Panel width. */
     uint16_t height;                  /*!< Panel height. */
     video_pixel_format_t pixelFormat; /*!< Panel pixel format. */
