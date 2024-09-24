@@ -39,7 +39,7 @@
 #endif
 
 /*! @brief Calculate the aligned address for LCDIF buffer. */
-#define LCDIF_ALIGN_ADDR(addr, align) (((addr) + (align)-1U) & ~((align)-1U))
+#define LCDIF_ALIGN_ADDR(addr, align) ((((addr) / (align) * (align)) == (addr)) ? (addr) : ((addr) / (align) * (align) + (align)))
 
 /*! @brief The frame buffer should be 128 byte aligned. */
 #if defined(FSL_FEATURE_LCDIF_VERSION_DC8000) & FSL_FEATURE_LCDIF_VERSION_DC8000
@@ -665,11 +665,6 @@ static inline bool LCDIF_DbiIsTypeCFifoFull(LCDIF_Type *base, uint8_t displayInd
 }
 #endif
 
-/* TODO:
- * From vendor spec description, to partial refresh panel, the frame buffer base address
- * doesn't need to be changed, but only change the region. But after test, the
- * frame buffer address need be changed too. To confirm with designer.
- */
 /*!
  * @brief Select the update area in DBI mode.
  *

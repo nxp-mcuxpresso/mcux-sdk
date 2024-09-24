@@ -81,7 +81,7 @@ static uint32_t SAI_GetInstance(I2S_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_saiBases); instance++)
     {
-        if (s_saiBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_saiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

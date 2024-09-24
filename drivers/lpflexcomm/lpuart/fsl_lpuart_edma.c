@@ -37,77 +37,15 @@ typedef union lpuart_to_lpflexcomm_edma
     lpuart_irq_handler_t lpuart_handler;
     lpflexcomm_irq_handler_t lpflexcomm_handler;
 } lpuart_to_lpflexcomm_edma_t;
+
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 /* Array of LPUART peripheral base address. */
 static LPUART_Type *const s_lpuartBases[] = LPUART_BASE_PTRS;
 
-/* Array of LPUART handle. */
-#if (defined(LPUART20))
-#define LPUART_HANDLE_ARRAY_SIZE 21
-#else /* LPUART20 */
-#if (defined(LPUART13))
-#define LPUART_HANDLE_ARRAY_SIZE 14
-#else /* LPUART13 */
-#if (defined(LPUART12))
-#define LPUART_HANDLE_ARRAY_SIZE 13
-#else /* LPUART12 */
-#if (defined(LPUART11))
-#define LPUART_HANDLE_ARRAY_SIZE 12
-#else /* LPUART11 */
-#if (defined(LPUART10))
-#define LPUART_HANDLE_ARRAY_SIZE 11
-#else /* LPUART10 */
-#if (defined(LPUART9))
-#define LPUART_HANDLE_ARRAY_SIZE 10
-#else /* LPUART9 */
-#if (defined(LPUART8))
-#define LPUART_HANDLE_ARRAY_SIZE 9
-#else /* LPUART8 */
-#if (defined(LPUART7))
-#define LPUART_HANDLE_ARRAY_SIZE 8
-#else /* LPUART7 */
-#if (defined(LPUART6))
-#define LPUART_HANDLE_ARRAY_SIZE 7
-#else /* LPUART6 */
-#if (defined(LPUART5))
-#define LPUART_HANDLE_ARRAY_SIZE 6
-#else /* LPUART5 */
-#if (defined(LPUART4))
-#define LPUART_HANDLE_ARRAY_SIZE 5
-#else /* LPUART4 */
-#if (defined(LPUART3))
-#define LPUART_HANDLE_ARRAY_SIZE 4
-#else /* LPUART3 */
-#if (defined(LPUART2))
-#define LPUART_HANDLE_ARRAY_SIZE 3
-#else /* LPUART2 */
-#if (defined(LPUART1))
-#define LPUART_HANDLE_ARRAY_SIZE 2
-#else /* LPUART1 */
-#if (defined(LPUART0))
-#define LPUART_HANDLE_ARRAY_SIZE 1
-#else /* LPUART0 */
-#define LPUART_HANDLE_ARRAY_SIZE FSL_FEATURE_SOC_LPUART_COUNT
-#endif /* LPUART 0 */
-#endif /* LPUART 1 */
-#endif /* LPUART 2 */
-#endif /* LPUART 3 */
-#endif /* LPUART 4 */
-#endif /* LPUART 5 */
-#endif /* LPUART 6 */
-#endif /* LPUART 7 */
-#endif /* LPUART 8 */
-#endif /* LPUART 9 */
-#endif /* LPUART 10 */
-#endif /* LPUART 11 */
-#endif /* LPUART 12 */
-#endif /* LPUART 13 */
-#endif /* LPUART 20 */
-
 /*<! Private handle only used for internally. */
-static lpuart_edma_private_handle_t s_lpuartEdmaPrivateHandle[LPUART_HANDLE_ARRAY_SIZE];
+static lpuart_edma_private_handle_t s_lpuartEdmaPrivateHandle[ARRAY_SIZE(s_lpuartBases)];
 
 /*******************************************************************************
  * Prototypes

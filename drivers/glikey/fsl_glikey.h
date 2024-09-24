@@ -114,6 +114,7 @@ status_t GLIKEY_IsLocked(GLIKEY_Type *base);
  */
 status_t GLIKEY_CheckLock(GLIKEY_Type *base);
 
+#if defined(GLIKEY_VERSION_FSM_CONFIG)
 /*!
  * @brief Retreives the version and configuration of Glikey.
  *
@@ -124,6 +125,7 @@ status_t GLIKEY_CheckLock(GLIKEY_Type *base);
  * @return Status kStatus_Success if success
  */
 status_t GLIKEY_GetVersion(GLIKEY_Type *base, uint32_t *result);
+#endif /* GLIKEY_VERSION_FSM_CONFIG */
 
 /*!
  * @brief Perform a synchronous reset of Glikey.

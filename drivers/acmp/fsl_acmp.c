@@ -48,7 +48,7 @@ static uint32_t ACMP_GetInstance(CMP_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_acmpBases); instance++)
     {
-        if (s_acmpBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_acmpBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

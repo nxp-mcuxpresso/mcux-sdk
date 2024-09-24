@@ -57,7 +57,7 @@ static uint32_t MRT_GetInstance(MRT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < mrtArrayCount; instance++)
     {
-        if (s_mrtBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_mrtBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

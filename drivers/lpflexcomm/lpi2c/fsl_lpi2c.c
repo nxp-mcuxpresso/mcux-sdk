@@ -130,7 +130,7 @@ uint32_t LPI2C_GetInstance(LPI2C_Type *base)
     uint32_t instance;
     for (instance = 0U; instance < ARRAY_SIZE(kLpi2cBases); ++instance)
     {
-        if (kLpi2cBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(kLpi2cBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
@@ -928,6 +928,7 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
     assert(transfer->subaddressSize <= sizeof(transfer->subaddress));
 
     status_t result = kStatus_Success;
+    status_t ret = kStatus_Success;
     uint16_t commandBuffer[7];
     uint32_t cmdCount = 0U;
 
@@ -1018,13 +1019,16 @@ status_t LPI2C_MasterTransferBlocking(LPI2C_Type *base, lpi2c_master_transfer_t 
                 }
             }
         }
-
         /* Transmit fail */
         if (kStatus_Success != result)
         {
             if ((transfer->flags & (uint32_t)kLPI2C_TransferNoStopFlag) == 0U)
             {
-                (void)LPI2C_MasterStop(base);
+                ret = LPI2C_MasterStop(base);
+                if(kStatus_Success != ret)
+                {
+                    result = ret;
+                }
             }
         }
     }

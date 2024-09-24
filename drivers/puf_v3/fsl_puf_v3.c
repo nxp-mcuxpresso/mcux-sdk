@@ -66,20 +66,34 @@ static status_t puf_waitForInit(PUF_Type *base)
 
 static void puf_powerOn(PUF_Type *base, puf_config_t *conf)
 {
+#if defined(PUF_PUF_MEM_CTRL_POWERON_MASK)
+    base->PUF_MEM_CTRL |= PUF_PUF_MEM_CTRL_POWERON_MASK;
+#elif defined(PUF_SRAM_CFG_ENABLE_MASK)
     /* Power On PUF SRAM */
     base->SRAM_CFG = 0x1u;
     while (0u == (PUF_SRAM_STATUS_READY_MASK & base->SRAM_STATUS))
     {
     }
+#else
+#warning "No valid PUF power up definition"
+#endif
 }
 
 static status_t puf_powerCycle(PUF_Type *base, puf_config_t *conf)
 {
     /* Power off */
+#if defined(PUF_PUF_MEM_CTRL_POWERON_MASK)
+    base->PUF_MEM_CTRL &= ~PUF_PUF_MEM_CTRL_POWERON_MASK;
+#elif defined(PUF_SRAM_CFG_ENABLE_MASK)
     base->SRAM_CFG = 0x0u;
+#else
+#warning "No valid PUF power up definition"
+#endif
 
+#if !(defined(FSL_FEATURE_PUF_HAS_NO_RESET) && FSL_FEATURE_PUF_HAS_NO_RESET)
     /* Reset PUF and reenable power to PUF SRAM */
     RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
+#endif /* !FSL_FEATURE_PUF_HAS_NO_RESET */
     puf_powerOn(base, conf);
 
     return kStatus_Success;
@@ -135,16 +149,15 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
     /* Enable PUF clock */
     CLOCK_EnableClock(kCLOCK_Puf);
 
-    /* Clear the PUF peripheral reset */
-    RESET_ClearPeripheralReset(kPUF_RST_SHIFT_RSTn);
-
+#if !(defined(FSL_FEATURE_PUF_HAS_NO_RESET) && FSL_FEATURE_PUF_HAS_NO_RESET)
     /* Reset PUF */
-#if defined(FSL_FEATURE_PUF_HAS_RESET) && FSL_FEATURE_PUF_HAS_RESET
     RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
-#endif /* FSL_FEATURE_PUF_HAS_RESET */
+#endif /* !FSL_FEATURE_PUF_HAS_NO_RESET */
 
+#if defined(PUF_SRAM_CFG_CKGATING_MASK)
     /* Set configuration from SRAM */
     base->SRAM_CFG |= PUF_SRAM_CFG_CKGATING(conf->CKGATING);
+#endif /* defined(PUF_SRAM_CFG_CKGATING_MASK) */
 
     /* Enable power to PUF SRAM */
     puf_powerOn(base, conf);
@@ -182,9 +195,17 @@ status_t PUF_Init(PUF_Type *base, puf_config_t *conf)
  */
 void PUF_Deinit(PUF_Type *base, puf_config_t *conf)
 {
+#if defined(PUF_PUF_MEM_CTRL_POWERON_MASK)
+    base->PUF_MEM_CTRL &= ~PUF_PUF_MEM_CTRL_POWERON_MASK;
+#elif defined(PUF_SRAM_CFG_ENABLE_MASK)
     base->SRAM_CFG = 0x0u;
+#else
+#warning "No valid PUF power up definition"
+#endif
 
+#if !(defined(FSL_FEATURE_PUF_HAS_NO_RESET) && FSL_FEATURE_PUF_HAS_NO_RESET)
     RESET_PeripheralReset(kPUF_RST_SHIFT_RSTn);
+#endif /* !FSL_FEATURE_PUF_HAS_NO_RESET */
     CLOCK_DisableClock(kCLOCK_Puf);
 }
 
@@ -197,7 +218,8 @@ void PUF_Deinit(PUF_Type *base, puf_config_t *conf)
  *
  * @param base PUF peripheral base address
  * @param[out] activationCode Word aligned address of the resulting activation code.
- * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes.
+ * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE
+ * bytes.
  * @param score Value of the PUF Score that was obtained during the enroll operation.
  * @return Status of enroll operation.
  */
@@ -271,7 +293,8 @@ status_t PUF_Enroll(PUF_Type *base, uint8_t *activationCode, size_t activationCo
  *
  * @param base PUF peripheral base address
  * @param[in] activationCode Word aligned address of the input activation code.
- * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE bytes.
+ * @param activationCodeSize Size of the activationCode buffer in bytes. Shall be FSL_FEATURE_PUF_ACTIVATION_CODE_SIZE
+ * bytes.
  * @param score Value of the PUF Score that was obtained during the start operation.
  * return Status of start operation.
  */

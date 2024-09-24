@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2017,2020,2021 NXP. Not a Contribution.
+ * Copyright 2016-2017,2020,2021,2024 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -59,6 +59,62 @@ extern ARM_DRIVER_SPI Driver_SPI5;
 #if defined(LPSPI6) && defined(RTE_SPI6) && RTE_SPI6
 extern ARM_DRIVER_SPI Driver_SPI6;
 #endif /* LPSPI6 */
+
+#if defined(LPSPI7) && defined(RTE_SPI7) && RTE_SPI7
+extern ARM_DRIVER_SPI Driver_SPI7;
+#endif /* LPSPI7 */
+
+#if defined(LPSPI8) && defined(RTE_SPI8) && RTE_SPI8
+extern ARM_DRIVER_SPI Driver_SPI8;
+#endif /* LPSPI8 */
+
+#if defined(LPSPI9) && defined(RTE_SPI9) && RTE_SPI9
+extern ARM_DRIVER_SPI Driver_SPI9;
+#endif /* LPSPI9 */
+
+#if defined(LPSPI10) && defined(RTE_SPI10) && RTE_SPI10
+extern ARM_DRIVER_SPI Driver_SPI10;
+#endif /* LPSPI10 */
+
+#if defined(LPSPI11) && defined(RTE_SPI11) && RTE_SPI11
+extern ARM_DRIVER_SPI Driver_SPI11;
+#endif /* LPSPI11 */
+
+#if defined(LPSPI12) && defined(RTE_SPI12) && RTE_SPI12
+extern ARM_DRIVER_SPI Driver_SPI12;
+#endif /* LPSPI12 */
+
+#if defined(LPSPI13) && defined(RTE_SPI13) && RTE_SPI13
+extern ARM_DRIVER_SPI Driver_SPI13;
+#endif /* LPSPI13 */
+
+#if defined(LPSPI14) && defined(RTE_SPI14) && RTE_SPI14
+extern ARM_DRIVER_SPI Driver_SPI14;
+#endif /* LPSPI14 */
+
+#if defined(LPSPI15) && defined(RTE_SPI15) && RTE_SPI15
+extern ARM_DRIVER_SPI Driver_SPI15;
+#endif /* LPSPI15 */
+
+#if defined(LPSPI16) && defined(RTE_SPI16) && RTE_SPI16
+extern ARM_DRIVER_SPI Driver_SPI16;
+#endif /* LPSPI16 */
+
+#if defined(LPSPI17) && defined(RTE_SPI17) && RTE_SPI17
+extern ARM_DRIVER_SPI Driver_SPI17;
+#endif /* LPSPI17 */
+
+#if defined(LPSPI18) && defined(RTE_SPI18) && RTE_SPI18
+extern ARM_DRIVER_SPI Driver_SPI18;
+#endif /* LPSPI18 */
+
+#if defined(LPSPI19) && defined(RTE_SPI19) && RTE_SPI19
+extern ARM_DRIVER_SPI Driver_SPI19;
+#endif /* LPSPI19 */
+
+#if defined(LPSPI20) && defined(RTE_SPI20) && RTE_SPI20
+extern ARM_DRIVER_SPI Driver_SPI20;
+#endif /* LPSPI20 */
 
 /* SPI Driver state flags */
 #define SPI_FLAG_UNINIT     (0UL)

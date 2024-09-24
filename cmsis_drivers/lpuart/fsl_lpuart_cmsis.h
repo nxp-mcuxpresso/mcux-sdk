@@ -87,6 +87,38 @@ extern ARM_DRIVER_USART Driver_USART11;
 extern ARM_DRIVER_USART Driver_USART12;
 #endif /* LPUART12 */
 
+#if defined(LPUART13) && defined(RTE_USART13) && RTE_USART13
+extern ARM_DRIVER_USART Driver_USART13;
+#endif /* LPUART13 */
+
+#if defined(LPUART14) && defined(RTE_USART14) && RTE_USART14
+extern ARM_DRIVER_USART Driver_USART14;
+#endif /* LPUART14 */
+
+#if defined(LPUART15) && defined(RTE_USART15) && RTE_USART15
+extern ARM_DRIVER_USART Driver_USART15;
+#endif /* LPUART15 */
+
+#if defined(LPUART16) && defined(RTE_USART16) && RTE_USART16
+extern ARM_DRIVER_USART Driver_USART16;
+#endif /* LPUART16 */
+
+#if defined(LPUART17) && defined(RTE_USART17) && RTE_USART17
+extern ARM_DRIVER_USART Driver_USART17;
+#endif /* LPUART17 */
+
+#if defined(LPUART18) && defined(RTE_USART18) && RTE_USART18
+extern ARM_DRIVER_USART Driver_USART18;
+#endif /* LPUART18 */
+
+#if defined(LPUART19) && defined(RTE_USART19) && RTE_USART19
+extern ARM_DRIVER_USART Driver_USART19;
+#endif /* LPUART19 */
+
+#if defined(LPUART20) && defined(RTE_USART20) && RTE_USART20
+extern ARM_DRIVER_USART Driver_USART20;
+#endif /* LPUART20 */
+
 #if (FSL_FEATURE_SOC_LPUART_COUNT == 1) && (FSL_FEATURE_SOC_UART_COUNT == 3)
 extern ARM_DRIVER_USART Driver_USART3;
 #endif

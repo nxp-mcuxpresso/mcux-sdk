@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2013-2016 ARM Limited. All rights reserved.
  * Copyright (c) 2016, Freescale Semiconductor, Inc. Not a Contribution.
- * Copyright 2016-2017,2020 NXP. Not a Contribution.
+ * Copyright 2016-2017,2020,2024 NXP. Not a Contribution.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -57,11 +57,67 @@ extern ARM_DRIVER_I2C Driver_I2C4;
 
 #if defined(LPI2C5) && defined(RTE_I2C5) && RTE_I2C5
 extern ARM_DRIVER_I2C Driver_I2C5;
-#endif /* LPI2C5*/
+#endif /* LPI2C5 */
 
 #if defined(LPI2C6) && defined(RTE_I2C6) && RTE_I2C6
 extern ARM_DRIVER_I2C Driver_I2C6;
 #endif /* LPI2C6 */
+
+#if defined(LPI2C7) && defined(RTE_I2C7) && RTE_I2C7
+extern ARM_DRIVER_I2C Driver_I2C7;
+#endif /* LPI2C7 */
+
+#if defined(LPI2C8) && defined(RTE_I2C8) && RTE_I2C8
+extern ARM_DRIVER_I2C Driver_I2C8;
+#endif /* LPI2C8 */
+
+#if defined(LPI2C9) && defined(RTE_I2C9) && RTE_I2C9
+extern ARM_DRIVER_I2C Driver_I2C9;
+#endif /* LPI2C9 */
+
+#if defined(LPI2C10) && defined(RTE_I2C10) && RTE_I2C10
+extern ARM_DRIVER_I2C Driver_I2C10;
+#endif /* LPI2C10 */
+
+#if defined(LPI2C11) && defined(RTE_I2C11) && RTE_I2C11
+extern ARM_DRIVER_I2C Driver_I2C11;
+#endif /* LPI2C11 */
+
+#if defined(LPI2C12) && defined(RTE_I2C12) && RTE_I2C12
+extern ARM_DRIVER_I2C Driver_I2C12;
+#endif /* LPI2C12 */
+
+#if defined(LPI2C13) && defined(RTE_I2C13) && RTE_I2C13
+extern ARM_DRIVER_I2C Driver_I2C13;
+#endif /* LPI2C13 */
+
+#if defined(LPI2C14) && defined(RTE_I2C14) && RTE_I2C14
+extern ARM_DRIVER_I2C Driver_I2C14;
+#endif /* LPI2C14 */
+
+#if defined(LPI2C15) && defined(RTE_I2C15) && RTE_I2C15
+extern ARM_DRIVER_I2C Driver_I2C15;
+#endif /* LPI2C15 */
+
+#if defined(LPI2C16) && defined(RTE_I2C16) && RTE_I2C16
+extern ARM_DRIVER_I2C Driver_I2C16;
+#endif /* LPI2C16 */
+
+#if defined(LPI2C17) && defined(RTE_I2C17) && RTE_I2C17
+extern ARM_DRIVER_I2C Driver_I2C17;
+#endif /* LPI2C17 */
+
+#if defined(LPI2C18) && defined(RTE_I2C18) && RTE_I2C18
+extern ARM_DRIVER_I2C Driver_I2C18;
+#endif /* LPI2C18 */
+
+#if defined(LPI2C19) && defined(RTE_I2C19) && RTE_I2C19
+extern ARM_DRIVER_I2C Driver_I2C19;
+#endif /* LPI2C19 */
+
+#if defined(LPI2C20) && defined(RTE_I2C20) && RTE_I2C20
+extern ARM_DRIVER_I2C Driver_I2C20;
+#endif /* LPI2C20 */
 
 /* I2C Driver state flags */
 #define I2C_FLAG_UNINIT (0UL)

@@ -87,7 +87,7 @@ static uint32_t SCTIMER_GetInstance(SCT_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < sctArrayCount; instance++)
     {
-        if (s_sctBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_sctBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

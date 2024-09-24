@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022,2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -59,7 +59,7 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief common driver version. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 4, 1))
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 4, 3))
 /*! @} */
 
 /*! @name Debug console type definition. */
@@ -206,6 +206,8 @@ enum _status_groups
     kStatusGroup_NETC           = 166, /*!< Group number for NETC status codes. */
     kStatusGroup_ELE            = 167, /*!< Group number for ELE status codes. */
     kStatusGroup_GLIKEY         = 168, /*!< Group number for GLIKEY status codes. */
+    kStatusGroup_AON_POWER      = 169, /*!< Group number for AON_POWER status codes. */
+    kStatusGroup_AON_COMMON     = 170, /*!< Group number for AON_COMMON status codes. */
 };
 
 /*! \public
@@ -351,6 +353,8 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz);
 #include "fsl_common_dsc.h"
 #elif defined(__XTENSA__)
 #include "fsl_common_dsp.h"
+#elif defined(__riscv)
+#include "fsl_common_riscv.h"
 #else
 #include "fsl_common_arm.h"
 #endif

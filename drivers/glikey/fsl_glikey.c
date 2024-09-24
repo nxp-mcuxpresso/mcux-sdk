@@ -110,7 +110,7 @@ status_t GLIKEY_GetVersion(GLIKEY_Type *base, uint32_t *result)
 
     return kStatus_Success;
 }
-#endif
+#endif /* GLIKEY_VERSION_FSM_CONFIG */
 
 status_t GLIKEY_SyncReset(GLIKEY_Type *base)
 {

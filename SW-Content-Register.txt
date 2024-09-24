@@ -78,6 +78,20 @@ CMSIS                      Name: CMSIS
                            https://github.com/ARM-software/CMSIS_5/releases/t
                            ag/5.9.0                                          
 
+RISCV                      Name: RISCV core source                           
+                           Version: 1.0.0                                    
+                           Outgoing License: LA_OPT_NXP_Software_License v56 
+                           April 2024 - Additional distribution license      
+                           granted, license in Section 2.3 applies           
+                           License File: LA_OPT_NXP_Software_License.txt     
+                           Format: source code                               
+                           Description: RISCV core support source files      
+                           Location: arch/riscv                              
+                           Origin: BSD-2-Clause                              
+                           Url:                                              
+                           https://github.com/riscv-software-src/opensbi/tree
+                           /v1.4  
+
 wifi                       Name: NXP Wi-Fi driver                            
                            Version: 1.3.48.p16                               
                            Outgoing License: BSD-3-Clause                    

@@ -591,6 +591,19 @@ static inline void DSI_GetAndClearInterruptStatus(MIPI_DSI_HOST_Type *base, uint
  * @{
  */
 
+#if defined(FSL_FEATURE_MIPI_DSI_HOST_DBI_HAS_PIXEL_FORMAT) && FSL_FEATURE_MIPI_DSI_HOST_DBI_HAS_PIXEL_FORMAT
+/*!
+ * brief Configure the DBI pixel format.
+ *
+ * param base MIPI DSI host peripheral base address.
+ * param format of the pixel.
+ */
+static inline void DSI_SetDbiPixelFormat(MIPI_DSI_HOST_Type *base, dsi_dbi_pixel_format_t format)
+{
+    base->CFG_DBI_PIXEL_FORMAT = (uint32_t)format;
+}
+#endif
+
 /*!
  * @brief Configure the DBI pixel FIFO send level.
  *

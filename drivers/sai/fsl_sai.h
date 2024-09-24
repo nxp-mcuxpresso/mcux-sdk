@@ -45,9 +45,9 @@
 #endif /* MCUX_SDK_SAI_DISABLE_IMPLICIT_CHAN_CONFIG */
 
 /*! @name Driver version */
-/*@{*/
-#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 2)) /*!< Version 2.4.2 */
-/*@}*/
+/*! @{ */
+#define FSL_SAI_DRIVER_VERSION (MAKE_VERSION(2, 4, 3)) /*!< Version 2.4.3 */
+/*! @} */
 
 /*! @brief _sai_status_t, SAI return status.*/
 enum
@@ -270,8 +270,8 @@ typedef enum _sai_data_pin_state
 typedef enum _sai_fifo_combine
 {
     kSAI_FifoCombineDisabled = 0U,          /*!< sai fifo combine mode disabled */
-    kSAI_FifoCombineModeEnabledOnRead,      /*!< sai fifo combine mode enabled on FIFO reads */
     kSAI_FifoCombineModeEnabledOnWrite,     /*!< sai fifo combine mode enabled on FIFO write */
+    kSAI_FifoCombineModeEnabledOnRead,      /*!< sai fifo combine mode enabled on FIFO reads */
     kSAI_FifoCombineModeEnabledOnReadWrite, /*!< sai fifo combined mode enabled on FIFO read/writes */
 } sai_fifo_combine_t;
 #endif

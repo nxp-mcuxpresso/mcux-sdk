@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2021-2022, 2024 NXP
  * All rights reserved.
  *
  *
@@ -52,7 +52,7 @@ static uint32_t SYSPM_GetInstance(SYSPM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_syspmBases); instance++)
     {
-        if (s_syspmBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_syspmBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
@@ -213,3 +213,38 @@ uint64_t SYSPM_GetEventCounter(SYSPM_Type *base, syspm_monitor_t monitor, syspm_
 
     return ((uint64_t)high << 32U) + low;
 }
+
+#if (defined(FSL_FEATURE_SYSPM_HAS_PMICTR) && FSL_FEATURE_SYSPM_HAS_PMICTR)
+/*
+ * brief This is the the 40-bits of instructionx counter.
+         The value in this register increments each time the CPU count
+         signals occurs.
+ *
+ * param base              SYSPM peripheral base address.
+ * param monitor           syspm control monitor, see to #syspm_monitor_t.
+ * return                  get the the 40 bits of instruction counter.
+ */
+uint64_t SYSPM_GetInstructionCounter(SYSPM_Type *base, syspm_monitor_t monitor)
+{
+    uint32_t highOld;
+    uint32_t high;
+    uint32_t low;
+
+    highOld = base->PMCR[(uint8_t)monitor].PMICTR_HI;
+    while (true)
+    {
+        low  = base->PMCR[(uint8_t)monitor].PMICTR_LO;
+        high = base->PMCR[(uint8_t)monitor].PMICTR_HI;
+        if (high == highOld)
+        {
+            break;
+        }
+        else
+        {
+            highOld = high;
+        }
+    }
+
+    return ((uint64_t)high << 32U) + low;
+}
+#endif /* FSL_FEATURE_SYSPM_HAS_PMICTR */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 NXP
+ * Copyright 2022-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -76,7 +76,7 @@ static uint32_t EDMA_GetInstance(EDMA_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_edmaBases); instance++)
     {
-        if (s_edmaBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
@@ -1292,28 +1292,21 @@ uint32_t EDMA_GetRemainingMajorLoopCount(EDMA_Type *base, uint32_t channel)
 
     uint32_t remainingCount = 0;
 
-    if (0U != DMA_GET_DONE_STATUS(base, channel))
+    /* Calculate the unfinished bytes */
+    if (0U != (EDMA_TCD_CITER(EDMA_TCD_BASE(base, channel), EDMA_TCD_TYPE(base)) & DMA_CITER_ELINKNO_ELINK_MASK))
     {
-        remainingCount = 0;
+        remainingCount = (((uint32_t)EDMA_TCD_CITER(EDMA_TCD_BASE(base, channel), EDMA_TCD_TYPE(base)) &
+                           DMA_CITER_ELINKYES_CITER_MASK) >>
+                          DMA_CITER_ELINKYES_CITER_SHIFT);
     }
     else
     {
-        /* Calculate the unfinished bytes */
-        if (0U != (EDMA_TCD_CITER(EDMA_TCD_BASE(base, channel), EDMA_TCD_TYPE(base)) & DMA_CITER_ELINKNO_ELINK_MASK))
-        {
-            remainingCount = (((uint32_t)EDMA_TCD_CITER(EDMA_TCD_BASE(base, channel), EDMA_TCD_TYPE(base)) &
-                               DMA_CITER_ELINKYES_CITER_MASK) >>
-                              DMA_CITER_ELINKYES_CITER_SHIFT);
-        }
-        else
-        {
-            remainingCount = (((uint32_t)EDMA_TCD_CITER(EDMA_TCD_BASE(base, channel), EDMA_TCD_TYPE(base)) &
-                               DMA_CITER_ELINKNO_CITER_MASK) >>
-                              DMA_CITER_ELINKNO_CITER_SHIFT);
-        }
+        remainingCount = (((uint32_t)EDMA_TCD_CITER(EDMA_TCD_BASE(base, channel), EDMA_TCD_TYPE(base)) &
+                           DMA_CITER_ELINKNO_CITER_MASK) >>
+                          DMA_CITER_ELINKNO_CITER_SHIFT);
     }
 
-    return remainingCount;
+    return ((0U != DMA_GET_DONE_STATUS(base, channel)) ? 0U : remainingCount);
 }
 
 /*!

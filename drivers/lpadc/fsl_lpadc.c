@@ -102,7 +102,7 @@ static uint32_t LPADC_GetInstance(ADC_Type *base)
          * (s_lpadcBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (s_lpadcBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_lpadcBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }
