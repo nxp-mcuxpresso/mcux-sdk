@@ -1,0 +1,14 @@
+# Copyright 2024 NXP
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
+# driver_mu1
+config MCUX_HAS_driver_mu1
+    bool
+
+config MCUX_USE_driver_mu1
+    depends on MCUX_HAS_driver_mu1
+    bool "MU1 Driver"
+    select MCUX_USE_driver_common
+    help
+      MU1 Driver
