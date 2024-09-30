@@ -15,7 +15,7 @@ struct ram_console_header {
     char flag_string[12];
     char *ram_console_buf_addr;
     size_t ram_console_buf_size;
-    size_t pos;
+    uint32_t pos;
 };
 
 #endif /* __FSL_RAM_CONSOLE_H__ */
