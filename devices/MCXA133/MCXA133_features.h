@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240704
+**     Build:               b240830
 **
 **     Abstract:
 **         Chip specific module features.
@@ -319,7 +319,7 @@
 /* GLIKEY module features */
 
 /* @brief GLIKEY has 8 step FSM configuration */
-#define FSL_FEATURE_GLIKEY_HAS_EIGHT_STEPS (1)
+#define FSL_FEATURE_GLIKEY_HAS_EIGHT_STEPS (0)
 
 /* GPIO module features */
 
@@ -352,6 +352,8 @@
 #define FSL_FEATURE_I3C_HAS_IBI_PAYLOAD_SIZE_OPTIONAL_BYTE (1)
 /* @brief Has SCL delay after START. */
 #define FSL_FEATURE_I3C_HAS_START_SCL_DELAY (1)
+/* @brief Has no the master write data register for DMA. */
+#define FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG (0)
 
 /* LPI2C module features */
 

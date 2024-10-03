@@ -1,11 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.frdmrw612
-#  # description: Board_project_template frdmrw612
-#  set(CONFIG_USE_BOARD_Project_Template_frdmrw612 true)
-
 #set.board.rdrw612bga
 #  # description: Board_project_template rdrw612bga
 #  set(CONFIG_USE_BOARD_Project_Template_rdrw612bga true)
+
+#set.board.frdmrw612
+#  # description: Board_project_template frdmrw612
+#  set(CONFIG_USE_BOARD_Project_Template_frdmrw612 true)
 
 #set.middleware.wireless.ieee.802.15.4
 #  # description: Middleware wireless ieee 802.15.4 for SerialDevice
@@ -44,9 +44,73 @@
 #  # description: Middleware wireless ieee 802.15.4 for mac split lib file
 #  set(CONFIG_USE_middleware_wireless_ieee_802_15_4_lib_mac_split true)
 
+#set.middleware.wireless.zigbee
+#  # description: middleware wireless zigbee cmake infrastructure
+#  set(CONFIG_USE_middleware_wireless_zigbee_cmake true)
+
+#  # description: middleware wireless zigbee markdown documentation
+#  set(CONFIG_USE_middleware_wireless_zigbee_doc true)
+
+#  # description: middleware wireless zigbee all libs
+#  set(CONFIG_USE_middleware_wireless_zigbee_core_all_libs true)
+
+#  # description: Middleware wireless zigbee for core lib files
+#  set(CONFIG_USE_middleware_wireless_zigbee_core_libs true)
+
+#  # description: Middleware wireless zigbee for core lib files R23
+#  set(CONFIG_USE_middleware_wireless_zigbee_core_libs_r23 true)
+
+#  # description: Middleware wireless zigbee for core ZED lib files
+#  set(CONFIG_USE_middleware_wireless_zigbee_core_ZED_libs true)
+
+#  # description: Middleware wireless zigbee for core ZED lib files
+#  set(CONFIG_USE_middleware_wireless_zigbee_core_ZED_libs_r23 true)
+
+#  # description: Middleware wireless zigbee
+#  set(CONFIG_USE_middleware_wireless_zigbee true)
+
+#  # description: Middleware wireless zigbee examples
+#  set(CONFIG_USE_middleware_wireless_zigbee_examples true)
+
+#  # description: Middleware wireless zigbee platform common
+#  set(CONFIG_USE_middleware_wireless_zigbee_platform_common true)
+
+#  # description: Middleware wireless zigbee platform
+#  set(CONFIG_USE_middleware_wireless_zigbee_platform_k32w1 true)
+
+#  # description: Middleware wireless zigbee platform RW612
+#  set(CONFIG_USE_middleware_wireless_zigbee_platform_rw612 true)
+
+#  # description: middleware wireless zigbee all RW612 libs
+#  set(CONFIG_USE_middleware_wireless_zigbee_libs_rw612 true)
+
+#  # description: Middleware wireless zigbee platform
+#  set(CONFIG_USE_middleware_wireless_zigbee_platform_ncp_host true)
+
+#  # description: Middleware wireless zigbee platform
+#  set(CONFIG_USE_middleware_wireless_zigbee_zb_examples_common true)
+
+#  # description: Middleware wireless zigbee platform ota
+#  set(CONFIG_USE_middleware_wireless_zigbee_zb_examples_common_ota_client true)
+
+#  # description: Middleware wireless zigbee platform ota
+#  set(CONFIG_USE_middleware_wireless_zigbee_zb_examples_common_ota_server true)
+
+#  # description: Middleware wireless zigbee examples collaterals
+#  set(CONFIG_USE_middleware_wireless_zigbee_zb_examples_collaterals true)
+
+#  # description: Middleware wireless zigbee serial link
+#  set(CONFIG_USE_middleware_wireless_zigbee_zb_serial_link true)
+
+#  # description: Middleware wireless zigbee ZCL OTA Server
+#  set(CONFIG_USE_middleware_wireless_zigbee_core_ZCL_Clusters_OTA_Server true)
+
+#  # description: Middleware wireless zigbee ZCL OTA Client
+#  set(CONFIG_USE_middleware_wireless_zigbee_core_ZCL_Clusters_OTA_Client true)
+
 #set.middleware.wireless.framework
 #  # description: Middleware wireless framework_cmake
-#  set(CONFIG_USE_middleware_wireless_framework_CMake_rw61x_frdmrw612 true)
+#  set(CONFIG_USE_middleware_wireless_framework_CMake_rw61x_rdrw612bga true)
 
 #  # description: Middleware wireless framework_fsci
 #  set(CONFIG_USE_middleware_wireless_framework_FSCI true)
@@ -136,7 +200,7 @@
 #  set(CONFIG_USE_middleware_wireless_framework_sec_lib true)
 
 #  # description: Middleware wireless framework board base
-#  set(CONFIG_USE_middleware_wireless_framework_board_base_frdmrw612 true)
+#  set(CONFIG_USE_middleware_wireless_framework_board_base_rdrw612bga true)
 
 #  # description: Middleware wireless framework_platform_common
 #  set(CONFIG_USE_middleware_wireless_framework_platform_common_rw61x true)
@@ -154,45 +218,6 @@
 #  set(CONFIG_USE_middleware_wireless_framework_platform_zb_rw61x true)
 
 #  # description: Middleware wireless framework_board_lp
-#  set(CONFIG_USE_middleware_wireless_framework_board_lp_frdmrw612 true)
-
-#  # description: Middleware wireless framework_board_dcdc
-#  set(CONFIG_USE_middleware_wireless_framework_board_dcdc_frdmrw612 true)
-
-#  # description: Middleware wireless framework_board_platform
-#  set(CONFIG_USE_middleware_wireless_framework_board_platform_frdmrw612 true)
-
-#  # description: Middleware wireless framework_board_comp
-#  set(CONFIG_USE_middleware_wireless_framework_board_comp_frdmrw612 true)
-
-#  # description: Middleware wireless framework_board_extflash
-#  set(CONFIG_USE_middleware_wireless_framework_board_extflash_frdmrw612 true)
-
-#  # description: Middleware wireless framework_lfs_config
-#  set(CONFIG_USE_middleware_wireless_framework_lfs_config_rw61x true)
-
-#  # description: Middleware wireless framework_platform_fpga
-#  set(CONFIG_USE_middleware_wireless_framework_platform_fpga_rw61x true)
-
-#  # description: Middleware wireless framework matter config
-#  set(CONFIG_USE_middleware_wireless_framework_matter_config_frdmrw612 true)
-
-#  # description: Middleware wireless framework init config
-#  set(CONFIG_USE_middleware_wireless_framework_init_config_frdmrw612 true)
-
-#  # description: Middleware wireless framework_mbedtls_config
-#  set(CONFIG_USE_middleware_wireless_framework_mbedtls_config_rw61x true)
-
-#  # description: Middleware wireless framework platform ot coex
-#  set(CONFIG_USE_middleware_wireless_framework_platform_rt_ot_coex true)
-
-#  # description: Middleware wireless framework_cmake
-#  set(CONFIG_USE_middleware_wireless_framework_CMake_rw61x_rdrw612bga true)
-
-#  # description: Middleware wireless framework board base
-#  set(CONFIG_USE_middleware_wireless_framework_board_base_rdrw612bga true)
-
-#  # description: Middleware wireless framework_board_lp
 #  set(CONFIG_USE_middleware_wireless_framework_board_lp_rdrw612bga true)
 
 #  # description: Middleware wireless framework_board_dcdc
@@ -207,11 +232,50 @@
 #  # description: Middleware wireless framework_board_extflash
 #  set(CONFIG_USE_middleware_wireless_framework_board_extflash_rdrw612bga true)
 
+#  # description: Middleware wireless framework_lfs_config
+#  set(CONFIG_USE_middleware_wireless_framework_lfs_config_rw61x true)
+
+#  # description: Middleware wireless framework_platform_fpga
+#  set(CONFIG_USE_middleware_wireless_framework_platform_fpga_rw61x true)
+
 #  # description: Middleware wireless framework matter config
 #  set(CONFIG_USE_middleware_wireless_framework_matter_config_rdrw612bga true)
 
 #  # description: Middleware wireless framework init config
 #  set(CONFIG_USE_middleware_wireless_framework_init_config_rdrw612bga true)
+
+#  # description: Middleware wireless framework_mbedtls_config
+#  set(CONFIG_USE_middleware_wireless_framework_mbedtls_config_rw61x true)
+
+#  # description: Middleware wireless framework platform ot coex
+#  set(CONFIG_USE_middleware_wireless_framework_platform_rt_ot_coex true)
+
+#  # description: Middleware wireless framework_cmake
+#  set(CONFIG_USE_middleware_wireless_framework_CMake_rw61x_frdmrw612 true)
+
+#  # description: Middleware wireless framework board base
+#  set(CONFIG_USE_middleware_wireless_framework_board_base_frdmrw612 true)
+
+#  # description: Middleware wireless framework_board_lp
+#  set(CONFIG_USE_middleware_wireless_framework_board_lp_frdmrw612 true)
+
+#  # description: Middleware wireless framework_board_dcdc
+#  set(CONFIG_USE_middleware_wireless_framework_board_dcdc_frdmrw612 true)
+
+#  # description: Middleware wireless framework_board_platform
+#  set(CONFIG_USE_middleware_wireless_framework_board_platform_frdmrw612 true)
+
+#  # description: Middleware wireless framework_board_comp
+#  set(CONFIG_USE_middleware_wireless_framework_board_comp_frdmrw612 true)
+
+#  # description: Middleware wireless framework_board_extflash
+#  set(CONFIG_USE_middleware_wireless_framework_board_extflash_frdmrw612 true)
+
+#  # description: Middleware wireless framework matter config
+#  set(CONFIG_USE_middleware_wireless_framework_matter_config_frdmrw612 true)
+
+#  # description: Middleware wireless framework init config
+#  set(CONFIG_USE_middleware_wireless_framework_init_config_frdmrw612 true)
 
 #  # description: Middleware wireless framework_rng
 #  set(CONFIG_USE_middleware_wireless_framework_RNG true)
@@ -410,7 +474,7 @@
 #  set(CONFIG_USE_driver_flexcomm_usart_dma true)
 
 #  # description: flash config block
-#  set(CONFIG_USE_driver_flash_config_frdmrw612 true)
+#  set(CONFIG_USE_driver_flash_config_rdrw612bga true)
 
 #  # description: MEMORY Driver
 #  set(CONFIG_USE_driver_memory true)
@@ -779,7 +843,7 @@
 #  set(CONFIG_USE_driver_wwdt true)
 
 #  # description: flash config block
-#  set(CONFIG_USE_driver_flash_config_rdrw612bga true)
+#  set(CONFIG_USE_driver_flash_config_frdmrw612 true)
 
 #set.CMSIS
 #  # description: CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M
@@ -1529,7 +1593,7 @@
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_asrc_sw true)
 
 #  # description: Template configuration file to be edited by user.
-#  set(CONFIG_USE_middleware_edgefast_bluetooth_mcux_linker_template_frdmrw612 true)
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_mcux_linker_template_rdrw612bga true)
 
 #  # description: edgefast_bluetooth Abstraction Layer
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_pal true)
@@ -1646,7 +1710,7 @@
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_porting_work_queue true)
 
 #  # description: Template configuration file to be edited by user.
-#  set(CONFIG_USE_middleware_edgefast_bluetooth_sdio_template_frdmrw612 true)
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_sdio_template_rdrw612bga true)
 
 #  # description: Template configuration file to be edited by user.
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_template true)
@@ -1682,74 +1746,10 @@
 #  set(CONFIG_USE_middleware_edgefast_bluetooth_ble_ethermind_lib_lc3_cm33nodsp true)
 
 #  # description: Template configuration file to be edited by user.
-#  set(CONFIG_USE_middleware_edgefast_bluetooth_mcux_linker_template_rdrw612bga true)
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_mcux_linker_template_frdmrw612 true)
 
 #  # description: Template configuration file to be edited by user.
-#  set(CONFIG_USE_middleware_edgefast_bluetooth_sdio_template_rdrw612bga true)
-
-#set.middleware.wireless.zigbee
-#  # description: middleware wireless zigbee cmake infrastructure
-#  set(CONFIG_USE_middleware_wireless_zigbee_cmake true)
-
-#  # description: middleware wireless zigbee markdown documentation
-#  set(CONFIG_USE_middleware_wireless_zigbee_doc true)
-
-#  # description: middleware wireless zigbee all libs
-#  set(CONFIG_USE_middleware_wireless_zigbee_core_all_libs true)
-
-#  # description: Middleware wireless zigbee for core lib files
-#  set(CONFIG_USE_middleware_wireless_zigbee_core_libs true)
-
-#  # description: Middleware wireless zigbee for core lib files R23
-#  set(CONFIG_USE_middleware_wireless_zigbee_core_libs_r23 true)
-
-#  # description: Middleware wireless zigbee for core ZED lib files
-#  set(CONFIG_USE_middleware_wireless_zigbee_core_ZED_libs true)
-
-#  # description: Middleware wireless zigbee for core ZED lib files
-#  set(CONFIG_USE_middleware_wireless_zigbee_core_ZED_libs_r23 true)
-
-#  # description: Middleware wireless zigbee
-#  set(CONFIG_USE_middleware_wireless_zigbee true)
-
-#  # description: Middleware wireless zigbee examples
-#  set(CONFIG_USE_middleware_wireless_zigbee_examples true)
-
-#  # description: Middleware wireless zigbee platform common
-#  set(CONFIG_USE_middleware_wireless_zigbee_platform_common true)
-
-#  # description: Middleware wireless zigbee platform
-#  set(CONFIG_USE_middleware_wireless_zigbee_platform_k32w1 true)
-
-#  # description: Middleware wireless zigbee platform RW612
-#  set(CONFIG_USE_middleware_wireless_zigbee_platform_rw612 true)
-
-#  # description: middleware wireless zigbee all RW612 libs
-#  set(CONFIG_USE_middleware_wireless_zigbee_libs_rw612 true)
-
-#  # description: Middleware wireless zigbee platform
-#  set(CONFIG_USE_middleware_wireless_zigbee_platform_ncp_host true)
-
-#  # description: Middleware wireless zigbee platform
-#  set(CONFIG_USE_middleware_wireless_zigbee_zb_examples_common true)
-
-#  # description: Middleware wireless zigbee platform ota
-#  set(CONFIG_USE_middleware_wireless_zigbee_zb_examples_common_ota_client true)
-
-#  # description: Middleware wireless zigbee platform ota
-#  set(CONFIG_USE_middleware_wireless_zigbee_zb_examples_common_ota_server true)
-
-#  # description: Middleware wireless zigbee examples collaterals
-#  set(CONFIG_USE_middleware_wireless_zigbee_zb_examples_collaterals true)
-
-#  # description: Middleware wireless zigbee serial link
-#  set(CONFIG_USE_middleware_wireless_zigbee_zb_serial_link true)
-
-#  # description: Middleware wireless zigbee ZCL OTA Server
-#  set(CONFIG_USE_middleware_wireless_zigbee_core_ZCL_Clusters_OTA_Server true)
-
-#  # description: Middleware wireless zigbee ZCL OTA Client
-#  set(CONFIG_USE_middleware_wireless_zigbee_core_ZCL_Clusters_OTA_Client true)
+#  set(CONFIG_USE_middleware_edgefast_bluetooth_sdio_template_frdmrw612 true)
 
 #set.middleware.wireless.wpa_supplicant
 #  # description: Wpa supplicant rtos

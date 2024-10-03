@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-#if CONFIG_MONOLITHIC_IEEE802154
+#if CONFIG_MONOLITHIC_BLE_15_4
 const uint8_t fw_cpu2_combo[] __attribute__ ((aligned(4))) = {
 #if CONFIG_SOC_SERIES_RW6XX_REVISION_A2
 #if CONFIG_MFG_MONOLITHIC
@@ -23,7 +23,7 @@ const uint8_t fw_cpu2_combo[] __attribute__ ((aligned(4))) = {
 #endif
 };
 
-#elif CONFIG_MONOLITHIC_BT 
+#elif CONFIG_MONOLITHIC_BLE 
 
 const uint8_t fw_cpu2_ble[] __attribute__ ((aligned(4))) = {
 #if CONFIG_SOC_SERIES_RW6XX_REVISION_A2

@@ -19,11 +19,6 @@
 #include "mcux_psa_els_pkc_common_init.h"
 #endif /* defined(PSA_CRYPTO_DRIVER_THREAD_EN) */
 
-bool is_output_multiple_of_block_size(psa_key_type_t key_type, psa_algorithm_t alg, size_t input_length)
-{
-    return (key_type == PSA_KEY_TYPE_AES && alg == PSA_ALG_GCM && input_length % MCUXCLELS_CIPHER_BLOCK_SIZE_AES == 0);
-}
-
 /** \defgroup psa_aead PSA driver entry points for AEAD
  *
  *  Entry points for AEAD encryption and decryption as described by the PSA
@@ -83,8 +78,7 @@ psa_status_t els_pkc_transparent_aead_decrypt(const psa_key_attributes_t *attrib
                                               size_t *plaintext_length)
 {
     psa_status_t status;
-    bool update_output      = false;
-    uint8_t *local_out_buff = NULL;
+    uint8_t *padded_plaintext = NULL;
 
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)
     if (mcux_mutex_lock(&els_pkc_hwcrypto_mutex))
@@ -93,27 +87,29 @@ psa_status_t els_pkc_transparent_aead_decrypt(const psa_key_attributes_t *attrib
     }
 #endif /* defined(PSA_CRYPTO_DRIVER_THREAD_EN) */
 
-    /* The crypto hardware accelerator returns the output in multiple of it's blocksize (16) with padded output.
-       To handle the decryption of less than block size, we have to pass a intermediate internal buffer as PSA
-       tests expects only the desired output bytes.*/
-    if (is_output_multiple_of_block_size(psa_get_key_type(attributes), alg, plaintext_size) == false)
+    /* The crypto hardware accelerator returns AES GCM plaintext in multiples of the block size, zero-padding it.
+       To handle the decryption with supplied buffers not matching the block size, we have to pass an intermediate
+       buffer which does, and copy only the actual plaintext without padding back into the original one.*/
+    if (psa_get_key_type(attributes) == PSA_KEY_TYPE_AES && PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG(alg) == PSA_ALG_GCM
+        && plaintext_size % PSA_BLOCK_CIPHER_BLOCK_LENGTH(PSA_KEY_TYPE_AES) != 0)
     {
-        local_out_buff =
-            mbedtls_calloc(1, ((plaintext_size / MCUXCLELS_CIPHER_BLOCK_SIZE_AES) * MCUXCLELS_CIPHER_BLOCK_SIZE_AES) +
-                                  MCUXCLELS_CIPHER_BLOCK_SIZE_AES);
-        update_output = true;
+        padded_plaintext = mbedtls_calloc(1, PSA_ROUND_UP_TO_MULTIPLE(PSA_BLOCK_CIPHER_BLOCK_LENGTH(PSA_KEY_TYPE_AES), plaintext_size));
+        if (padded_plaintext == NULL)
+        {
+            return PSA_ERROR_INSUFFICIENT_MEMORY;
+        }
     }
 
     status = mcuxClPsaDriver_psa_driver_wrapper_aead_decrypt(
         attributes, key_buffer, key_buffer_size, alg, nonce, nonce_length, additional_data, additional_data_length,
-        ciphertext, ciphertext_length, (update_output) ? local_out_buff : plaintext, plaintext_size, plaintext_length);
+        ciphertext, ciphertext_length, (padded_plaintext != NULL) ? padded_plaintext : plaintext, plaintext_size, plaintext_length);
 
-    /* Copy output buffer*/
-    if (update_output)
+    if (padded_plaintext != NULL && status == PSA_SUCCESS)
     {
-        memcpy(plaintext, local_out_buff, plaintext_size);
-        mbedtls_free(local_out_buff);
+        (void)memcpy(plaintext, padded_plaintext, *plaintext_length);
     }
+
+    mbedtls_free(padded_plaintext);
 
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)
     if (mcux_mutex_unlock(&els_pkc_hwcrypto_mutex))
@@ -264,8 +260,7 @@ psa_status_t els_pkc_transparent_aead_update(els_pkc_transparent_aead_operation_
                                              size_t *output_length)
 {
     psa_status_t status;
-    bool update_output      = false;
-    uint8_t *local_out_buff = NULL;
+    uint8_t *padded_output = NULL;
 
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)
     if (mcux_mutex_lock(&els_pkc_hwcrypto_mutex))
@@ -274,26 +269,28 @@ psa_status_t els_pkc_transparent_aead_update(els_pkc_transparent_aead_operation_
     }
 #endif /* defined(PSA_CRYPTO_DRIVER_THREAD_EN) */
 
-    /* The crypto hardware accelerator returns the output in multiple of it's blocksize (16) with padded output.
-       To handle the decryption of less than block size, we have to pass a intermediate internal buffer as PSA
-       tests expects only the desired output bytes.*/
-    if (is_output_multiple_of_block_size(operation->key_type, operation->alg, input_length) == false)
+    /* The crypto hardware accelerator returns AES GCM plaintext in multiples of the block size, zero-padding it.
+       To handle the decryption with supplied buffers not matching the block size, we have to pass an intermediate
+       buffer which does, and copy only the actual plaintext without padding back into the original one.*/
+    if (operation->key_type == PSA_KEY_TYPE_AES && PSA_ALG_AEAD_WITH_DEFAULT_LENGTH_TAG(operation->alg) == PSA_ALG_GCM
+        && output_size % PSA_BLOCK_CIPHER_BLOCK_LENGTH(PSA_KEY_TYPE_AES) != 0)
     {
-        local_out_buff =
-            mbedtls_calloc(1, ((input_length / MCUXCLELS_CIPHER_BLOCK_SIZE_AES) * MCUXCLELS_CIPHER_BLOCK_SIZE_AES) +
-                                  MCUXCLELS_CIPHER_BLOCK_SIZE_AES);
-        update_output = true;
+        padded_output = mbedtls_calloc(1, PSA_ROUND_UP_TO_MULTIPLE(PSA_BLOCK_CIPHER_BLOCK_LENGTH(PSA_KEY_TYPE_AES), output_size));
+        if (padded_output == NULL)
+        {
+            return PSA_ERROR_INSUFFICIENT_MEMORY;
+        }
     }
 
     status = mcuxClPsaDriver_psa_driver_wrapper_aead_update(
-        operation, input, input_length, (update_output) ? local_out_buff : output, output_size, output_length);
+        operation, input, input_length, (padded_output != NULL) ? padded_output : output, output_size, output_length);
 
-    /* Copy output buffer*/
-    if (update_output)
+    if (padded_output != NULL && status == PSA_SUCCESS)
     {
-        memcpy(output, local_out_buff, output_size);
-        mbedtls_free(local_out_buff);
+        (void)memcpy(output, padded_output, *output_length);
     }
+
+    mbedtls_free(padded_output);
 
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)
     if (mcux_mutex_unlock(&els_pkc_hwcrypto_mutex))

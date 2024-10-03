@@ -19,15 +19,15 @@
 #include <stddef.h>
 #include "mcuxClPsaDriver_Oracle_Utils.h"
 
-#define NXP_DIE_MK_SK_SLOT               0x0U
-#define NXP_DIE_EL2GOOEM_MK_SK_SLOT      0x04U
+#define NXP_DIE_MK_SK_SLOT          0x00U
+#define NXP_DIE_EL2GOOEM_MK_SK_SLOT 0x04U
 
-#define RECIPE_STEP_CREATE_NXP_DIE_KEK_SK                                                              \
+#define RECIPE_STEP_CREATE_NXP_DIE_KEK_SK                                                                          \
     {                                                                                                              \
         .operation = OP_CKDF, .storage = STORAGE_FINAL_KEY,                                                        \
         .ckdf = {                                                                                                  \
-            .source_key_slot           = NXP_DIE_MK_SK_SLOT,                                              \
-            .target_key_id             = MBEDTLS_NXP_DIE_KEK_SK_ID,                                    \
+            .source_key_slot           = NXP_DIE_MK_SK_SLOT,                                                       \
+            .target_key_id             = MBEDTLS_NXP_DIE_KEK_SK_ID,                                                \
             .key_properties.word.value = 0x404000E1u,                                                              \
             .derivation_data           = {0x94, 0xbe, 0x03, 0xac, 0x8b, 0x59, 0x32, 0x45, 0x11, 0x7f, 0xf8, 0x3f}, \
         },                                                                                                         \

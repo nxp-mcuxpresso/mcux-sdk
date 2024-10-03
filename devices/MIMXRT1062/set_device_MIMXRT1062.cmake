@@ -2190,30 +2190,6 @@ endif()
 endif()
 
 
-if (CONFIG_USE_component_nvm_adapter)
-# Add set(CONFIG_USE_component_nvm_adapter true) in config.cmake to use this component
-
-message("component_nvm_adapter component is included from ${CMAKE_CURRENT_LIST_FILE}.")
-
-if(CONFIG_USE_driver_common AND CONFIG_USE_middleware_wireless_framework_function_lib AND CONFIG_USE_middleware_wireless_framework_NVM AND CONFIG_USE_middleware_wireless_framework_Common)
-
-target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/nvm_adapter.c
-)
-
-target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../components/nvm/.
-)
-
-else()
-
-message(SEND_ERROR "component_nvm_adapter.MIMXRT1062 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
-
-endif()
-
-endif()
-
-
 if (CONFIG_USE_component_panic)
 # Add set(CONFIG_USE_component_panic true) in config.cmake to use this component
 

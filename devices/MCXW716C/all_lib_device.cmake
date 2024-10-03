@@ -1126,6 +1126,7 @@
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/power_manager/devices/MCXW716C
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/multicore

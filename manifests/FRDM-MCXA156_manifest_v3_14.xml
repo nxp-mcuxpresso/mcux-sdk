@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_FRDM-MCXA156_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_FRDM-MCXA156_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="middleware.usb.device.controller.driver.MCXA156"/>
@@ -3940,7 +3940,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.glikey.MCXA156" name="glikey" brief="GLIKEY Driver" version="2.0.0" full_name="GLIKEY Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/glikey" project_base_path="drivers">
+    <component id="platform.drivers.glikey.MCXA156" name="glikey" brief="GLIKEY Driver" version="2.0.1" full_name="GLIKEY Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/glikey" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXA156"/>

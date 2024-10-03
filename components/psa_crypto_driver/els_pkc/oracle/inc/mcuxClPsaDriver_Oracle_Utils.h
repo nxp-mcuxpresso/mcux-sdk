@@ -43,7 +43,7 @@
 #define MBEDTLS_NXP_DIE_EL2GOATTEST_AUTH_PRK_ID  NXP_DIE_EL2GOATTEST_AUTH_PRK_ID
 #else
 #define MBEDTLS_NXP_DIE_KEK_SK_ID                                                 \
-    {                                                                                         \
+    {                                                                             \
         .MBEDTLS_PRIVATE(owner) = 0, .MBEDTLS_PRIVATE(key_id) = NXP_DIE_KEK_SK_ID \
     }
 #define MBEDTLS_NXP_DIE_EL2GOIMPORT_KEK_SK_ID                                                 \
@@ -107,7 +107,7 @@ typedef struct _key_recipe_step_ckdf_t
     union 
     {
         uint8_t derivation_data[MCUXCLELS_CKDF_DERIVATIONDATA_SIZE];
-        int (*derivation_fn)(uint8_t *derived_data);    
+        psa_status_t (*derivation_fn)(uint8_t *derived_data);    
     };
 } key_recipe_step_ckdf_t;
 

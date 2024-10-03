@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1180-EVK_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1180-EVK_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="middleware.usb.host.stack.MIMXRT1189"/>
@@ -3256,7 +3256,7 @@ ${load}</script>
         <files mask="eCAT_Servo_Motor_Example_User_Guide.pdf"/>
       </source>
     </component>
-    <component id="docs.maestro.MIMXRT1189" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
+    <component id="docs.maestro.MIMXRT1189" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.8.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
       <dependencies>
         <all>
           <component_dependency value="middleware.maestro_framework.MIMXRT1189"/>

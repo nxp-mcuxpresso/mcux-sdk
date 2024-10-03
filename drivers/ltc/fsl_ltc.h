@@ -20,9 +20,9 @@
  */
 /*! @name Driver version */
 /*! @{ */
-/*! @brief LTC driver version. Version 2.0.16.
+/*! @brief LTC driver version. Version 2.0.17.
  *
- * Current version: 2.0.16
+ * Current version: 2.0.17
  *
  * Change log:
  * - Version 2.0.1
@@ -72,8 +72,11 @@
  *
  * - Version 2.0.16
  *   - Fix unitialized GCC warning in LTC_AES_GenerateDecryptKey()
+ *
+ * - Version 2.0.17
+ *   - Fix CMAC for payloads over one block, and if BRIC is present on the device, remove XCBC and "decrypt key" functionality
  */
-#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 16))
+#define FSL_LTC_DRIVER_VERSION (MAKE_VERSION(2, 0, 17))
 /*! @} */
 /*! @} */
 
@@ -89,11 +92,19 @@
 /*! AES Input Vector size in bytes */
 #define LTC_AES_IV_SIZE 16
 
+#if defined(FSL_FEATURE_SOC_BRIC_COUNT) && (FSL_FEATURE_SOC_BRIC_COUNT > 0)
+#define LTC_KEY_REGISTER_READABLE (0)
+#else
+#define LTC_KEY_REGISTER_READABLE (1)
+#endif /* FSL_FEATURE_SOC_BRIC_COUNT */
+
 /*! @brief Type of AES key for ECB and CBC decrypt operations. */
 typedef enum _ltc_aes_key_t
 {
     kLTC_EncryptKey = 0U, /*!< Input key is an encrypt key */
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
     kLTC_DecryptKey = 1U, /*!< Input key is a decrypt key */
+#endif /* LTC_KEY_REGISTER_READABLE */
 } ltc_aes_key_t;
 
 /*!
@@ -128,7 +139,9 @@ typedef enum _ltc_aes_key_t
 /*! Supported cryptographic block cipher functions for HASH creation */
 typedef enum _ltc_hash_algo_t
 {
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
     kLTC_XcbcMac = 0, /*!< XCBC-MAC (AES engine) */
+#endif /* LTC_KEY_REGISTER_READABLE */
     kLTC_Cmac,        /*!< CMAC (AES engine) */
 #if defined(FSL_FEATURE_LTC_HAS_SHA) && FSL_FEATURE_LTC_HAS_SHA
     kLTC_Sha1,   /*!< SHA_1   (MDHA engine)  */
@@ -1644,7 +1657,9 @@ typedef enum _ltc_mode_symmetric_alg
     kLTC_ModeCFB     = 0x30U << LTC_MD_AAI_SHIFT,
     kLTC_ModeOFB     = 0x40U << LTC_MD_AAI_SHIFT,
     kLTC_ModeCMAC    = 0x60U << LTC_MD_AAI_SHIFT,
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
     kLTC_ModeXCBCMAC = 0x70U << LTC_MD_AAI_SHIFT,
+#endif /* LTC_KEY_REGISTER_READABLE */
     kLTC_ModeCCM     = 0x80U << LTC_MD_AAI_SHIFT,
     kLTC_ModeGCM     = 0x90U << LTC_MD_AAI_SHIFT,
 } ltc_mode_symmetric_alg_t;

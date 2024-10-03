@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVKB_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVKB_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="isi_qmc_dgc"/>
@@ -11,9 +11,6 @@
     <definition extID="middleware.freertos-kernel.MIMXRT1176"/>
     <definition extID="middleware.multicore.erpc.MIMXRT1176"/>
     <definition extID="middleware.multicore.MIMXRT1176"/>
-    <definition extID="middleware.wireless.framework.function_lib.MIMXRT1176"/>
-    <definition extID="middleware.wireless.framework.nvm.MIMXRT1176"/>
-    <definition extID="middleware.wireless.framework.common.MIMXRT1176"/>
     <definition extID="middleware.azure_rtos.tx.MIMXRT1176"/>
     <definition extID="middleware.azure_rtos.tx.sp.MIMXRT1176"/>
     <definition extID="middleware.usb.device.cdc.external.MIMXRT1176"/>
@@ -33,7 +30,6 @@
     <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_MIMXRT1176_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/wireless/framework/manifests/middleware_nxp_conn_fwk_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/eiq/manifests/middleware_nxp_eiq_machine_learning_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/azure-rtos/manifests/middleware_microsoft_azure_rtos_MIMXRT1176_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/wpa_supplicant-rtos/manifests/middleware_nxp_wifi_wpa_supplicant_MIMXRT1176_manifest_v3_14.xml"/>
@@ -3050,7 +3046,7 @@ ${load}</script>
         <files mask="MCUXpresso SDK Azure RTOS Release Notes.pdf"/>
       </source>
     </component>
-    <component id="docs.maestro.MIMXRT1176" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
+    <component id="docs.maestro.MIMXRT1176" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.8.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
       <dependencies>
         <all>
           <component_dependency value="middleware.maestro_framework.MIMXRT1176"/>
@@ -6170,29 +6166,6 @@ ${load}</script>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="driver_mma8451q.MIMXRT1176.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-      </include_paths>
-    </component>
-    <component id="component.nvm_adapter.MIMXRT1176" name="nvm_adapter" brief="Component nvm_adapter" version="1.0.0" full_name="NVM Adapter" category="Device/SDK Utilities" user_visible="false" type="utilities" package_base_path="../components/nvm" project_base_path="component/nvm">
-      <dependencies>
-        <all>
-          <component_dependency value="platform.drivers.common.MIMXRT1176"/>
-          <component_dependency value="middleware.wireless.framework.function_lib.MIMXRT1176"/>
-          <component_dependency value="middleware.wireless.framework.nvm.MIMXRT1176"/>
-          <component_dependency value="middleware.wireless.framework.common.MIMXRT1176"/>
-          <device_dependency value="MIMXRT1176xxxxx"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="c_include">
-        <files mask="nvm_adapter.h"/>
-      </source>
-      <source relative_path="./" type="src">
-        <files mask="nvm_adapter.c"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_nvm_adapter.MIMXRT1176.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>

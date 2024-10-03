@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_FRDM-RW612_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_FRDM-RW612_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="rdrw612bga"/>
@@ -18,6 +18,7 @@
   <manifest_includes>
     <manifest_include path="../../examples/frdmrw612/frdmrw612_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/manifests/middleware_nxp_ieee_802_15_4_RW612_manifest_v3_14.xml"/>
+    <manifest_include path="../../middleware/wireless/zigbee/manifests/middleware_nxp_zigbee_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/framework/manifests/middleware_nxp_conn_fwk_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wifi_nxp/manifests/middleware_nxp_wifi_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../rtos/freertos/freertos-kernel/manifests/middleware_amazon_freertos_kernel_RW612_manifest_v3_14.xml"/>
@@ -29,7 +30,6 @@
     <manifest_include path="../../middleware/sdmmc/manifests/middleware_nxp_sd_mmc_sdio_card_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/usb/manifests/middleware_nxp_usb_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/edgefast_bluetooth/manifests/middleware_nxp_edgefast_bluetooth_pal_RW612_manifest_v3_14.xml"/>
-    <manifest_include path="../../middleware/wireless/zigbee/manifests/middleware_nxp_zigbee_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/wireless/wpa_supplicant-rtos/manifests/middleware_nxp_wifi_wpa_supplicant_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/fatfs/manifests/middleware_elm_chan_fatfs_RW612_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/voice_seeker/manifests/middleware_nxp_voiceseeker_no_aec_RW612_manifest_v3_14.xml"/>
@@ -3964,14 +3964,14 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flash_config.frdmrw612.RW612" name="flash_config" brief="flash config block" version="2.0.0" full_name="Flash config" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../boards/frdmrw612/flash_config" project_base_path="flash_config">
+    <component id="platform.drivers.flash_config.rdrw612bga.RW612" name="flash_config" brief="flash config block" version="2.0.0" full_name="Flash config" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../boards/rdrw612bga/flash_config" project_base_path="flash_config">
       <defines>
         <define name="BOOT_HEADER_ENABLE" value="1"/>
       </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
-          <board_dependency value="frdmrw612"/>
+          <board_dependency value="rdrw612bga"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -3982,7 +3982,7 @@ ${load}</script>
         <files mask="flash_config.h"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="driver_flash_config_frdmrw612.RW612.cmake" hidden="true"/>
+        <files mask="driver_flash_config_rdrw612bga.RW612.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>
@@ -5026,8 +5026,7 @@ ${load}</script>
         <files mask="UM11861-NXP-802.15.4-demo-applications-for-RW612.pdf"/>
       </source>
       <source relative_path="Release Notes" type="doc">
-        <files mask="RW61x-Wi-Fi-and-Bluetooth-802.15.4-Release-Notes-for-FreeRTOS.pdf"/>
-        <files mask="RW61x-Wi-Fi-and-Bluetooth-802.15.4-Software-Features-for-FreeRTOS.pdf"/>
+        <files mask="RN00174-Wireless-SoC-features-and-release-notes-for-FreeRTOS.pdf"/>
       </source>
       <source relative_path="Wi-Fi" type="doc">
         <files mask="AN13680-Tx-Power-Table-and-Channel-Scan-Management-for-RW61x.pdf"/>
@@ -5047,7 +5046,7 @@ ${load}</script>
         <files mask="Getting Started with MCUXpressoSDK and FreeRTOS OS.pdf"/>
       </source>
     </component>
-    <component id="docs.maestro.RW612" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
+    <component id="docs.maestro.RW612" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.8.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
       <dependencies>
         <all>
           <component_dependency value="middleware.maestro_framework.RW612"/>
@@ -5400,30 +5399,15 @@ ${load}</script>
         <files mask="rw61x_sb_ble_a2.bin"/>
         <files mask="rw61x_sb_ble_15d4_combo_a2.bin"/>
       </source>
+      <source relative_path="fw_bin/script" type="script">
+        <files mask="wlan_gen_fw_incs.py"/>
+      </source>
       <source relative_path="fw_bin/inc" type="asm_include">
-        <files mask="nbu_15_4.bin.inc"/>
-        <files mask="nbu_15_4_mfg.bin.inc"/>
-        <files mask="nbu_15_4_raw_cpu2_15d4.bin.inc"/>
-        <files mask="nbu_15_4_sb.bin.inc"/>
-        <files mask="nbu_15_4_sb_mfg.bin.inc"/>
-        <files mask="rw610_sb_ble.bin.inc"/>
-        <files mask="rw610_sb_ble_15d4_combo.bin.inc"/>
-        <files mask="rw610_sb_mfg_fw_ble_15d4_combo.bin.inc"/>
-        <files mask="rw610_sb_wifi.bin.inc"/>
-        <files mask="rw610n_mfg_fw_cpu2_ble.bin.inc"/>
-        <files mask="rw610n_sb_mfg_fw_cpu2.bin.inc"/>
-        <files mask="rw610w_mfg_fw_cpu1.bin.inc"/>
-        <files mask="rw610w_sb_mfg_fw_cpu1.bin.inc"/>
         <files mask="rw61x_sb_ble_15d4_combo_a2.bin.inc"/>
         <files mask="rw61x_sb_ble_a2.bin.inc"/>
         <files mask="rw61x_sb_wifi_a2.bin.inc"/>
-        <files mask="rw61xn_combo_raw_cpu2_ble_15_4_combo_a2.bin.inc"/>
-        <files mask="rw61xn_raw_cpu2_ble_a2.bin.inc"/>
-        <files mask="rw61xn_raw_cpu2_ble_zb_combo.bin.inc"/>
         <files mask="rw61xn_sb_mfg_fw_cpu2_ble_a2.bin.inc"/>
         <files mask="rw61xn_sb_mfg_fw_cpu2_combo_a2.bin.inc"/>
-        <files mask="rw61xw_raw_cpu1_a2.bin.inc"/>
-        <files mask="rw61xw_raw_cpu1_a2_vdllv2.bin.inc"/>
         <files mask="rw61xw_sb_mfg_fw_cpu1_a2.bin.inc"/>
       </source>
       <source relative_path="fw_bin/rw61x" type="src">
@@ -5438,6 +5422,7 @@ ${load}</script>
         <include_path relative_path="fw_bin" type="c_include"/>
         <include_path relative_path="fw_bin/inc" type="c_include"/>
         <include_path relative_path="fw_bin/rw61x" type="c_include"/>
+        <include_path relative_path="fw_bin/script" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.lpc_crc_adapter.RW612" name="lpc_crc_adapter" brief="Component lpc_crc_adapter" version="1.0.0" full_name="Component lpc_crc_adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/crc" project_base_path="component/crc">
@@ -11564,14 +11549,14 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.flash_config.rdrw612bga.RW612" name="flash_config" brief="flash config block" version="2.0.0" full_name="Flash config" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../boards/rdrw612bga/flash_config" project_base_path="flash_config">
+    <component id="platform.drivers.flash_config.frdmrw612.RW612" name="flash_config" brief="flash config block" version="2.0.0" full_name="Flash config" category="Device/SDK Drivers" user_visible="true" type="board_component" package_base_path="../boards/frdmrw612/flash_config" project_base_path="flash_config">
       <defines>
         <define name="BOOT_HEADER_ENABLE" value="1"/>
       </defines>
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.RW612"/>
-          <board_dependency value="rdrw612bga"/>
+          <board_dependency value="frdmrw612"/>
           <device_dependency value="RW612"/>
         </all>
       </dependencies>
@@ -11582,7 +11567,7 @@ ${load}</script>
         <files mask="flash_config.h"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="driver_flash_config_rdrw612bga.RW612.cmake" hidden="true"/>
+        <files mask="driver_flash_config_frdmrw612.RW612.cmake" hidden="true"/>
       </source>
       <include_paths>
         <include_path relative_path="./" type="c_include"/>

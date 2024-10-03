@@ -544,6 +544,8 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     return PSA_SUCCESS;
 }
 
+// Keeping the implementation for future reference and use.
+#if 0
 static inline psa_status_t mcuxClPsaDriver_psa_driver_wrapper_generate_s50_key(
     const psa_key_attributes_t *attributes,
     mcuxClEls_KeyIndex_t key_index_private_key,
@@ -606,6 +608,7 @@ static inline psa_status_t mcuxClPsaDriver_psa_driver_wrapper_generate_s50_key(
 
     return PSA_SUCCESS;
 }
+#endif
 
 MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 psa_status_t mcuxClPsaDriver_psa_driver_wrapper_key_generate(

@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240607
+**     Build:               b240830
 **
 **     Abstract:
 **         Chip specific module features.
@@ -465,7 +465,7 @@
 /* GLIKEY module features */
 
 /* @brief GLIKEY has 8 step FSM configuration */
-#define FSL_FEATURE_GLIKEY_HAS_EIGHT_STEPS (1)
+#define FSL_FEATURE_GLIKEY_HAS_EIGHT_STEPS (0)
 
 /* GPIO module features */
 
@@ -496,6 +496,8 @@
 #define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 /* @brief Has SCL delay after START. */
 #define FSL_FEATURE_I3C_HAS_START_SCL_DELAY (1)
+/* @brief Has no the master write data register for DMA. */
+#define FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG (0)
 
 /* LPI2C module features */
 
@@ -764,7 +766,7 @@
 /* @brief Has the Dynamic SOF threshold compare support */
 #define FSL_FEATURE_USB_KHCI_DYNAMIC_SOF_THRESHOLD_COMPARE_ENABLED (0)
 /* @brief Has the VBUS detect support */
-#define FSL_FEATURE_USB_KHCI_VBUS_DETECT_ENABLED (1)
+#define FSL_FEATURE_USB_KHCI_VBUS_DETECT_ENABLED (0)
 /* @brief Has the IRC48M module clock support */
 #define FSL_FEATURE_USB_KHCI_IRC48M_MODULE_CLOCK_ENABLED (1)
 /* @brief Number of endpoints supported */

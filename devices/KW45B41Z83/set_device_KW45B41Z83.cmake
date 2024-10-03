@@ -197,19 +197,6 @@ message("device_KW45B41Z83_startup component is included from ${CMAKE_CURRENT_LI
 if(CONFIG_USE_device_KW45B41Z83_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_KW45B41Z83.S
-  )
-endif()
-
-if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_kw45b41z83.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_kw45b41z83.cpp
-  )
-endif()
-
-if(CONFIG_TOOLCHAIN STREQUAL armgcc)
   add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_KW45B41Z83.S "" device_KW45B41Z83_startup.KW45B41Z83)
 endif()
 

@@ -615,6 +615,10 @@ psa_status_t mcuxClPsaDriver_Oracle_GetKeyBufferSizeFromKeyData(const psa_key_at
         return PSA_SUCCESS;
     }
 #endif
+    else
+    {
+        return mcuxClPsaDriver_Oracle_GetKeyBufferSize(attributes, key_buffer_length);
+    }
     // TODO: check which return code is better to use
     return PSA_ERROR_NOT_SUPPORTED;
 }

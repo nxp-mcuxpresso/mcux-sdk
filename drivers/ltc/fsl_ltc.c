@@ -384,6 +384,7 @@ static void ltc_set_key(LTC_Type *base, const uint8_t *key, uint8_t keySize)
     }
 }
 
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
 /*!
  * @brief Gets the LTC keys.
  *
@@ -402,6 +403,7 @@ static void ltc_get_key(LTC_Type *base, uint8_t *key, uint8_t keySize)
         ltc_set_unaligned_from_word(base->KEY[i], &key[i * sizeof(uint32_t)]);
     }
 }
+#endif /* LTC_KEY_REGISTER_READABLE */
 
 /*!
  * @brief Writes the LTC context register;
@@ -1130,12 +1132,14 @@ static status_t ltc_aes_decrypt_ecb(LTC_Type *base,
         return retval;
     }
 
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
     /* set DK bit in the LTC Mode Register AAI field for directly loaded decrypt keys */
     if (keyType == kLTC_DecryptKey)
     {
         uint32_t u32mask = 1;
         base->MD |= (u32mask << (uint32_t)kLTC_ModeRegBitShiftDK);
     }
+#endif /* LTC_KEY_REGISTER_READABLE */
 
     /* Process data and return status. */
     retval = ltc_process_message_in_sessions(base, &ciphertext[0], size, &plaintext[0]);
@@ -1145,6 +1149,7 @@ static status_t ltc_aes_decrypt_ecb(LTC_Type *base,
 /*******************************************************************************
  * AES Code public
  ******************************************************************************/
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
 /*!
  * brief Transforms an AES encrypt key (forward AES) into the decrypt key (inverse AES).
  *
@@ -1178,6 +1183,7 @@ status_t LTC_AES_GenerateDecryptKey(LTC_Type *base, const uint8_t *encryptKey, u
 
     return status;
 }
+#endif /* LTC_KEY_REGISTER_READABLE */
 
 /*!
  * brief Encrypts AES using the ECB block mode.
@@ -1360,12 +1366,14 @@ status_t LTC_AES_DecryptCbc(LTC_Type *base,
         return retval;
     }
 
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
     /* set DK bit in the LTC Mode Register AAI field for directly loaded decrypt keys */
     if (keyType == kLTC_DecryptKey)
     {
         uint32_t u32mask = 1;
         base->MD |= (u32mask << (uint8_t)kLTC_ModeRegBitShiftDK);
     }
+#endif /* LTC_KEY_REGISTER_READABLE */
 
     /* Process data and return status. */
     retval = ltc_process_message_in_sessions(base, &ciphertext[0], size, &plaintext[0]);
@@ -3001,7 +3009,10 @@ typedef struct _ltc_hash_ctx_internal
  ******************************************************************************/
 static status_t ltc_hash_check_input_alg(ltc_hash_algo_t algo)
 {
-    if ((algo != kLTC_XcbcMac) && (algo != kLTC_Cmac)
+    if ((algo != kLTC_Cmac)
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
+        && (algo != kLTC_XcbcMac)
+#endif /* LTC_KEY_REGISTER_READABLE */
 #if defined(FSL_FEATURE_LTC_HAS_SHA) && FSL_FEATURE_LTC_HAS_SHA
         && (algo != kLTC_Sha1) && (algo != kLTC_Sha224) && (algo != kLTC_Sha256)
 #endif /* FSL_FEATURE_LTC_HAS_SHA */
@@ -3014,7 +3025,11 @@ static status_t ltc_hash_check_input_alg(ltc_hash_algo_t algo)
 
 static inline bool ltc_hash_alg_is_cmac(ltc_hash_algo_t algo)
 {
-    return ((algo == kLTC_XcbcMac) || (algo == kLTC_Cmac));
+    return ((algo == kLTC_Cmac)
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
+            || (algo == kLTC_XcbcMac)
+#endif /* LTC_KEY_REGISTER_READABLE */
+            );
 }
 
 #if defined(FSL_FEATURE_LTC_HAS_SHA) && FSL_FEATURE_LTC_HAS_SHA
@@ -3067,10 +3082,12 @@ static uint32_t ltc_hash_algo2mode(ltc_hash_algo_t algo, ltc_mode_algorithm_stat
     /* Set LTC algorithm */
     switch (algo)
     {
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
         case kLTC_XcbcMac:
             modeReg = (uint32_t)kLTC_AlgorithmAES | (uint32_t)kLTC_ModeXCBCMAC;
             outSize = 16u;
             break;
+#endif /* LTC_KEY_REGISTER_READABLE */
         case kLTC_Cmac:
             modeReg = (uint32_t)kLTC_AlgorithmAES | (uint32_t)kLTC_ModeCMAC;
             outSize = 16u;
@@ -3123,7 +3140,11 @@ static void ltc_hash_engine_init(ltc_hash_ctx_internal_t *ctx)
         key     = (uint8_t *)&ctx->word[kLTC_HashCtxKeyStartIdx];
 
         /* set LTC mode register to INITIALIZE */
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
         algo = (ctx->algo == kLTC_XcbcMac) ? kLTC_ModeXCBCMAC : kLTC_ModeCMAC;
+#else
+        algo = kLTC_ModeCMAC;
+#endif /* LTC_KEY_REGISTER_READABLE */
         (void)ltc_symmetric_init(base, key, (uint8_t)keySize, kLTC_AlgorithmAES, algo, kLTC_ModeEncrypt);
 #if defined(FSL_FEATURE_LTC_HAS_SHA) && FSL_FEATURE_LTC_HAS_SHA
     }
@@ -3152,6 +3173,7 @@ static void ltc_hash_save_context(ltc_hash_ctx_internal_t *ctx)
     /* Get context size */
     switch (ctx->algo)
     {
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
         case kLTC_XcbcMac:
             /*
              *  word[0-3] = mac
@@ -3161,6 +3183,7 @@ static void ltc_hash_save_context(ltc_hash_ctx_internal_t *ctx)
              */
             sz = 12U * sizeof(uint32_t);
             break;
+#endif /* LTC_KEY_REGISTER_READABLE */
         case kLTC_Cmac:
             /*
              *  word[0-3] = mac
@@ -3184,13 +3207,6 @@ static void ltc_hash_save_context(ltc_hash_ctx_internal_t *ctx)
     }
 
     (void)ltc_get_context(base, (uint8_t *)&ctx->word[0], (uint8_t)sz, 0);
-
-    if (true == ltc_hash_alg_is_cmac(ctx->algo))
-    {
-        /* word[12-19] = key */
-        ltc_get_key(base, (uint8_t *)&ctx->word[kLTC_HashCtxKeyStartIdx],
-                    (uint8_t)ctx->word[(uint8_t)kLTC_HashCtxKeySize]);
-    }
 }
 
 static void ltc_hash_restore_context(ltc_hash_ctx_internal_t *ctx)
@@ -3203,6 +3219,7 @@ static void ltc_hash_restore_context(ltc_hash_ctx_internal_t *ctx)
     /* Get context size */
     switch (ctx->algo)
     {
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
         case kLTC_XcbcMac:
             /*
              *  word[0-3] = mac
@@ -3212,6 +3229,7 @@ static void ltc_hash_restore_context(ltc_hash_ctx_internal_t *ctx)
              */
             sz = 12U * sizeof(uint32_t);
             break;
+#endif /* LTC_KEY_REGISTER_READABLE */
         case kLTC_Cmac:
             /*
              *  word[0-3] = mac
@@ -3262,7 +3280,11 @@ static void ltc_hash_prepare_context_switch(LTC_Type *base)
 
 static uint32_t ltc_hash_get_block_size(ltc_hash_algo_t algo)
 {
-    if ((algo == kLTC_XcbcMac) || (algo == kLTC_Cmac))
+    if ((algo == kLTC_Cmac)
+#if defined(LTC_KEY_REGISTER_READABLE) && LTC_KEY_REGISTER_READABLE
+        || (algo == kLTC_XcbcMac)
+#endif /* LTC_KEY_REGISTER_READABLE */
+    )
     {
         return (uint32_t)LTC_AES_BLOCK_SIZE;
     }

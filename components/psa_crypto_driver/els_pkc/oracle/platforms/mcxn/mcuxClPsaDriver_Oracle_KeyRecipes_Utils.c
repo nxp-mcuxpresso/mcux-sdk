@@ -54,7 +54,7 @@ psa_status_t get_el2goem_mk_dd(uint8_t* dd)
     psa_status_t status = PSA_ERROR_GENERIC_ERROR;
     uint32_t rkth[NBOOT_MAX_ROTKH_SIZE_IN_BYTES / sizeof(uint32_t)];
     uint32_t lifecycle = el2go_get_device_lifecycle();
-    uint32_t rkth_size;
+    size_t rkth_size;
     
     status = el2go_get_device_rkth(rkth, &rkth_size);
 

@@ -437,13 +437,21 @@ static void TimersCheckAndUpdate(uint32_t remainingUs)
 }
 
 /*! -------------------------------------------------------------------------
+ * \brief  Update Remaining Us for all Active timers and do not sync timer task
+ * \return
+ *---------------------------------------------------------------------------*/
+static void TimersUpdateWithoutSyncTask(uint32_t remainingUs)
+{
+    TimersCheckAndUpdate(remainingUs);
+    s_timermanager.previousTimeInUs = remainingUs;
+}
+/*! -------------------------------------------------------------------------
  * \brief  Update Remaining Us for all Active timers and sync timer task
  * \return
  *---------------------------------------------------------------------------*/
 static void TimersUpdateSyncTask(uint32_t remainingUs)
 {
-    TimersCheckAndUpdate(remainingUs);
-    s_timermanager.previousTimeInUs = remainingUs;
+    TimersUpdateWithoutSyncTask(remainingUs);
     NotifyTimersTask();
 }
 
@@ -560,9 +568,10 @@ TIMER_MANAGER_STATIC void TimerEnable(timer_handle_t timerHandle)
         IncrementActiveTimerNumber(TimerGetTimerType(timerHandle));
         TimerSetTimerStatus(timerHandle, (uint8_t)kTimerStateReady_c);
         currentTimerCount = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
-        TimersUpdateSyncTask(currentTimerCount);
+        TimersUpdateWithoutSyncTask(currentTimerCount);
     }
     EnableGlobalIRQ(regPrimask);
+    NotifyTimersTask();
 }
 
 /*****************************************************************************
@@ -747,9 +756,10 @@ void TM_ExitTickless(timer_handle_t timerHandle)
     (void)TimerStop(timerHandle);
 
     remainingUs = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
-    TimersUpdateSyncTask(remainingUs);
+    TimersUpdateWithoutSyncTask(remainingUs);
 
     EnableGlobalIRQ(regPrimask);
+    NotifyTimersTask();
 }
 
 /*!
@@ -822,12 +832,12 @@ timer_status_t TM_Close(timer_handle_t timerHandle)
     timer_handle_struct_t *timerState = timerHandle;
     timer_handle_struct_t *timerStatePre;
     assert(timerHandle);
-    TIMER_ENTER_CRITICAL();
-    status = TM_Stop(timerHandle);
 
+    status = TM_Stop(timerHandle);
     assert(kStatus_TimerSuccess == status);
     (void)status;
 
+    TIMER_ENTER_CRITICAL();
     TimerMarkTimerFree(timerHandle);
 
     timerStatePre = s_timermanager.timerHead;
@@ -975,8 +985,9 @@ timer_status_t TM_Stop(timer_handle_t timerHandle)
 
     status            = TimerStop(timerHandle);
     currentTimerCount = HAL_TimerGetCurrentTimerCount((hal_timer_handle_t)s_timermanager.halTimerHandle);
-    TimersUpdateSyncTask(currentTimerCount);
+    TimersUpdateWithoutSyncTask(currentTimerCount);
     EnableGlobalIRQ(regPrimask);
+    NotifyTimersTask();
     return status;
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_K32W148-EVK_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_K32W148-EVK_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="middleware.wireless.framework.sec_lib.K32W1480"/>
@@ -218,7 +218,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="device.K32W1480_startup_wireless.K32W1480" name="Wireless start up code" brief="Wireless start up code" version="1.0.0" full_name="Wireless exmple start up" category="K32W1480_startup_wireless/K32W1480_startup_wireless" user_visible="false" type="middleware" package_base_path="../devices/K32W1480" project_base_path="startup">
+    <component id="device.K32W1480_startup_wireless.K32W1480" name="Wireless start up code" brief="Wireless start up code" version="1.0.0" full_name="Wireless example start up" category="K32W1480_startup_wireless/K32W1480_startup_wireless" user_visible="false" type="middleware" package_base_path="../devices/K32W1480" project_base_path="startup">
       <dependencies>
         <device_dependency value="K32W1480xxxA"/>
       </dependencies>
@@ -3350,10 +3350,10 @@ ${load}</script>
           <device_dependency value="K32W1480xxxA"/>
         </all>
       </dependencies>
-      <source toolchain="mcuxpresso" relative_path="mcuxpresso" project_relative_path="./" type="src_c">
+      <source toolchain="mcuxpresso" relative_path="mcuxpresso" project_relative_path="./" config="true" type="src_c">
         <files mask="startup_k32w148.c"/>
       </source>
-      <source toolchain="mcuxpresso" relative_path="mcuxpresso" project_relative_path="./" type="src_cpp">
+      <source toolchain="mcuxpresso" relative_path="mcuxpresso" project_relative_path="./" config="true" type="src_cpp">
         <files mask="startup_k32w148.cpp"/>
       </source>
       <source toolchain="armgcc" relative_path="gcc" project_relative_path="./" config="true" type="asm_include">
@@ -4925,7 +4925,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.ltc.K32W1480" name="ltc" brief="LTC Driver" version="2.0.16" full_name="LTC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/ltc" project_base_path="drivers">
+    <component id="platform.drivers.ltc.K32W1480" name="ltc" brief="LTC Driver" version="2.0.17" full_name="LTC Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/ltc" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.K32W1480"/>
@@ -7461,6 +7461,9 @@ ${load}</script>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive" type="other">
         <files mask="indexterms.properties"/>
       </source>
+      <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive" type="image">
+        <files mask="nxp-logo.png"/>
+      </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/css" type="doc">
         <files mask="commonltr.css"/>
         <files mask="commonrtl.css"/>
@@ -7469,6 +7472,7 @@ ${load}</script>
         <files mask="3.png"/>
         <files mask="AMS_Figure_10.png"/>
         <files mask="AMS_Figure_11.png"/>
+        <files mask="FRDM-MCXW_new.jpg"/>
         <files mask="Figure_33a.png"/>
         <files mask="Json_config2.png"/>
         <files mask="Procesor_selection.png"/>
@@ -7621,24 +7625,75 @@ ${load}</script>
         <files mask="tooltip.css"/>
       </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/oxygen-webhelp/app/nav-links/json" type="script">
+        <files mask="GUID-13F224BD-B57D-4A39-AB16-8F6EFFCAA17E-d962e1321.js"/>
         <files mask="GUID-13F224BD-B57D-4A39-AB16-8F6EFFCAA17E-d967e1342.js"/>
+        <files mask="GUID-13F224BD-B57D-4A39-AB16-8F6EFFCAA17E-d968e1321.js"/>
+        <files mask="GUID-13F224BD-B57D-4A39-AB16-8F6EFFCAA17E-d988e1342.js"/>
+        <files mask="GUID-1494FED7-7DDB-4D3A-BA98-891523F88506-d962e1427.js"/>
         <files mask="GUID-1494FED7-7DDB-4D3A-BA98-891523F88506-d967e1448.js"/>
+        <files mask="GUID-1494FED7-7DDB-4D3A-BA98-891523F88506-d968e1427.js"/>
+        <files mask="GUID-1494FED7-7DDB-4D3A-BA98-891523F88506-d988e1448.js"/>
+        <files mask="GUID-15C6D62A-3123-46C4-95BD-1ABC029BA6C4-d962e462.js"/>
         <files mask="GUID-15C6D62A-3123-46C4-95BD-1ABC029BA6C4-d967e483.js"/>
+        <files mask="GUID-15C6D62A-3123-46C4-95BD-1ABC029BA6C4-d968e462.js"/>
+        <files mask="GUID-15C6D62A-3123-46C4-95BD-1ABC029BA6C4-d988e483.js"/>
+        <files mask="GUID-1B785008-95E1-4646-A241-9FC143A293D1-d962e681.js"/>
         <files mask="GUID-1B785008-95E1-4646-A241-9FC143A293D1-d967e702.js"/>
+        <files mask="GUID-1B785008-95E1-4646-A241-9FC143A293D1-d968e681.js"/>
+        <files mask="GUID-1B785008-95E1-4646-A241-9FC143A293D1-d988e702.js"/>
+        <files mask="GUID-40A3CB6C-9139-42B4-83B9-117067BB9D79-d962e357.js"/>
         <files mask="GUID-40A3CB6C-9139-42B4-83B9-117067BB9D79-d967e378.js"/>
+        <files mask="GUID-40A3CB6C-9139-42B4-83B9-117067BB9D79-d968e357.js"/>
+        <files mask="GUID-40A3CB6C-9139-42B4-83B9-117067BB9D79-d988e378.js"/>
+        <files mask="GUID-56C80BBD-BC39-4CFE-8B82-E072709546BA-d962e1089.js"/>
         <files mask="GUID-56C80BBD-BC39-4CFE-8B82-E072709546BA-d967e1110.js"/>
+        <files mask="GUID-56C80BBD-BC39-4CFE-8B82-E072709546BA-d968e1089.js"/>
+        <files mask="GUID-56C80BBD-BC39-4CFE-8B82-E072709546BA-d988e1110.js"/>
+        <files mask="GUID-580074D7-5C40-44FE-96C8-D28FC5261116-d962e1204.js"/>
         <files mask="GUID-580074D7-5C40-44FE-96C8-D28FC5261116-d967e1225.js"/>
+        <files mask="GUID-580074D7-5C40-44FE-96C8-D28FC5261116-d968e1204.js"/>
+        <files mask="GUID-580074D7-5C40-44FE-96C8-D28FC5261116-d988e1225.js"/>
+        <files mask="GUID-59C819D5-4DAA-40D3-BC4C-0F230FB4BF5F-d962e216.js"/>
         <files mask="GUID-59C819D5-4DAA-40D3-BC4C-0F230FB4BF5F-d967e237.js"/>
+        <files mask="GUID-59C819D5-4DAA-40D3-BC4C-0F230FB4BF5F-d968e216.js"/>
+        <files mask="GUID-59C819D5-4DAA-40D3-BC4C-0F230FB4BF5F-d988e237.js"/>
+        <files mask="GUID-77546E2C-FDDD-4DAB-B291-41524FF1DCFE-d962e975.js"/>
         <files mask="GUID-77546E2C-FDDD-4DAB-B291-41524FF1DCFE-d967e996.js"/>
+        <files mask="GUID-77546E2C-FDDD-4DAB-B291-41524FF1DCFE-d968e975.js"/>
+        <files mask="GUID-77546E2C-FDDD-4DAB-B291-41524FF1DCFE-d988e996.js"/>
+        <files mask="GUID-7AB12807-D9E8-4BEB-BBF8-376AD7DB88D2-d962e786.js"/>
         <files mask="GUID-7AB12807-D9E8-4BEB-BBF8-376AD7DB88D2-d967e807.js"/>
+        <files mask="GUID-7AB12807-D9E8-4BEB-BBF8-376AD7DB88D2-d968e786.js"/>
+        <files mask="GUID-7AB12807-D9E8-4BEB-BBF8-376AD7DB88D2-d988e807.js"/>
+        <files mask="GUID-84AB0FCE-6242-4A79-9E48-A4D7D75F128F-d962e891.js"/>
         <files mask="GUID-84AB0FCE-6242-4A79-9E48-A4D7D75F128F-d967e912.js"/>
+        <files mask="GUID-84AB0FCE-6242-4A79-9E48-A4D7D75F128F-d968e891.js"/>
+        <files mask="GUID-84AB0FCE-6242-4A79-9E48-A4D7D75F128F-d988e912.js"/>
+        <files mask="GUID-899312BF-1D02-407F-BC82-4AE6237549E4-d962e102.js"/>
         <files mask="GUID-899312BF-1D02-407F-BC82-4AE6237549E4-d967e102.js"/>
+        <files mask="GUID-899312BF-1D02-407F-BC82-4AE6237549E4-d968e102.js"/>
+        <files mask="GUID-899312BF-1D02-407F-BC82-4AE6237549E4-d988e102.js"/>
+        <files mask="GUID-D515D36C-B460-426D-8A58-211A5C277C15-d962e334.js"/>
         <files mask="GUID-D515D36C-B460-426D-8A58-211A5C277C15-d967e355.js"/>
+        <files mask="GUID-D515D36C-B460-426D-8A58-211A5C277C15-d968e334.js"/>
+        <files mask="GUID-D515D36C-B460-426D-8A58-211A5C277C15-d988e355.js"/>
+        <files mask="GUID-EA11D553-35FC-4A59-8DDE-7D52A25E6020-d962e1568.js"/>
         <files mask="GUID-EA11D553-35FC-4A59-8DDE-7D52A25E6020-d967e1588.js"/>
+        <files mask="GUID-EA11D553-35FC-4A59-8DDE-7D52A25E6020-d968e1568.js"/>
+        <files mask="GUID-EA11D553-35FC-4A59-8DDE-7D52A25E6020-d988e1588.js"/>
+        <files mask="GUID-FF6E7286-8C66-4CBD-9007-543422BDB8C3-d962e597.js"/>
         <files mask="GUID-FF6E7286-8C66-4CBD-9007-543422BDB8C3-d967e618.js"/>
+        <files mask="GUID-FF6E7286-8C66-4CBD-9007-543422BDB8C3-d968e597.js"/>
+        <files mask="GUID-FF6E7286-8C66-4CBD-9007-543422BDB8C3-d988e618.js"/>
         <files mask="nav-links.js"/>
+        <files mask="topic_0125ad6e-f84f-488e-ac55-8d71182a83a6-d962e1788.js"/>
         <files mask="topic_0125ad6e-f84f-488e-ac55-8d71182a83a6-d967e1808.js"/>
+        <files mask="topic_0125ad6e-f84f-488e-ac55-8d71182a83a6-d968e1788.js"/>
+        <files mask="topic_0125ad6e-f84f-488e-ac55-8d71182a83a6-d988e1808.js"/>
+        <files mask="topic_ad826d91-41f6-43da-8c49-b40eddc8c001-d962e1683.js"/>
         <files mask="topic_ad826d91-41f6-43da-8c49-b40eddc8c001-d967e1703.js"/>
+        <files mask="topic_ad826d91-41f6-43da-8c49-b40eddc8c001-d968e1683.js"/>
+        <files mask="topic_ad826d91-41f6-43da-8c49-b40eddc8c001-d988e1703.js"/>
       </source>
       <source relative_path="html/Bluetooth Low Energy Demo Applications User's Guide/webhelp-responsive/oxygen-webhelp/app/options" type="script">
         <files mask="options.js"/>

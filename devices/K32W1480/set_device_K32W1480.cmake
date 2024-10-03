@@ -197,10 +197,8 @@ message("device_K32W1480_startup component is included from ${CMAKE_CURRENT_LIST
 if(CONFIG_USE_device_K32W1480_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_k32w148.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_k32w148.cpp
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_k32w148.c "" device_K32W1480_startup.K32W1480)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_k32w148.cpp "" device_K32W1480_startup.K32W1480)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)

@@ -1189,6 +1189,7 @@
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_LIST_DIR}/.
   ${CMAKE_CURRENT_LIST_DIR}/../../components/osa
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/power_manager/devices/KW45B41Z83
   ${CMAKE_CURRENT_LIST_DIR}/../../components/psa_crypto_driver
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/littlefs
   ${CMAKE_CURRENT_LIST_DIR}/../../../middleware/mbedtls

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2018, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -62,8 +62,13 @@ serial_manager_status_t Serial_SwoInit(serial_handle_t serialHandle, void *confi
     swoConfig = (serial_port_swo_config_t *)config;
 
     assert(swoConfig->baudRate <= swoConfig->clockRate);
+#if (__CM_CMSIS_VERSION_MAIN >= 6U)
+    assert((swoConfig->clockRate / swoConfig->baudRate) <= TPIU_ACPR_PRESCALER_Msk);
+    assert((TPIU->DEVID & (TPIU_DEVID_NRZVALID_Msk | TPIU_DEVID_MANCVALID_Msk)) != 0U);
+#else
     assert((swoConfig->clockRate / swoConfig->baudRate) <= TPI_ACPR_PRESCALER_Msk);
     assert((TPI->DEVID & (TPI_DEVID_NRZVALID_Msk | TPI_DEVID_MANCVALID_Msk)) != 0U);
+#endif
 
     serialSwoHandle = (serial_swo_state_t *)serialHandle;
 
@@ -72,9 +77,15 @@ serial_manager_status_t Serial_SwoInit(serial_handle_t serialHandle, void *confi
     prescaler = swoConfig->clockRate / swoConfig->baudRate - 1U;
 
     /* enable the ITM and DWT units */
+#if (__CM_CMSIS_VERSION_MAIN >= 6U)
+    DCB->DEMCR = DCB_DEMCR_TRCENA_Msk;
+
+    if ((DCB->DEMCR & DCB_DEMCR_TRCENA_Msk) == 0U)
+#else
     CoreDebug->DEMCR = CoreDebug_DEMCR_TRCENA_Msk;
 
     if ((CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk) == 0U)
+#endif
     {
         return kStatus_SerialManager_Error;
     }
@@ -84,10 +95,17 @@ serial_manager_status_t Serial_SwoInit(serial_handle_t serialHandle, void *confi
     /* Disable ITM */
     ITM->TER &= ~(1UL << swoConfig->port);
     ITM->TCR = 0U;
+#if (__CM_CMSIS_VERSION_MAIN >= 6U)
+    /* select SWO encoding protocol */
+    TPIU->SPPR = (uint32_t)swoConfig->protocol;
+    /* select asynchronous clock prescaler */
+    TPIU->ACPR = prescaler & 0xFFFFU;
+#else
     /* select SWO encoding protocol */
     TPI->SPPR = (uint32_t)swoConfig->protocol;
     /* select asynchronous clock prescaler */
     TPI->ACPR = prescaler & 0xFFFFU;
+#endif
     /* allow unprivilege access */
     ITM->TPR = 0U;
     /* enable ITM */

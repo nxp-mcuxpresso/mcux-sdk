@@ -371,6 +371,7 @@ led_status_t LED_Init(led_handle_t ledHandle, const led_config_t *ledConfig)
         do
         {
             timer_status_t tmState;
+            EnableGlobalIRQ(regPrimask);
             tmState = TM_Open((timer_handle_t)s_ledList.timerHandle);
             assert(kStatus_TimerSuccess == tmState);
 
@@ -380,7 +381,7 @@ led_status_t LED_Init(led_handle_t ledHandle, const led_config_t *ledConfig)
             tmState = TM_Start(s_ledList.timerHandle, (uint8_t)kTimerModeIntervalTimer, LED_TIMER_INTERVAL);
             assert(kStatus_TimerSuccess == tmState);
             (void)tmState;
-
+            regPrimask = DisableGlobalIRQ();
             s_ledList.ledState = ledState;
         } while (false);
     }
@@ -510,9 +511,13 @@ led_status_t LED_Deinit(led_handle_t ledHandle)
 
     if (NULL == s_ledList.ledState)
     {
+        EnableGlobalIRQ(regPrimask);
         (void)TM_Close(s_ledList.timerHandle);
     }
-    EnableGlobalIRQ(regPrimask);
+    else
+    {
+        EnableGlobalIRQ(regPrimask);
+    }
 
 #if (defined(LED_DIMMING_ENABLEMENT) && (LED_DIMMING_ENABLEMENT > 0U))
 #if (defined(LED_USE_CONFIGURE_STRUCTURE) && (LED_USE_CONFIGURE_STRUCTURE > 0U))
