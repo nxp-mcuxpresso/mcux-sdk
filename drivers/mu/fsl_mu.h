@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -371,6 +371,33 @@ static inline uint32_t MU_GetStatusFlags(MU_Type *base)
                         | MU_SR_HRIP_MASK
 #endif
                         ));
+}
+
+/*!
+ * @brief Return the RX status flags.
+ *
+ * This function return the RX status flags.
+ * Note: RFn bits of SR[27-24](mu status register) are
+ * mapped in reverse numerical order:
+ *      RF0 -> SR[27]
+ *      RF1 -> SR[26]
+ *      RF2 -> SR[25]
+ *      RF3 -> SR[24]
+ *
+ * @code
+ * status_reg = MU_GetRxStatusFlags(base);
+ * @endcode
+ *
+ * @param base MU peripheral base address.
+ * @return MU RX status
+ */
+
+static inline uint32_t MU_GetRxStatusFlags(MU_Type *base)
+{
+    uint32_t flags = 0;
+    flags = ((MU_GetStatusFlags(base) >> (MU_SR_RFn_SHIFT + 0U)) & 0x0000000FU);
+
+    return flags;
 }
 
 /*!

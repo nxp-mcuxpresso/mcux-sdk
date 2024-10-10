@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 NXP
+ * Copyright 2021-2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -891,6 +891,41 @@ static inline uint32_t MU_GetGeneralPurposeStatusFlags(MU_Type *base)
 static inline void MU_ClearGeneralPurposeStatusFlags(MU_Type *base, uint32_t flags)
 {
     base->GSR = flags;
+}
+
+/*!
+ * @brief Return the RX status flags in reverse numerical order.
+ *
+ * This function return the RX status flags in reverse order.
+ * Note: RFn bits of SR[3-0](mu status register) are
+ * mapped in ascending numerical order:
+ *      RF0 -> SR[0]
+ *      RF1 -> SR[1]
+ *      RF2 -> SR[2]
+ *      RF3 -> SR[3]
+ * This function will return these bits in reverse numerical
+ * order(RF3->RF1) to comply with MU_GetRxStatusFlags() of
+ * mu driver. See MU_GetRxStatusFlags() from drivers/mu/fsl_mu.h
+ *
+ * @code
+ * status_reg = MU_GetRxStatusFlags(base);
+ * @endcode
+ *
+ * @param base MU peripheral base address.
+ * @return MU RX status flags in reverse order
+ */
+
+static inline uint32_t MU_GetRxStatusFlags(MU_Type *base)
+{
+    uint32_t flags = 0;
+    flags = ((base->RSR >> MU_RSR_RF0_SHIFT) & 0x0000000FU);
+    flags = (((flags >> MU_RSR_RF3_SHIFT) << MU_RSR_RF0_SHIFT) |
+             ((flags >> MU_RSR_RF2_SHIFT) << MU_RSR_RF1_SHIFT) |
+             ((flags >> MU_RSR_RF1_SHIFT) << MU_RSR_RF2_SHIFT) |
+             ((flags >> MU_RSR_RF0_SHIFT) << MU_RSR_RF3_SHIFT))
+             & 0x0000000FU;
+
+    return flags;
 }
 
 /*!
