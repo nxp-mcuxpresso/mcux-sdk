@@ -490,7 +490,7 @@ void LOG_AsyncPrintf(log_module_t const *module,
  *
  * @details This function dumps one log bufferred in log component.
  * Only the buffer and length are valid, the outLength will be filled with valid value.
- * The message will be discarded when the message is more than LOG_MAX_MEESSAGE_LENGTH or buffer length
+ * The message will be discarded when the message is more than LOG_MAX_MESSAGE_LENGTH or buffer length
  * passed by the function.
  *
  * @param buffer The buffer to dump the message.
