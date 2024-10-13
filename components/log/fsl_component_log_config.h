@@ -112,13 +112,13 @@
  * want to enable the feature.@n For IAR, right click project and select "Options", define it in "C/C++
  * Compiler->Preprocessor->Defined symbols".@n For KEIL, click "Options for Target...", define it in
  * "C/C++->Preprocessor Symbols->Define".@n For ARMGCC, open CmakeLists.txt and add the following lines,@n
- * "SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DLOG_MAX_MEESSAGE_LENGTH=128")" for debug target.@n
- * "SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DLOG_MAX_MEESSAGE_LENGTH=128")" for release target.@n
+ * "SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DLOG_MAX_MESSAGE_LENGTH=128")" for debug target.@n
+ * "SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -DLOG_MAX_MESSAGE_LENGTH=128")" for release target.@n
  * For MCUxpresso, right click project and select "Properties", define it in "C/C++ Build->Settings->MCU C
  * Complier->Preprocessor".@n
  */
-#ifndef LOG_MAX_MEESSAGE_LENGTH
-#define LOG_MAX_MEESSAGE_LENGTH 128
+#ifndef LOG_MAX_MESSAGE_LENGTH
+#define LOG_MAX_MESSAGE_LENGTH 128
 #endif
 
 /*! @brief Whether enable asynchronous log mode feature, 1 - enable, 0 - disable.
