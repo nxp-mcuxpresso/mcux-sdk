@@ -491,6 +491,22 @@ _Pragma("diag_suppress=Pm120")
 #define MSDK_REG_NONSECURE_ADDR(x) (x)
 #endif
 
+/*!
+ * @def MSDK_REG_SECURE_ADDR(x)
+ * Convert the register address to the one used in secure mode.
+ *
+ * @def MSDK_REG_NONSECURE_ADDR(x)
+ * Convert the register address to the one used in non-secure mode.
+ */
+
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+#define MSDK_REG_SECURE_ADDR(x) ((uintptr_t)(x) | (0x1UL << 28))
+#define MSDK_REG_NONSECURE_ADDR(x) ((uintptr_t)(x) & ~(0x1UL << 28))
+#else
+#define MSDK_REG_SECURE_ADDR(x) (x)
+#define MSDK_REG_NONSECURE_ADDR(x) (x)
+#endif
+
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
         void DefaultISR(void);
 #endif

@@ -82,7 +82,7 @@ static uint32_t PWM_GetInstance(PWM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_pwmBases); instance++)
     {
-        if (s_pwmBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_pwmBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

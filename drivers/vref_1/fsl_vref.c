@@ -58,7 +58,7 @@ static uint32_t VREF_GetInstance(VREF_Type *base)
          * (s_vrefBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (s_vrefBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_vrefBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

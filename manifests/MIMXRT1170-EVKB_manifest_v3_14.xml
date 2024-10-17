@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVKB_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1170-EVKB_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="isi_qmc_dgc"/>
@@ -15,7 +15,7 @@
     <definition extID="middleware.azure_rtos.tx.sp.MIMXRT1176"/>
     <definition extID="middleware.usb.device.cdc.external.MIMXRT1176"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
+  <ksdk id="MCUXpressoSDK216100" name="MCUXpresso SDK216100" version="2.16.100" revision="2.16.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/evkbmimxrt1170/evkbmimxrt1170_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/maestro/manifests/middleware_nxp_maestro_audio_framework_MIMXRT1176_manifest_v3_14.xml"/>
@@ -2815,9 +2815,6 @@ ${load}</script>
         <files mask="MCUXpresso SDK USB Stack Device Reference Manual.pdf"/>
         <files mask="MCUXpresso SDK USB Stack Composite Device User's Guide.pdf"/>
       </source>
-      <source relative_path="./" type="doc">
-        <files mask="Enable More USB Examples on M4 Core for RT1170 or M7 Core for RT1180.pdf"/>
-      </source>
     </component>
     <component id="component.power_manager_docs.MIMXRT1176" name="power_manager_docs" brief="Power Manager component documentation" version="2.0.0" full_name="Power Manager component documentation" category="Device/SDK Drivers" user_visible="true" type="documentation" package_base_path="../components/power_manager" project_base_path="component/power_manager">
       <dependencies>
@@ -3026,7 +3023,6 @@ ${load}</script>
         <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
         <files mask="EFBTPALAPIRM.pdf"/>
         <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
-        <files mask="Enabling Additional Edgefast BT PAL Examples on M4 core for RT1170.pdf"/>
       </source>
     </component>
     <component id="docs.eiq.MIMXRT1176" name="eiq" brief="Docs eiq" version="1.0.0" full_name="Docs eiq" category="docs/eiq" user_visible="true" type="documentation" package_base_path="../middleware/eiq/doc" project_base_path="EIQ">
@@ -3050,7 +3046,7 @@ ${load}</script>
         <files mask="MCUXpresso SDK Azure RTOS Release Notes.pdf"/>
       </source>
     </component>
-    <component id="docs.maestro.MIMXRT1176" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
+    <component id="docs.maestro.MIMXRT1176" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.8.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
       <dependencies>
         <all>
           <component_dependency value="middleware.maestro_framework.MIMXRT1176"/>
@@ -3898,8 +3894,6 @@ ${load}</script>
         <device_dependency value="MIMXRT1176xxxxx"/>
       </dependencies>
       <source relative_path="./" type="doc">
-        <files mask="Getting Started with MCUXpresso SDK for MIMXRT1170-EVK.pdf"/>
-        <files mask="MCUXpresso SDK Release Notes for MIMXRT1170-EVK.pdf"/>
         <files mask="Getting Started with MCUXpresso SDK for MIMXRT1170-EVKB.pdf"/>
         <files mask="MCUXpresso SDK Release Notes for MIMXRT1170-EVKB.pdf"/>
         <files mask="Getting Started Guide for using MCUXpresso SDK online.pdf"/>
@@ -5852,28 +5846,6 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.flexspi_nor_flash_adapter_rt1170.MIMXRT1176" name="flexspi_nor_flash_adapter_rt1170" brief="Component flexspi_nor_flash_adapter_rt1170" version="1.0.0" full_name="Component flexspi_nor_flash_adapter_rt1170" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/internal_flash" project_base_path="component/internal_flash">
-      <dependencies>
-        <all>
-          <component_dependency value="platform.drivers.common.MIMXRT1176"/>
-          <component_dependency value="platform.drivers.flexspi.MIMXRT1176"/>
-          <board_dependency value="evkmimxrt1170"/>
-          <device_dependency value="MIMXRT1176xxxxx"/>
-        </all>
-      </dependencies>
-      <source relative_path="mimxrt1170" type="src">
-        <files mask="fsl_adapter_flexspi_nor_flash.c"/>
-      </source>
-      <source relative_path="./" type="c_include">
-        <files mask="fsl_adapter_flash.h"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_flexspi_nor_flash_adapter_rt1170.MIMXRT1176.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-      </include_paths>
-    </component>
     <component id="component.flexspi_nor_flash_adapter_rt1170evkb.MIMXRT1176" name="flexspi_nor_flash_adapter_rt1170evkb" brief="Component flexspi_nor_flash_adapter_rt1170evkb" version="1.0.0" full_name="Component flexspi_nor_flash_adapter_rt1170evkb" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/internal_flash" project_base_path="component/internal_flash">
       <dependencies>
         <all>
@@ -6116,10 +6088,7 @@ ${load}</script>
     <component id="component.mflash_file.MIMXRT1176" name="mflash file" brief="mflash file" version="1.0.0" full_name="statically allocated file system for mflash" category="Device/SDK Drivers" user_visible="false" type="software_component" package_base_path="../components/flash/mflash" project_base_path="flash/mflash">
       <dependencies>
         <all>
-          <any_of>
-            <component_dependency value="component.mflash.rt1170.MIMXRT1176"/>
-            <component_dependency value="component.mflash.mimxrt1170evkb.MIMXRT1176"/>
-          </any_of>
+          <component_dependency value="component.mflash.mimxrt1170evkb.MIMXRT1176"/>
           <device_dependency value="MIMXRT1176xxxxx"/>
         </all>
       </dependencies>
@@ -6152,35 +6121,6 @@ ${load}</script>
       <source toolchain="armgcc" relative_path="./" type="workspace">
         <files mask="component_mflash_dummy.MIMXRT1176.cmake" hidden="true"/>
       </source>
-    </component>
-    <component id="component.mflash.rt1170.MIMXRT1176" name="mflash rt1170" brief="mflash rt1170" version="1.0.0" full_name="mflash rt1170" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/flash/mflash/mimxrt1170" project_base_path="flash/mflash/mimxrt1170">
-      <defines>
-        <define name="MFLASH_FILE_BASEADDR" value="14221312"/>
-      </defines>
-      <dependencies>
-        <all>
-          <any_of>
-            <component_dependency value="platform.drivers.cache_armv7_m7.MIMXRT1176"/>
-            <component_dependency value="platform.drivers.cache_lmem.MIMXRT1176"/>
-          </any_of>
-          <component_dependency value="component.mflash.common.MIMXRT1176"/>
-          <component_dependency value="platform.drivers.flexspi.MIMXRT1176"/>
-          <board_dependency value="evkmimxrt1170"/>
-          <device_dependency value="MIMXRT1176xxxxx"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="c_include">
-        <files mask="mflash_drv.h"/>
-      </source>
-      <source relative_path="./" type="src">
-        <files mask="mflash_drv.c"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_mflash_rt1170.MIMXRT1176.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-      </include_paths>
     </component>
     <component id="component.mflash.mimxrt1170evkb.MIMXRT1176" name="mflash mimxrt1170evkb" brief="mflash mimxrt1170evkb" version="1.0.0" full_name="mflash mimxrt1170evkb" category="Device/SDK Drivers" user_visible="true" type="software_component" package_base_path="../components/flash/mflash/mimxrt1170evkb" project_base_path="flash/mflash/mimxrt1170evkb">
       <defines>
@@ -6759,12 +6699,9 @@ ${load}</script>
     <component id="component.gpt_time_stamp_adapter.MIMXRT1176" name="gpt time stamp adapter" brief="Component gpt time stamp adapter" version="1.0.0" full_name="component gpt time stamp adapter" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/time_stamp" project_base_path="component/time_stamp">
       <dependencies>
         <all>
-          <any_of>
-            <board_dependency value="evkbmimxrt1170"/>
-            <board_dependency value="evkmimxrt1170"/>
-          </any_of>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
           <component_dependency value="platform.drivers.gpt.MIMXRT1176"/>
+          <board_dependency value="evkbmimxrt1170"/>
           <device_dependency value="MIMXRT1176xxxxx"/>
         </all>
       </dependencies>
@@ -6972,7 +6909,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.MIMXRT1176" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.MIMXRT1176" name="common" brief="COMMON Driver" version="2.4.2" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.clock.MIMXRT1176"/>
@@ -7989,11 +7926,8 @@ ${load}</script>
     <component id="platform.drivers.smartcard_emvsim.MIMXRT1176" name="smartcard_emvsim" brief="SMARTCARD EMVSIM Driver" version="2.3.0" full_name="SMARTCARD EMVSIM Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/smartcard" project_base_path="drivers">
       <dependencies>
         <all>
-          <any_of>
-            <board_dependency value="evkmimxrt1170"/>
-            <board_dependency value="evkbmimxrt1170"/>
-          </any_of>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+          <board_dependency value="evkbmimxrt1170"/>
           <device_dependency value="MIMXRT1176xxxxx"/>
         </all>
       </dependencies>
@@ -8017,12 +7951,9 @@ ${load}</script>
       </defines>
       <dependencies>
         <all>
-          <any_of>
-            <board_dependency value="evkmimxrt1170"/>
-            <board_dependency value="evkbmimxrt1170"/>
-          </any_of>
           <component_dependency value="platform.drivers.smartcard_emvsim.MIMXRT1176"/>
           <component_dependency value="platform.drivers.common.MIMXRT1176"/>
+          <board_dependency value="evkbmimxrt1170"/>
           <device_dependency value="MIMXRT1176xxxxx"/>
         </all>
       </dependencies>

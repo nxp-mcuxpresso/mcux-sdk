@@ -62,7 +62,7 @@ static uint32_t SMARTCARD_USIM_GetInstance(USIM_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < usimArrayCount; instance++)
     {
-        if (s_usimBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_usimBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

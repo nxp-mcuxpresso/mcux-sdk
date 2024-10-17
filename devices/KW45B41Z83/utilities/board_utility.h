@@ -16,7 +16,8 @@
 #define LPADC_TEMPEATURE_SENSOR_CHANNEL 26U
 /*! @brief ID for command in command buffer. */
 #define LPADC_USER_CMDID 1U
-/*! @brief ADC reference, for temperature sensor monitoring, VREFO voltage reference driven from the VREF block is the best option. */
+/*! @brief ADC reference, for temperature sensor monitoring, VREFO voltage reference driven from the VREF block is the
+ * best option. */
 #define LPADC_REFERENCE_TEMPERATURE kLPADC_ReferenceVoltageAlt2
 /*! @brief ADC reference, for battery voltage monitoring. */
 #define LPADC_REFERENCE_BATTERY kLPADC_ReferenceVoltageAlt2

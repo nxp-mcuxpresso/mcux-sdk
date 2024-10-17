@@ -2241,6 +2241,30 @@ endif()
 endif()
 
 
+if (CONFIG_USE_driver_iped)
+# Add set(CONFIG_USE_driver_iped true) in config.cmake to use this component
+
+message("driver_iped component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+if((CONFIG_DEVICE_ID STREQUAL MCXN947) AND CONFIG_USE_driver_common AND CONFIG_USE_component_els_pkc AND CONFIG_USE_driver_flashiap AND CONFIG_USE_driver_mem_interface)
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iped/fsl_iped.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../drivers/iped/.
+)
+
+else()
+
+message(SEND_ERROR "driver_iped.MCXN947 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+
+endif()
+
+endif()
+
+
 if (CONFIG_USE_driver_irtc)
 # Add set(CONFIG_USE_driver_irtc true) in config.cmake to use this component
 

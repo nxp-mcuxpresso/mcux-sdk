@@ -240,7 +240,9 @@ static void BUTTON_Task(void *param)
             s_buttonList.activeButtonCount--;
             if (0U == s_buttonList.activeButtonCount)
             {
+                BUTTON_EXIT_CRITICAL();
                 (void)TM_Stop(s_buttonList.timerHandle);
+                BUTTON_ENTER_CRITICAL();
             }
         }
         buttonState = buttonState->next;

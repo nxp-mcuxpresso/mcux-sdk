@@ -1,6 +1,5 @@
 /*
  * Copyright 2022-2023 NXP
- * All rights reserved.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,11 +21,14 @@
 #include "mcux_psa_els_pkc_common_init.h"
 #endif /* defined(PSA_CRYPTO_DRIVER_THREAD_EN) */
 
-size_t els_pkc_opaque_size_function_key_buff_size(mbedtls_svc_key_id_t key_id)
+size_t els_pkc_opaque_size_function_key_buff_size(const psa_key_attributes_t *attributes)
 {
     size_t key_buffer_size=0;
+    psa_key_location_t location = PSA_KEY_LIFETIME_GET_LOCATION(
+                                      psa_get_key_lifetime(attributes) );
 
 #if defined(MBEDTLS_PSA_CRYPTO_BUILTIN_KEYS)
+    mbedtls_svc_key_id_t key_id = psa_get_key_id(attributes);
     if ((bool)psa_key_id_is_builtin(MBEDTLS_SVC_KEY_ID_GET_KEY_ID(key_id)))
     {
 
@@ -41,6 +43,10 @@ size_t els_pkc_opaque_size_function_key_buff_size(mbedtls_svc_key_id_t key_id)
         if (status != PSA_SUCCESS)
         {
           key_buffer_size = 0;
+        } 
+        else
+        {
+          return key_buffer_size;
         }
 
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)
@@ -50,6 +56,17 @@ size_t els_pkc_opaque_size_function_key_buff_size(mbedtls_svc_key_id_t key_id)
 #endif /* defined(PSA_CRYPTO_DRIVER_THREAD_EN) */
     }
 #endif
+    
+
+    if (false == (MCUXCLPSADRIVER_IS_LOCAL_STORAGE(location)) )
+    {
+        psa_status_t status = mcuxClPsaDriver_Oracle_GetKeyBufferSize(attributes,
+                                                                      &key_buffer_size);
+        if (PSA_SUCCESS != status)
+        {
+            key_buffer_size = 0;
+        }
+    }
     return key_buffer_size;
 }
 
@@ -73,6 +90,7 @@ psa_status_t els_pkc_opaque_generate_key(const psa_key_attributes_t *attributes,
     }
 #endif /* defined(PSA_CRYPTO_DRIVER_THREAD_EN) */
 
+    
     /* The driver handles multiple storage locations,
     call it first then default to builtin driver */
     status = mcuxClPsaDriver_psa_driver_wrapper_key_generate(

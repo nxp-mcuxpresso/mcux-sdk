@@ -192,6 +192,23 @@ target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
 endif()
 
 
+if (CONFIG_USE_driver_p3t1755)
+# Add set(CONFIG_USE_driver_p3t1755 true) in config.cmake to use this component
+
+message("driver_p3t1755 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+
+target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/sensor/p3t1755/fsl_p3t1755.c
+)
+
+target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/sensor/p3t1755/.
+)
+
+
+endif()
+
+
 if (CONFIG_USE_DEVICES_Project_Template_RW612)
 # Add set(CONFIG_USE_DEVICES_Project_Template_RW612 true) in config.cmake to use this component
 
@@ -678,19 +695,19 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_flash_config_frdmrw612)
-# Add set(CONFIG_USE_driver_flash_config_frdmrw612 true) in config.cmake to use this component
+if (CONFIG_USE_driver_flash_config_rdrw612bga)
+# Add set(CONFIG_USE_driver_flash_config_rdrw612bga true) in config.cmake to use this component
 
-message("driver_flash_config_frdmrw612 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+message("driver_flash_config_rdrw612bga component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL frdmrw612))
+if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL rdrw612bga))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/frdmrw612/flash_config/flash_config.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/rdrw612bga/flash_config/flash_config.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/frdmrw612/flash_config/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/rdrw612bga/flash_config/.
 )
 
 if(CONFIG_USE_COMPONENT_CONFIGURATION)
@@ -704,7 +721,7 @@ endif()
 
 else()
 
-message(SEND_ERROR "driver_flash_config_frdmrw612.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "driver_flash_config_rdrw612bga.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 
@@ -1319,10 +1336,16 @@ target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fsl_loader_utils.c
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/nboot_hal.c
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/life_cycle.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/rw61x/rw61x_cpu1.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/rw61x/rw61x_cpu2.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/include
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/inc
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/rw61x
+  ${CMAKE_CURRENT_LIST_DIR}/../../components/conn_fwloader/fw_bin/script
 )
 
 else()
@@ -3866,19 +3889,19 @@ endif()
 endif()
 
 
-if (CONFIG_USE_driver_flash_config_rdrw612bga)
-# Add set(CONFIG_USE_driver_flash_config_rdrw612bga true) in config.cmake to use this component
+if (CONFIG_USE_driver_flash_config_frdmrw612)
+# Add set(CONFIG_USE_driver_flash_config_frdmrw612 true) in config.cmake to use this component
 
-message("driver_flash_config_rdrw612bga component is included from ${CMAKE_CURRENT_LIST_FILE}.")
+message("driver_flash_config_frdmrw612 component is included from ${CMAKE_CURRENT_LIST_FILE}.")
 
-if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL rdrw612bga))
+if(CONFIG_USE_driver_common AND (CONFIG_BOARD STREQUAL frdmrw612))
 
 target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/rdrw612bga/flash_config/flash_config.c
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/frdmrw612/flash_config/flash_config.c
 )
 
 target_include_directories(${MCUX_SDK_PROJECT_NAME} PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/../../boards/rdrw612bga/flash_config/.
+  ${CMAKE_CURRENT_LIST_DIR}/../../boards/frdmrw612/flash_config/.
 )
 
 if(CONFIG_USE_COMPONENT_CONFIGURATION)
@@ -3892,7 +3915,7 @@ endif()
 
 else()
 
-message(SEND_ERROR "driver_flash_config_rdrw612bga.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
+message(SEND_ERROR "driver_flash_config_frdmrw612.RW612 dependency does not meet, please check ${CMAKE_CURRENT_LIST_FILE}.")
 
 endif()
 

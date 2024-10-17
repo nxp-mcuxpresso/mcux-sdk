@@ -57,6 +57,12 @@ typedef struct _usart_rtos_handle
     EventGroupHandle_t rxEvent; /*!< RX completion event */
     EventGroupHandle_t txEvent; /*!< TX completion event */
     void *t_state;              /*!< Transactional state of the underlying driver */
+#if (configSUPPORT_STATIC_ALLOCATION == 1)
+    StaticSemaphore_t txSemaphoreBuffer; /*!< Statically allocated memory for txSemaphore */
+    StaticSemaphore_t rxSemaphoreBuffer; /*!< Statically allocated memory for rxSemaphore */
+    StaticEventGroup_t txEventBuffer;    /*!< Statically allocated memory for txEvent */
+    StaticEventGroup_t rxEventBuffer;    /*!< Statically allocated memory for rxEvent */
+#endif
 } usart_rtos_handle_t;
 
 /*******************************************************************************

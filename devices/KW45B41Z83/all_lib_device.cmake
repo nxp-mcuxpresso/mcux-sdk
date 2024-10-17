@@ -1,11 +1,11 @@
 # Copy variable into project config.cmake to use software component
-#set.board.kw45b41zevk
-#  # description: Board_project_template kw45b41zevk
-#  set(CONFIG_USE_BOARD_Project_Template_kw45b41zevk true)
-
 #set.board.kw45b41zloc
 #  # description: Board_project_template kw45b41zloc
 #  set(CONFIG_USE_BOARD_Project_Template_kw45b41zloc true)
+
+#set.board.kw45b41zevk
+#  # description: Board_project_template kw45b41zevk
+#  set(CONFIG_USE_BOARD_Project_Template_kw45b41zevk true)
 
 #set.middleware.wireless
 #  # description: Wireless start up code
@@ -29,20 +29,38 @@
 #  # description: Middleware wireless ble_host_ae_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_AE_component_lib_mcux true)
 
+#  # description: Middleware wireless ble_host_ae_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_AE_component_lib_armgcc true)
+
 #  # description: Middleware wireless ble_host_ae_central_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_AE_central_component_lib_mcux true)
+
+#  # description: Middleware wireless ble_host_ae_central_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_AE_central_component_lib_armgcc true)
 
 #  # description: Middleware wireless ble_host_ae_peripheral_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_AE_peripheral_component_lib_mcux true)
 
+#  # description: Middleware wireless ble_host_ae_peripheral_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_AE_peripheral_component_lib_armgcc true)
+
 #  # description: Middleware wireless ble_host_component_lib_mcux
 #  set(CONFIG_USE_middleware_wireless_ble_host_component_lib_mcux true)
+
+#  # description: Middleware wireless ble_host_component_lib_armgcc
+#  set(CONFIG_USE_middleware_wireless_ble_host_component_lib_armgcc true)
 
 #  # description: Middleware wireless ble_host_central_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_central_component_lib_mcux true)
 
+#  # description: Middleware wireless ble_host_central_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_central_component_lib_armgcc true)
+
 #  # description: Middleware wireless ble_host_peripheral_component_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_peripheral_component_lib_mcux true)
+
+#  # description: Middleware wireless ble_host_peripheral_component_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_peripheral_component_lib_armgcc true)
 
 #  # description: Middleware wireless ble_host_interface
 #  set(CONFIG_USE_middleware_wireless_ble_host_interface true)
@@ -68,6 +86,9 @@
 #  # description: Middleware wireless ble_fsci_source_handover
 #  set(CONFIG_USE_middleware_wireless_ble_fsci_source_handover true)
 
+#  # description: Middleware wireless ble_fsci_source_channel_sounding
+#  set(CONFIG_USE_middleware_wireless_ble_fsci_source_channel_sounding true)
+
 #  # description: Middleware wireless ble_fsci_host
 #  set(CONFIG_USE_middleware_wireless_ble_fsci_host true)
 
@@ -76,6 +97,9 @@
 
 #  # description: Middleware wireless lib_ble_handover_mcux lib
 #  set(CONFIG_USE_middleware_wireless_ble_host_handover_component_lib_mcux true)
+
+#  # description: Middleware wireless lib_ble_handover_armgcc lib
+#  set(CONFIG_USE_middleware_wireless_ble_host_handover_component_lib_armgcc true)
 
 #  # description: Middleware wireless auto
 #  set(CONFIG_USE_middleware_wireless_auto true)
@@ -134,6 +158,9 @@
 #  # description: Middleware wireless xcvr_gen40_driver
 #  set(CONFIG_USE_middleware_wireless_XCVR_driver true)
 
+#  # description: Middleware wireless xcvr_gen45_driver
+#  set(CONFIG_USE_middleware_wireless_XCVR_GEN45_driver_workaround true)
+
 #  # description: Wireless seclib_file for matter
 #  set(CONFIG_USE_wireless_wireless_seclib_file true)
 
@@ -187,7 +214,7 @@
 #  set(CONFIG_USE_DEVICES_Project_Template_KW45B41Z83 true)
 
 #  # description: utilitiy for KW45B41Z83
-#  set(CONFIG_USE_device_KW45B41Z83_utility_kw45b41zevk true)
+#  set(CONFIG_USE_device_KW45B41Z83_utility_kw45b41zloc true)
 
 #  # description: Device KW45B41Z83_startup
 #  set(CONFIG_USE_device_KW45B41Z83_startup true)
@@ -532,7 +559,7 @@
 #  set(CONFIG_USE_driver_romapi true)
 
 #  # description: utilitiy for KW45B41Z83
-#  set(CONFIG_USE_device_KW45B41Z83_utility_kw45b41zloc true)
+#  set(CONFIG_USE_device_KW45B41Z83_utility_kw45b41zevk true)
 
 #set.CMSIS
 #  # description: CMSIS-CORE for Cortex-M, ARMv8-M, ARMv8.1-M
@@ -866,8 +893,14 @@
 #  # description: OS Abstraction Layer for PSA crypto driver
 #  set(CONFIG_USE_component_psa_crypto_driver_osal true)
 
-#  # description: Oracle of PSA crypto driver for els_pkc
-#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle true)
+#  # description: Threading Alt implementation for mbedtls layer via PSA crypto driver
+#  set(CONFIG_USE_component_psa_crypto_driver_mbedtls_thread_alt true)
+
+#  # description: Key Recipes for rw61x for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle_rw61x true)
+
+#  # description: Key Recipes for mcxn for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle_mcxn true)
 
 #  # description: Common files of PSA crypto driver for els_pkc
 #  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_common true)

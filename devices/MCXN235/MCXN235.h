@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MCXN235VDF
 **                          MCXN235VNL
+**                          MCXN235VPB
 **
 **     Compilers:           GNU C Compiler
 **                          IAR ANSI C/C++ Compiler for ARM
@@ -10,7 +11,7 @@
 **
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 1.0, 2023-10-01
-**     Build:               b240409
+**     Build:               b240709
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXN235
@@ -140,7 +141,7 @@ typedef enum IRQn {
   SAI1_IRQn                    = 60,               /**< Serial Audio Interface 1 interrupt */
   Reserved77_IRQn              = 61,               /**< Reserved interrupt */
   CAN0_IRQn                    = 62,               /**< Controller Area Network 0 interrupt */
-  Reserved79_IRQn              = 63,               /**< Reserved interrupt */
+  CAN1_IRQn                    = 63,               /**< Controller Area Network 1 interrupt */
   Reserved80_IRQn              = 64,               /**< Reserved interrupt */
   Reserved81_IRQn              = 65,               /**< Reserved interrupt */
   USB1_HS_PHY_IRQn             = 66,               /**< USBHS DCD or USBHS Phy interrupt */
@@ -195,12 +196,12 @@ typedef enum IRQn {
   FLEXPWM0_SUBMODULE1_IRQn     = 115,              /**< FlexPWM0 Submodule 1 capture/compare/reload interrupt */
   FLEXPWM0_SUBMODULE2_IRQn     = 116,              /**< FlexPWM0 Submodule 2 capture/compare/reload interrupt */
   FLEXPWM0_SUBMODULE3_IRQn     = 117,              /**< FlexPWM0 Submodule 3 capture/compare/reload interrupt */
-  Reserved134_IRQn             = 118,              /**< Reserved interrupt */
-  Reserved135_IRQn             = 119,              /**< Reserved interrupt */
-  Reserved136_IRQn             = 120,              /**< Reserved interrupt */
-  Reserved137_IRQn             = 121,              /**< Reserved interrupt */
-  Reserved138_IRQn             = 122,              /**< Reserved interrupt */
-  Reserved139_IRQn             = 123,              /**< Reserved interrupt */
+  FLEXPWM1_RELOAD_ERROR_IRQn   = 118,              /**< FlexPWM1_reload_error interrupt */
+  FLEXPWM1_FAULT_IRQn          = 119,              /**< FlexPWM1_fault interrupt */
+  FLEXPWM1_SUBMODULE0_IRQn     = 120,              /**< FlexPWM1 Submodule 0 capture/compare/reload interrupt */
+  FLEXPWM1_SUBMODULE1_IRQn     = 121,              /**< FlexPWM1 Submodule 1 capture/compare/reload interrupt */
+  FLEXPWM1_SUBMODULE2_IRQn     = 122,              /**< FlexPWM1 Submodule 2 capture/compare/reload interrupt */
+  FLEXPWM1_SUBMODULE3_IRQn     = 123,              /**< FlexPWM1 Submodule 3 capture/compare/reload interrupt */
   QDC0_COMPARE_IRQn            = 124,              /**< QDC0_Compare interrupt */
   QDC0_HOME_IRQn               = 125,              /**< QDC0_Home interrupt */
   QDC0_WDG_SAB_IRQn            = 126,              /**< QDC0_WDG_IRQ/SAB interrupt */
@@ -459,12 +460,30 @@ typedef enum _dma_request_source
     kDma1RequestMuxFlexPwm0ReqVal2  = 45U,         /**< PWM0 value2 request */
     kDma0RequestMuxFlexPwm0ReqVal3  = 46U,         /**< PWM0 value3 request */
     kDma1RequestMuxFlexPwm0ReqVal3  = 46U,         /**< PWM0 value3 request */
+    kDma0RequestMuxFlexPwm1ReqCapt0 = 47U,         /**< PWM1 capture0 request */
+    kDma1RequestMuxFlexPwm1ReqCapt0 = 47U,         /**< PWM1 capture0 request */
+    kDma0RequestMuxFlexPwm1ReqCapt1 = 48U,         /**< PWM1 capture1 request */
+    kDma1RequestMuxFlexPwm1ReqCapt1 = 48U,         /**< PWM1 capture1 request */
+    kDma0RequestMuxFlexPwm1ReqCapt2 = 49U,         /**< PWM1 capture2 request */
+    kDma1RequestMuxFlexPwm1ReqCapt2 = 49U,         /**< PWM1 capture2 request */
+    kDma0RequestMuxFlexPwm1ReqCapt3 = 50U,         /**< PWM1 capture3 request */
+    kDma1RequestMuxFlexPwm1ReqCapt3 = 50U,         /**< PWM1 capture3 request */
+    kDma0RequestMuxFlexPwm1ReqVal0  = 51U,         /**< PWM1 value0 request */
+    kDma1RequestMuxFlexPwm1ReqVal0  = 51U,         /**< PWM1 value0 request */
+    kDma0RequestMuxFlexPwm1ReqVal1  = 52U,         /**< PWM1 value1 request */
+    kDma1RequestMuxFlexPwm1ReqVal1  = 52U,         /**< PWM1 value1 request */
+    kDma0RequestMuxFlexPwm1ReqVal2  = 53U,         /**< PWM1 value2 request */
+    kDma1RequestMuxFlexPwm1ReqVal2  = 53U,         /**< PWM1 value2 request */
+    kDma0RequestMuxFlexPwm1ReqVal3  = 54U,         /**< PWM0 value3 request */
+    kDma1RequestMuxFlexPwm1ReqVal3  = 54U,         /**< PWM0 value3 request */
     kDma0RequestMuxLptmr0           = 57U,         /**< LPTMR0 Counter match event */
     kDma1RequestMuxLptmr0           = 57U,         /**< LPTMR0 Counter match event */
     kDma0RequestMuxLptmr1           = 58U,         /**< LPTMR1 Counter match event */
     kDma1RequestMuxLptmr1           = 58U,         /**< LPTMR1 Counter match event */
     kDma0RequestMuxFlexCan0DmaRequest = 59U,       /**< CAN0 DMA request */
     kDma1RequestMuxFlexCan0DmaRequest = 59U,       /**< CAN0 DMA request */
+    kDma0RequestMuxFlexCan1DmaRequest = 60U,       /**< CAN1 DMA request */
+    kDma1RequestMuxFlexCan1DmaRequest = 60U,       /**< CAN1 DMA request */
     kDma0RequestMuxFlexIO0ShiftRegister0Request = 61U, /**< FlexIO0 Shifter0 Status DMA request OR Timer0 Status DMA request */
     kDma1RequestMuxFlexIO0ShiftRegister0Request = 61U, /**< FlexIO0 Shifter0 Status DMA request OR Timer0 Status DMA request */
     kDma0RequestMuxFlexIO0ShiftRegister1Request = 62U, /**< FlexIO0 Shifter1 Status DMA request OR Timer1 Status DMA request */
@@ -8148,31 +8167,43 @@ typedef struct {
   #define CAN0                                     ((CAN_Type *)CAN0_BASE)
   /** Peripheral CAN0 base pointer */
   #define CAN0_NS                                  ((CAN_Type *)CAN0_BASE_NS)
+  /** Peripheral CAN1 base address */
+  #define CAN1_BASE                                (0x500D8000u)
+  /** Peripheral CAN1 base address */
+  #define CAN1_BASE_NS                             (0x400D8000u)
+  /** Peripheral CAN1 base pointer */
+  #define CAN1                                     ((CAN_Type *)CAN1_BASE)
+  /** Peripheral CAN1 base pointer */
+  #define CAN1_NS                                  ((CAN_Type *)CAN1_BASE_NS)
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS                           { CAN0_BASE }
+  #define CAN_BASE_ADDRS                           { CAN0_BASE, CAN1_BASE }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS                            { CAN0 }
+  #define CAN_BASE_PTRS                            { CAN0, CAN1 }
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS_NS                        { CAN0_BASE_NS }
+  #define CAN_BASE_ADDRS_NS                        { CAN0_BASE_NS, CAN1_BASE_NS }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS_NS                         { CAN0_NS }
+  #define CAN_BASE_PTRS_NS                         { CAN0_NS, CAN1_NS }
 #else
   /** Peripheral CAN0 base address */
   #define CAN0_BASE                                (0x400D4000u)
   /** Peripheral CAN0 base pointer */
   #define CAN0                                     ((CAN_Type *)CAN0_BASE)
+  /** Peripheral CAN1 base address */
+  #define CAN1_BASE                                (0x400D8000u)
+  /** Peripheral CAN1 base pointer */
+  #define CAN1                                     ((CAN_Type *)CAN1_BASE)
   /** Array initializer of CAN peripheral base addresses */
-  #define CAN_BASE_ADDRS                           { CAN0_BASE }
+  #define CAN_BASE_ADDRS                           { CAN0_BASE, CAN1_BASE }
   /** Array initializer of CAN peripheral base pointers */
-  #define CAN_BASE_PTRS                            { CAN0 }
+  #define CAN_BASE_PTRS                            { CAN0, CAN1 }
 #endif
 /** Interrupt vectors for the CAN peripheral type */
-#define CAN_Rx_Warning_IRQS                      { CAN0_IRQn }
-#define CAN_Tx_Warning_IRQS                      { CAN0_IRQn }
-#define CAN_Wake_Up_IRQS                         { CAN0_IRQn }
-#define CAN_Error_IRQS                           { CAN0_IRQn }
-#define CAN_Bus_Off_IRQS                         { CAN0_IRQn }
-#define CAN_ORed_Message_buffer_IRQS             { CAN0_IRQn }
+#define CAN_Rx_Warning_IRQS                      { CAN0_IRQn, CAN1_IRQn }
+#define CAN_Tx_Warning_IRQS                      { CAN0_IRQn, CAN1_IRQn }
+#define CAN_Wake_Up_IRQS                         { CAN0_IRQn, CAN1_IRQn }
+#define CAN_Error_IRQS                           { CAN0_IRQn, CAN1_IRQn }
+#define CAN_Bus_Off_IRQS                         { CAN0_IRQn, CAN1_IRQn }
+#define CAN_ORed_Message_buffer_IRQS             { CAN0_IRQn, CAN1_IRQn }
 
 /*!
  * @}
@@ -13123,422 +13154,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group DMA_Peripheral_Access_Layer */
-
-
-/* ----------------------------------------------------------------------------
-   -- DMA0_TEE_ALIAS Peripheral Access Layer
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup DMA0_TEE_ALIAS_Peripheral_Access_Layer DMA0_TEE_ALIAS Peripheral Access Layer
- * @{
- */
-
-/** DMA0_TEE_ALIAS - Register Layout Typedef */
-typedef struct {
-       uint8_t RESERVED_0[4092];
-       uint32_t RESERVED;                          /**< Reserved., offset: 0xFFC */
-} DMA0_TEE_ALIAS_Type;
-
-/* ----------------------------------------------------------------------------
-   -- DMA0_TEE_ALIAS Register Masks
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup DMA0_TEE_ALIAS_Register_Masks DMA0_TEE_ALIAS Register Masks
- * @{
- */
-
-
-/*!
- * @}
- */ /* end of group DMA0_TEE_ALIAS_Register_Masks */
-
-
-/* DMA0_TEE_ALIAS - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral DMA0_TEE_ALIAS0 base address */
-  #define DMA0_TEE_ALIAS0_BASE                     (0x50080000u)
-  /** Peripheral DMA0_TEE_ALIAS0 base address */
-  #define DMA0_TEE_ALIAS0_BASE_NS                  (0x40080000u)
-  /** Peripheral DMA0_TEE_ALIAS0 base pointer */
-  #define DMA0_TEE_ALIAS0                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS0_BASE)
-  /** Peripheral DMA0_TEE_ALIAS0 base pointer */
-  #define DMA0_TEE_ALIAS0_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS0_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS1 base address */
-  #define DMA0_TEE_ALIAS1_BASE                     (0x50081000u)
-  /** Peripheral DMA0_TEE_ALIAS1 base address */
-  #define DMA0_TEE_ALIAS1_BASE_NS                  (0x40081000u)
-  /** Peripheral DMA0_TEE_ALIAS1 base pointer */
-  #define DMA0_TEE_ALIAS1                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS1_BASE)
-  /** Peripheral DMA0_TEE_ALIAS1 base pointer */
-  #define DMA0_TEE_ALIAS1_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS1_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS2 base address */
-  #define DMA0_TEE_ALIAS2_BASE                     (0x50082000u)
-  /** Peripheral DMA0_TEE_ALIAS2 base address */
-  #define DMA0_TEE_ALIAS2_BASE_NS                  (0x40082000u)
-  /** Peripheral DMA0_TEE_ALIAS2 base pointer */
-  #define DMA0_TEE_ALIAS2                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS2_BASE)
-  /** Peripheral DMA0_TEE_ALIAS2 base pointer */
-  #define DMA0_TEE_ALIAS2_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS2_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS3 base address */
-  #define DMA0_TEE_ALIAS3_BASE                     (0x50083000u)
-  /** Peripheral DMA0_TEE_ALIAS3 base address */
-  #define DMA0_TEE_ALIAS3_BASE_NS                  (0x40083000u)
-  /** Peripheral DMA0_TEE_ALIAS3 base pointer */
-  #define DMA0_TEE_ALIAS3                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS3_BASE)
-  /** Peripheral DMA0_TEE_ALIAS3 base pointer */
-  #define DMA0_TEE_ALIAS3_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS3_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS4 base address */
-  #define DMA0_TEE_ALIAS4_BASE                     (0x50084000u)
-  /** Peripheral DMA0_TEE_ALIAS4 base address */
-  #define DMA0_TEE_ALIAS4_BASE_NS                  (0x40084000u)
-  /** Peripheral DMA0_TEE_ALIAS4 base pointer */
-  #define DMA0_TEE_ALIAS4                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS4_BASE)
-  /** Peripheral DMA0_TEE_ALIAS4 base pointer */
-  #define DMA0_TEE_ALIAS4_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS4_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS5 base address */
-  #define DMA0_TEE_ALIAS5_BASE                     (0x50085000u)
-  /** Peripheral DMA0_TEE_ALIAS5 base address */
-  #define DMA0_TEE_ALIAS5_BASE_NS                  (0x40085000u)
-  /** Peripheral DMA0_TEE_ALIAS5 base pointer */
-  #define DMA0_TEE_ALIAS5                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS5_BASE)
-  /** Peripheral DMA0_TEE_ALIAS5 base pointer */
-  #define DMA0_TEE_ALIAS5_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS5_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS6 base address */
-  #define DMA0_TEE_ALIAS6_BASE                     (0x50086000u)
-  /** Peripheral DMA0_TEE_ALIAS6 base address */
-  #define DMA0_TEE_ALIAS6_BASE_NS                  (0x40086000u)
-  /** Peripheral DMA0_TEE_ALIAS6 base pointer */
-  #define DMA0_TEE_ALIAS6                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS6_BASE)
-  /** Peripheral DMA0_TEE_ALIAS6 base pointer */
-  #define DMA0_TEE_ALIAS6_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS6_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS7 base address */
-  #define DMA0_TEE_ALIAS7_BASE                     (0x50087000u)
-  /** Peripheral DMA0_TEE_ALIAS7 base address */
-  #define DMA0_TEE_ALIAS7_BASE_NS                  (0x40087000u)
-  /** Peripheral DMA0_TEE_ALIAS7 base pointer */
-  #define DMA0_TEE_ALIAS7                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS7_BASE)
-  /** Peripheral DMA0_TEE_ALIAS7 base pointer */
-  #define DMA0_TEE_ALIAS7_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS7_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS8 base address */
-  #define DMA0_TEE_ALIAS8_BASE                     (0x50088000u)
-  /** Peripheral DMA0_TEE_ALIAS8 base address */
-  #define DMA0_TEE_ALIAS8_BASE_NS                  (0x40088000u)
-  /** Peripheral DMA0_TEE_ALIAS8 base pointer */
-  #define DMA0_TEE_ALIAS8                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS8_BASE)
-  /** Peripheral DMA0_TEE_ALIAS8 base pointer */
-  #define DMA0_TEE_ALIAS8_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS8_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS9 base address */
-  #define DMA0_TEE_ALIAS9_BASE                     (0x50089000u)
-  /** Peripheral DMA0_TEE_ALIAS9 base address */
-  #define DMA0_TEE_ALIAS9_BASE_NS                  (0x40089000u)
-  /** Peripheral DMA0_TEE_ALIAS9 base pointer */
-  #define DMA0_TEE_ALIAS9                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS9_BASE)
-  /** Peripheral DMA0_TEE_ALIAS9 base pointer */
-  #define DMA0_TEE_ALIAS9_NS                       ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS9_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS10 base address */
-  #define DMA0_TEE_ALIAS10_BASE                    (0x5008A000u)
-  /** Peripheral DMA0_TEE_ALIAS10 base address */
-  #define DMA0_TEE_ALIAS10_BASE_NS                 (0x4008A000u)
-  /** Peripheral DMA0_TEE_ALIAS10 base pointer */
-  #define DMA0_TEE_ALIAS10                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS10_BASE)
-  /** Peripheral DMA0_TEE_ALIAS10 base pointer */
-  #define DMA0_TEE_ALIAS10_NS                      ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS10_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS11 base address */
-  #define DMA0_TEE_ALIAS11_BASE                    (0x5008B000u)
-  /** Peripheral DMA0_TEE_ALIAS11 base address */
-  #define DMA0_TEE_ALIAS11_BASE_NS                 (0x4008B000u)
-  /** Peripheral DMA0_TEE_ALIAS11 base pointer */
-  #define DMA0_TEE_ALIAS11                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS11_BASE)
-  /** Peripheral DMA0_TEE_ALIAS11 base pointer */
-  #define DMA0_TEE_ALIAS11_NS                      ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS11_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS12 base address */
-  #define DMA0_TEE_ALIAS12_BASE                    (0x5008C000u)
-  /** Peripheral DMA0_TEE_ALIAS12 base address */
-  #define DMA0_TEE_ALIAS12_BASE_NS                 (0x4008C000u)
-  /** Peripheral DMA0_TEE_ALIAS12 base pointer */
-  #define DMA0_TEE_ALIAS12                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS12_BASE)
-  /** Peripheral DMA0_TEE_ALIAS12 base pointer */
-  #define DMA0_TEE_ALIAS12_NS                      ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS12_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS13 base address */
-  #define DMA0_TEE_ALIAS13_BASE                    (0x5008D000u)
-  /** Peripheral DMA0_TEE_ALIAS13 base address */
-  #define DMA0_TEE_ALIAS13_BASE_NS                 (0x4008D000u)
-  /** Peripheral DMA0_TEE_ALIAS13 base pointer */
-  #define DMA0_TEE_ALIAS13                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS13_BASE)
-  /** Peripheral DMA0_TEE_ALIAS13 base pointer */
-  #define DMA0_TEE_ALIAS13_NS                      ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS13_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS14 base address */
-  #define DMA0_TEE_ALIAS14_BASE                    (0x5008E000u)
-  /** Peripheral DMA0_TEE_ALIAS14 base address */
-  #define DMA0_TEE_ALIAS14_BASE_NS                 (0x4008E000u)
-  /** Peripheral DMA0_TEE_ALIAS14 base pointer */
-  #define DMA0_TEE_ALIAS14                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS14_BASE)
-  /** Peripheral DMA0_TEE_ALIAS14 base pointer */
-  #define DMA0_TEE_ALIAS14_NS                      ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS14_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS15 base address */
-  #define DMA0_TEE_ALIAS15_BASE                    (0x5008F000u)
-  /** Peripheral DMA0_TEE_ALIAS15 base address */
-  #define DMA0_TEE_ALIAS15_BASE_NS                 (0x4008F000u)
-  /** Peripheral DMA0_TEE_ALIAS15 base pointer */
-  #define DMA0_TEE_ALIAS15                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS15_BASE)
-  /** Peripheral DMA0_TEE_ALIAS15 base pointer */
-  #define DMA0_TEE_ALIAS15_NS                      ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS15_BASE_NS)
-  /** Peripheral DMA0_TEE_ALIAS16 base address */
-  #define DMA0_TEE_ALIAS16_BASE                    (0x50090000u)
-  /** Peripheral DMA0_TEE_ALIAS16 base address */
-  #define DMA0_TEE_ALIAS16_BASE_NS                 (0x40090000u)
-  /** Peripheral DMA0_TEE_ALIAS16 base pointer */
-  #define DMA0_TEE_ALIAS16                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS16_BASE)
-  /** Peripheral DMA0_TEE_ALIAS16 base pointer */
-  #define DMA0_TEE_ALIAS16_NS                      ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS16_BASE_NS)
-  /** Array initializer of DMA0_TEE_ALIAS peripheral base addresses */
-  #define DMA0_TEE_ALIAS_BASE_ADDRS                { DMA0_TEE_ALIAS0_BASE, DMA0_TEE_ALIAS1_BASE, DMA0_TEE_ALIAS2_BASE, DMA0_TEE_ALIAS3_BASE, DMA0_TEE_ALIAS4_BASE, DMA0_TEE_ALIAS5_BASE, DMA0_TEE_ALIAS6_BASE, DMA0_TEE_ALIAS7_BASE, DMA0_TEE_ALIAS8_BASE, DMA0_TEE_ALIAS9_BASE, DMA0_TEE_ALIAS10_BASE, DMA0_TEE_ALIAS11_BASE, DMA0_TEE_ALIAS12_BASE, DMA0_TEE_ALIAS13_BASE, DMA0_TEE_ALIAS14_BASE, DMA0_TEE_ALIAS15_BASE, DMA0_TEE_ALIAS16_BASE }
-  /** Array initializer of DMA0_TEE_ALIAS peripheral base pointers */
-  #define DMA0_TEE_ALIAS_BASE_PTRS                 { DMA0_TEE_ALIAS0, DMA0_TEE_ALIAS1, DMA0_TEE_ALIAS2, DMA0_TEE_ALIAS3, DMA0_TEE_ALIAS4, DMA0_TEE_ALIAS5, DMA0_TEE_ALIAS6, DMA0_TEE_ALIAS7, DMA0_TEE_ALIAS8, DMA0_TEE_ALIAS9, DMA0_TEE_ALIAS10, DMA0_TEE_ALIAS11, DMA0_TEE_ALIAS12, DMA0_TEE_ALIAS13, DMA0_TEE_ALIAS14, DMA0_TEE_ALIAS15, DMA0_TEE_ALIAS16 }
-  /** Array initializer of DMA0_TEE_ALIAS peripheral base addresses */
-  #define DMA0_TEE_ALIAS_BASE_ADDRS_NS             { DMA0_TEE_ALIAS0_BASE_NS, DMA0_TEE_ALIAS1_BASE_NS, DMA0_TEE_ALIAS2_BASE_NS, DMA0_TEE_ALIAS3_BASE_NS, DMA0_TEE_ALIAS4_BASE_NS, DMA0_TEE_ALIAS5_BASE_NS, DMA0_TEE_ALIAS6_BASE_NS, DMA0_TEE_ALIAS7_BASE_NS, DMA0_TEE_ALIAS8_BASE_NS, DMA0_TEE_ALIAS9_BASE_NS, DMA0_TEE_ALIAS10_BASE_NS, DMA0_TEE_ALIAS11_BASE_NS, DMA0_TEE_ALIAS12_BASE_NS, DMA0_TEE_ALIAS13_BASE_NS, DMA0_TEE_ALIAS14_BASE_NS, DMA0_TEE_ALIAS15_BASE_NS, DMA0_TEE_ALIAS16_BASE_NS }
-  /** Array initializer of DMA0_TEE_ALIAS peripheral base pointers */
-  #define DMA0_TEE_ALIAS_BASE_PTRS_NS              { DMA0_TEE_ALIAS0_NS, DMA0_TEE_ALIAS1_NS, DMA0_TEE_ALIAS2_NS, DMA0_TEE_ALIAS3_NS, DMA0_TEE_ALIAS4_NS, DMA0_TEE_ALIAS5_NS, DMA0_TEE_ALIAS6_NS, DMA0_TEE_ALIAS7_NS, DMA0_TEE_ALIAS8_NS, DMA0_TEE_ALIAS9_NS, DMA0_TEE_ALIAS10_NS, DMA0_TEE_ALIAS11_NS, DMA0_TEE_ALIAS12_NS, DMA0_TEE_ALIAS13_NS, DMA0_TEE_ALIAS14_NS, DMA0_TEE_ALIAS15_NS, DMA0_TEE_ALIAS16_NS }
-#else
-  /** Peripheral DMA0_TEE_ALIAS0 base address */
-  #define DMA0_TEE_ALIAS0_BASE                     (0x40080000u)
-  /** Peripheral DMA0_TEE_ALIAS0 base pointer */
-  #define DMA0_TEE_ALIAS0                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS0_BASE)
-  /** Peripheral DMA0_TEE_ALIAS1 base address */
-  #define DMA0_TEE_ALIAS1_BASE                     (0x40081000u)
-  /** Peripheral DMA0_TEE_ALIAS1 base pointer */
-  #define DMA0_TEE_ALIAS1                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS1_BASE)
-  /** Peripheral DMA0_TEE_ALIAS2 base address */
-  #define DMA0_TEE_ALIAS2_BASE                     (0x40082000u)
-  /** Peripheral DMA0_TEE_ALIAS2 base pointer */
-  #define DMA0_TEE_ALIAS2                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS2_BASE)
-  /** Peripheral DMA0_TEE_ALIAS3 base address */
-  #define DMA0_TEE_ALIAS3_BASE                     (0x40083000u)
-  /** Peripheral DMA0_TEE_ALIAS3 base pointer */
-  #define DMA0_TEE_ALIAS3                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS3_BASE)
-  /** Peripheral DMA0_TEE_ALIAS4 base address */
-  #define DMA0_TEE_ALIAS4_BASE                     (0x40084000u)
-  /** Peripheral DMA0_TEE_ALIAS4 base pointer */
-  #define DMA0_TEE_ALIAS4                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS4_BASE)
-  /** Peripheral DMA0_TEE_ALIAS5 base address */
-  #define DMA0_TEE_ALIAS5_BASE                     (0x40085000u)
-  /** Peripheral DMA0_TEE_ALIAS5 base pointer */
-  #define DMA0_TEE_ALIAS5                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS5_BASE)
-  /** Peripheral DMA0_TEE_ALIAS6 base address */
-  #define DMA0_TEE_ALIAS6_BASE                     (0x40086000u)
-  /** Peripheral DMA0_TEE_ALIAS6 base pointer */
-  #define DMA0_TEE_ALIAS6                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS6_BASE)
-  /** Peripheral DMA0_TEE_ALIAS7 base address */
-  #define DMA0_TEE_ALIAS7_BASE                     (0x40087000u)
-  /** Peripheral DMA0_TEE_ALIAS7 base pointer */
-  #define DMA0_TEE_ALIAS7                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS7_BASE)
-  /** Peripheral DMA0_TEE_ALIAS8 base address */
-  #define DMA0_TEE_ALIAS8_BASE                     (0x40088000u)
-  /** Peripheral DMA0_TEE_ALIAS8 base pointer */
-  #define DMA0_TEE_ALIAS8                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS8_BASE)
-  /** Peripheral DMA0_TEE_ALIAS9 base address */
-  #define DMA0_TEE_ALIAS9_BASE                     (0x40089000u)
-  /** Peripheral DMA0_TEE_ALIAS9 base pointer */
-  #define DMA0_TEE_ALIAS9                          ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS9_BASE)
-  /** Peripheral DMA0_TEE_ALIAS10 base address */
-  #define DMA0_TEE_ALIAS10_BASE                    (0x4008A000u)
-  /** Peripheral DMA0_TEE_ALIAS10 base pointer */
-  #define DMA0_TEE_ALIAS10                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS10_BASE)
-  /** Peripheral DMA0_TEE_ALIAS11 base address */
-  #define DMA0_TEE_ALIAS11_BASE                    (0x4008B000u)
-  /** Peripheral DMA0_TEE_ALIAS11 base pointer */
-  #define DMA0_TEE_ALIAS11                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS11_BASE)
-  /** Peripheral DMA0_TEE_ALIAS12 base address */
-  #define DMA0_TEE_ALIAS12_BASE                    (0x4008C000u)
-  /** Peripheral DMA0_TEE_ALIAS12 base pointer */
-  #define DMA0_TEE_ALIAS12                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS12_BASE)
-  /** Peripheral DMA0_TEE_ALIAS13 base address */
-  #define DMA0_TEE_ALIAS13_BASE                    (0x4008D000u)
-  /** Peripheral DMA0_TEE_ALIAS13 base pointer */
-  #define DMA0_TEE_ALIAS13                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS13_BASE)
-  /** Peripheral DMA0_TEE_ALIAS14 base address */
-  #define DMA0_TEE_ALIAS14_BASE                    (0x4008E000u)
-  /** Peripheral DMA0_TEE_ALIAS14 base pointer */
-  #define DMA0_TEE_ALIAS14                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS14_BASE)
-  /** Peripheral DMA0_TEE_ALIAS15 base address */
-  #define DMA0_TEE_ALIAS15_BASE                    (0x4008F000u)
-  /** Peripheral DMA0_TEE_ALIAS15 base pointer */
-  #define DMA0_TEE_ALIAS15                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS15_BASE)
-  /** Peripheral DMA0_TEE_ALIAS16 base address */
-  #define DMA0_TEE_ALIAS16_BASE                    (0x40090000u)
-  /** Peripheral DMA0_TEE_ALIAS16 base pointer */
-  #define DMA0_TEE_ALIAS16                         ((DMA0_TEE_ALIAS_Type *)DMA0_TEE_ALIAS16_BASE)
-  /** Array initializer of DMA0_TEE_ALIAS peripheral base addresses */
-  #define DMA0_TEE_ALIAS_BASE_ADDRS                { DMA0_TEE_ALIAS0_BASE, DMA0_TEE_ALIAS1_BASE, DMA0_TEE_ALIAS2_BASE, DMA0_TEE_ALIAS3_BASE, DMA0_TEE_ALIAS4_BASE, DMA0_TEE_ALIAS5_BASE, DMA0_TEE_ALIAS6_BASE, DMA0_TEE_ALIAS7_BASE, DMA0_TEE_ALIAS8_BASE, DMA0_TEE_ALIAS9_BASE, DMA0_TEE_ALIAS10_BASE, DMA0_TEE_ALIAS11_BASE, DMA0_TEE_ALIAS12_BASE, DMA0_TEE_ALIAS13_BASE, DMA0_TEE_ALIAS14_BASE, DMA0_TEE_ALIAS15_BASE, DMA0_TEE_ALIAS16_BASE }
-  /** Array initializer of DMA0_TEE_ALIAS peripheral base pointers */
-  #define DMA0_TEE_ALIAS_BASE_PTRS                 { DMA0_TEE_ALIAS0, DMA0_TEE_ALIAS1, DMA0_TEE_ALIAS2, DMA0_TEE_ALIAS3, DMA0_TEE_ALIAS4, DMA0_TEE_ALIAS5, DMA0_TEE_ALIAS6, DMA0_TEE_ALIAS7, DMA0_TEE_ALIAS8, DMA0_TEE_ALIAS9, DMA0_TEE_ALIAS10, DMA0_TEE_ALIAS11, DMA0_TEE_ALIAS12, DMA0_TEE_ALIAS13, DMA0_TEE_ALIAS14, DMA0_TEE_ALIAS15, DMA0_TEE_ALIAS16 }
-#endif
-
-/*!
- * @}
- */ /* end of group DMA0_TEE_ALIAS_Peripheral_Access_Layer */
-
-
-/* ----------------------------------------------------------------------------
-   -- DMA1_TEE_ALIAS Peripheral Access Layer
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup DMA1_TEE_ALIAS_Peripheral_Access_Layer DMA1_TEE_ALIAS Peripheral Access Layer
- * @{
- */
-
-/** DMA1_TEE_ALIAS - Register Layout Typedef */
-typedef struct {
-       uint8_t RESERVED_0[4092];
-       uint32_t RESERVED;                          /**< Reserved., offset: 0xFFC */
-} DMA1_TEE_ALIAS_Type;
-
-/* ----------------------------------------------------------------------------
-   -- DMA1_TEE_ALIAS Register Masks
-   ---------------------------------------------------------------------------- */
-
-/*!
- * @addtogroup DMA1_TEE_ALIAS_Register_Masks DMA1_TEE_ALIAS Register Masks
- * @{
- */
-
-
-/*!
- * @}
- */ /* end of group DMA1_TEE_ALIAS_Register_Masks */
-
-
-/* DMA1_TEE_ALIAS - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral DMA1_TEE_ALIAS0 base address */
-  #define DMA1_TEE_ALIAS0_BASE                     (0x500A0000u)
-  /** Peripheral DMA1_TEE_ALIAS0 base address */
-  #define DMA1_TEE_ALIAS0_BASE_NS                  (0x400A0000u)
-  /** Peripheral DMA1_TEE_ALIAS0 base pointer */
-  #define DMA1_TEE_ALIAS0                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS0_BASE)
-  /** Peripheral DMA1_TEE_ALIAS0 base pointer */
-  #define DMA1_TEE_ALIAS0_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS0_BASE_NS)
-  /** Peripheral DMA1_TEE_ALIAS1 base address */
-  #define DMA1_TEE_ALIAS1_BASE                     (0x500A1000u)
-  /** Peripheral DMA1_TEE_ALIAS1 base address */
-  #define DMA1_TEE_ALIAS1_BASE_NS                  (0x400A1000u)
-  /** Peripheral DMA1_TEE_ALIAS1 base pointer */
-  #define DMA1_TEE_ALIAS1                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS1_BASE)
-  /** Peripheral DMA1_TEE_ALIAS1 base pointer */
-  #define DMA1_TEE_ALIAS1_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS1_BASE_NS)
-  /** Peripheral DMA1_TEE_ALIAS2 base address */
-  #define DMA1_TEE_ALIAS2_BASE                     (0x500A2000u)
-  /** Peripheral DMA1_TEE_ALIAS2 base address */
-  #define DMA1_TEE_ALIAS2_BASE_NS                  (0x400A2000u)
-  /** Peripheral DMA1_TEE_ALIAS2 base pointer */
-  #define DMA1_TEE_ALIAS2                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS2_BASE)
-  /** Peripheral DMA1_TEE_ALIAS2 base pointer */
-  #define DMA1_TEE_ALIAS2_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS2_BASE_NS)
-  /** Peripheral DMA1_TEE_ALIAS3 base address */
-  #define DMA1_TEE_ALIAS3_BASE                     (0x500A3000u)
-  /** Peripheral DMA1_TEE_ALIAS3 base address */
-  #define DMA1_TEE_ALIAS3_BASE_NS                  (0x400A3000u)
-  /** Peripheral DMA1_TEE_ALIAS3 base pointer */
-  #define DMA1_TEE_ALIAS3                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS3_BASE)
-  /** Peripheral DMA1_TEE_ALIAS3 base pointer */
-  #define DMA1_TEE_ALIAS3_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS3_BASE_NS)
-  /** Peripheral DMA1_TEE_ALIAS4 base address */
-  #define DMA1_TEE_ALIAS4_BASE                     (0x500A4000u)
-  /** Peripheral DMA1_TEE_ALIAS4 base address */
-  #define DMA1_TEE_ALIAS4_BASE_NS                  (0x400A4000u)
-  /** Peripheral DMA1_TEE_ALIAS4 base pointer */
-  #define DMA1_TEE_ALIAS4                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS4_BASE)
-  /** Peripheral DMA1_TEE_ALIAS4 base pointer */
-  #define DMA1_TEE_ALIAS4_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS4_BASE_NS)
-  /** Peripheral DMA1_TEE_ALIAS5 base address */
-  #define DMA1_TEE_ALIAS5_BASE                     (0x500A5000u)
-  /** Peripheral DMA1_TEE_ALIAS5 base address */
-  #define DMA1_TEE_ALIAS5_BASE_NS                  (0x400A5000u)
-  /** Peripheral DMA1_TEE_ALIAS5 base pointer */
-  #define DMA1_TEE_ALIAS5                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS5_BASE)
-  /** Peripheral DMA1_TEE_ALIAS5 base pointer */
-  #define DMA1_TEE_ALIAS5_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS5_BASE_NS)
-  /** Peripheral DMA1_TEE_ALIAS6 base address */
-  #define DMA1_TEE_ALIAS6_BASE                     (0x500A6000u)
-  /** Peripheral DMA1_TEE_ALIAS6 base address */
-  #define DMA1_TEE_ALIAS6_BASE_NS                  (0x400A6000u)
-  /** Peripheral DMA1_TEE_ALIAS6 base pointer */
-  #define DMA1_TEE_ALIAS6                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS6_BASE)
-  /** Peripheral DMA1_TEE_ALIAS6 base pointer */
-  #define DMA1_TEE_ALIAS6_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS6_BASE_NS)
-  /** Peripheral DMA1_TEE_ALIAS7 base address */
-  #define DMA1_TEE_ALIAS7_BASE                     (0x500A7000u)
-  /** Peripheral DMA1_TEE_ALIAS7 base address */
-  #define DMA1_TEE_ALIAS7_BASE_NS                  (0x400A7000u)
-  /** Peripheral DMA1_TEE_ALIAS7 base pointer */
-  #define DMA1_TEE_ALIAS7                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS7_BASE)
-  /** Peripheral DMA1_TEE_ALIAS7 base pointer */
-  #define DMA1_TEE_ALIAS7_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS7_BASE_NS)
-  /** Peripheral DMA1_TEE_ALIAS8 base address */
-  #define DMA1_TEE_ALIAS8_BASE                     (0x500A8000u)
-  /** Peripheral DMA1_TEE_ALIAS8 base address */
-  #define DMA1_TEE_ALIAS8_BASE_NS                  (0x400A8000u)
-  /** Peripheral DMA1_TEE_ALIAS8 base pointer */
-  #define DMA1_TEE_ALIAS8                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS8_BASE)
-  /** Peripheral DMA1_TEE_ALIAS8 base pointer */
-  #define DMA1_TEE_ALIAS8_NS                       ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS8_BASE_NS)
-  /** Array initializer of DMA1_TEE_ALIAS peripheral base addresses */
-  #define DMA1_TEE_ALIAS_BASE_ADDRS                { DMA1_TEE_ALIAS0_BASE, DMA1_TEE_ALIAS1_BASE, DMA1_TEE_ALIAS2_BASE, DMA1_TEE_ALIAS3_BASE, DMA1_TEE_ALIAS4_BASE, DMA1_TEE_ALIAS5_BASE, DMA1_TEE_ALIAS6_BASE, DMA1_TEE_ALIAS7_BASE, DMA1_TEE_ALIAS8_BASE }
-  /** Array initializer of DMA1_TEE_ALIAS peripheral base pointers */
-  #define DMA1_TEE_ALIAS_BASE_PTRS                 { DMA1_TEE_ALIAS0, DMA1_TEE_ALIAS1, DMA1_TEE_ALIAS2, DMA1_TEE_ALIAS3, DMA1_TEE_ALIAS4, DMA1_TEE_ALIAS5, DMA1_TEE_ALIAS6, DMA1_TEE_ALIAS7, DMA1_TEE_ALIAS8 }
-  /** Array initializer of DMA1_TEE_ALIAS peripheral base addresses */
-  #define DMA1_TEE_ALIAS_BASE_ADDRS_NS             { DMA1_TEE_ALIAS0_BASE_NS, DMA1_TEE_ALIAS1_BASE_NS, DMA1_TEE_ALIAS2_BASE_NS, DMA1_TEE_ALIAS3_BASE_NS, DMA1_TEE_ALIAS4_BASE_NS, DMA1_TEE_ALIAS5_BASE_NS, DMA1_TEE_ALIAS6_BASE_NS, DMA1_TEE_ALIAS7_BASE_NS, DMA1_TEE_ALIAS8_BASE_NS }
-  /** Array initializer of DMA1_TEE_ALIAS peripheral base pointers */
-  #define DMA1_TEE_ALIAS_BASE_PTRS_NS              { DMA1_TEE_ALIAS0_NS, DMA1_TEE_ALIAS1_NS, DMA1_TEE_ALIAS2_NS, DMA1_TEE_ALIAS3_NS, DMA1_TEE_ALIAS4_NS, DMA1_TEE_ALIAS5_NS, DMA1_TEE_ALIAS6_NS, DMA1_TEE_ALIAS7_NS, DMA1_TEE_ALIAS8_NS }
-#else
-  /** Peripheral DMA1_TEE_ALIAS0 base address */
-  #define DMA1_TEE_ALIAS0_BASE                     (0x400A0000u)
-  /** Peripheral DMA1_TEE_ALIAS0 base pointer */
-  #define DMA1_TEE_ALIAS0                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS0_BASE)
-  /** Peripheral DMA1_TEE_ALIAS1 base address */
-  #define DMA1_TEE_ALIAS1_BASE                     (0x400A1000u)
-  /** Peripheral DMA1_TEE_ALIAS1 base pointer */
-  #define DMA1_TEE_ALIAS1                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS1_BASE)
-  /** Peripheral DMA1_TEE_ALIAS2 base address */
-  #define DMA1_TEE_ALIAS2_BASE                     (0x400A2000u)
-  /** Peripheral DMA1_TEE_ALIAS2 base pointer */
-  #define DMA1_TEE_ALIAS2                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS2_BASE)
-  /** Peripheral DMA1_TEE_ALIAS3 base address */
-  #define DMA1_TEE_ALIAS3_BASE                     (0x400A3000u)
-  /** Peripheral DMA1_TEE_ALIAS3 base pointer */
-  #define DMA1_TEE_ALIAS3                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS3_BASE)
-  /** Peripheral DMA1_TEE_ALIAS4 base address */
-  #define DMA1_TEE_ALIAS4_BASE                     (0x400A4000u)
-  /** Peripheral DMA1_TEE_ALIAS4 base pointer */
-  #define DMA1_TEE_ALIAS4                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS4_BASE)
-  /** Peripheral DMA1_TEE_ALIAS5 base address */
-  #define DMA1_TEE_ALIAS5_BASE                     (0x400A5000u)
-  /** Peripheral DMA1_TEE_ALIAS5 base pointer */
-  #define DMA1_TEE_ALIAS5                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS5_BASE)
-  /** Peripheral DMA1_TEE_ALIAS6 base address */
-  #define DMA1_TEE_ALIAS6_BASE                     (0x400A6000u)
-  /** Peripheral DMA1_TEE_ALIAS6 base pointer */
-  #define DMA1_TEE_ALIAS6                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS6_BASE)
-  /** Peripheral DMA1_TEE_ALIAS7 base address */
-  #define DMA1_TEE_ALIAS7_BASE                     (0x400A7000u)
-  /** Peripheral DMA1_TEE_ALIAS7 base pointer */
-  #define DMA1_TEE_ALIAS7                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS7_BASE)
-  /** Peripheral DMA1_TEE_ALIAS8 base address */
-  #define DMA1_TEE_ALIAS8_BASE                     (0x400A8000u)
-  /** Peripheral DMA1_TEE_ALIAS8 base pointer */
-  #define DMA1_TEE_ALIAS8                          ((DMA1_TEE_ALIAS_Type *)DMA1_TEE_ALIAS8_BASE)
-  /** Array initializer of DMA1_TEE_ALIAS peripheral base addresses */
-  #define DMA1_TEE_ALIAS_BASE_ADDRS                { DMA1_TEE_ALIAS0_BASE, DMA1_TEE_ALIAS1_BASE, DMA1_TEE_ALIAS2_BASE, DMA1_TEE_ALIAS3_BASE, DMA1_TEE_ALIAS4_BASE, DMA1_TEE_ALIAS5_BASE, DMA1_TEE_ALIAS6_BASE, DMA1_TEE_ALIAS7_BASE, DMA1_TEE_ALIAS8_BASE }
-  /** Array initializer of DMA1_TEE_ALIAS peripheral base pointers */
-  #define DMA1_TEE_ALIAS_BASE_PTRS                 { DMA1_TEE_ALIAS0, DMA1_TEE_ALIAS1, DMA1_TEE_ALIAS2, DMA1_TEE_ALIAS3, DMA1_TEE_ALIAS4, DMA1_TEE_ALIAS5, DMA1_TEE_ALIAS6, DMA1_TEE_ALIAS7, DMA1_TEE_ALIAS8 }
-#endif
-
-/*!
- * @}
- */ /* end of group DMA1_TEE_ALIAS_Peripheral_Access_Layer */
 
 
 /* ----------------------------------------------------------------------------
@@ -48138,30 +47753,42 @@ typedef struct {
   #define PWM0                                     ((PWM_Type *)PWM0_BASE)
   /** Peripheral PWM0 base pointer */
   #define PWM0_NS                                  ((PWM_Type *)PWM0_BASE_NS)
+  /** Peripheral PWM1 base address */
+  #define PWM1_BASE                                (0x500D0000u)
+  /** Peripheral PWM1 base address */
+  #define PWM1_BASE_NS                             (0x400D0000u)
+  /** Peripheral PWM1 base pointer */
+  #define PWM1                                     ((PWM_Type *)PWM1_BASE)
+  /** Peripheral PWM1 base pointer */
+  #define PWM1_NS                                  ((PWM_Type *)PWM1_BASE_NS)
   /** Array initializer of PWM peripheral base addresses */
-  #define PWM_BASE_ADDRS                           { PWM0_BASE }
+  #define PWM_BASE_ADDRS                           { PWM0_BASE, PWM1_BASE }
   /** Array initializer of PWM peripheral base pointers */
-  #define PWM_BASE_PTRS                            { PWM0 }
+  #define PWM_BASE_PTRS                            { PWM0, PWM1 }
   /** Array initializer of PWM peripheral base addresses */
-  #define PWM_BASE_ADDRS_NS                        { PWM0_BASE_NS }
+  #define PWM_BASE_ADDRS_NS                        { PWM0_BASE_NS, PWM1_BASE_NS }
   /** Array initializer of PWM peripheral base pointers */
-  #define PWM_BASE_PTRS_NS                         { PWM0_NS }
+  #define PWM_BASE_PTRS_NS                         { PWM0_NS, PWM1_NS }
 #else
   /** Peripheral PWM0 base address */
   #define PWM0_BASE                                (0x400CE000u)
   /** Peripheral PWM0 base pointer */
   #define PWM0                                     ((PWM_Type *)PWM0_BASE)
+  /** Peripheral PWM1 base address */
+  #define PWM1_BASE                                (0x400D0000u)
+  /** Peripheral PWM1 base pointer */
+  #define PWM1                                     ((PWM_Type *)PWM1_BASE)
   /** Array initializer of PWM peripheral base addresses */
-  #define PWM_BASE_ADDRS                           { PWM0_BASE }
+  #define PWM_BASE_ADDRS                           { PWM0_BASE, PWM1_BASE }
   /** Array initializer of PWM peripheral base pointers */
-  #define PWM_BASE_PTRS                            { PWM0 }
+  #define PWM_BASE_PTRS                            { PWM0, PWM1 }
 #endif
 /** Interrupt vectors for the PWM peripheral type */
-#define PWM_CMP_IRQS                             { { FLEXPWM0_SUBMODULE0_IRQn, FLEXPWM0_SUBMODULE1_IRQn, FLEXPWM0_SUBMODULE2_IRQn, FLEXPWM0_SUBMODULE3_IRQn } }
-#define PWM_RELOAD_IRQS                          { { FLEXPWM0_SUBMODULE0_IRQn, FLEXPWM0_SUBMODULE1_IRQn, FLEXPWM0_SUBMODULE2_IRQn, FLEXPWM0_SUBMODULE3_IRQn } }
-#define PWM_CAPTURE_IRQS                         { { FLEXPWM0_SUBMODULE0_IRQn, FLEXPWM0_SUBMODULE1_IRQn, FLEXPWM0_SUBMODULE2_IRQn, FLEXPWM0_SUBMODULE3_IRQn } }
-#define PWM_FAULT_IRQS                           { FLEXPWM0_FAULT_IRQn }
-#define PWM_RELOAD_ERROR_IRQS                    { FLEXPWM0_RELOAD_ERROR_IRQn }
+#define PWM_CMP_IRQS                             { { FLEXPWM0_SUBMODULE0_IRQn, FLEXPWM0_SUBMODULE1_IRQn, FLEXPWM0_SUBMODULE2_IRQn, FLEXPWM0_SUBMODULE3_IRQn }, { FLEXPWM1_SUBMODULE0_IRQn, FLEXPWM1_SUBMODULE1_IRQn, FLEXPWM1_SUBMODULE2_IRQn, FLEXPWM1_SUBMODULE3_IRQn } }
+#define PWM_RELOAD_IRQS                          { { FLEXPWM0_SUBMODULE0_IRQn, FLEXPWM0_SUBMODULE1_IRQn, FLEXPWM0_SUBMODULE2_IRQn, FLEXPWM0_SUBMODULE3_IRQn }, { FLEXPWM1_SUBMODULE0_IRQn, FLEXPWM1_SUBMODULE1_IRQn, FLEXPWM1_SUBMODULE2_IRQn, FLEXPWM1_SUBMODULE3_IRQn } }
+#define PWM_CAPTURE_IRQS                         { { FLEXPWM0_SUBMODULE0_IRQn, FLEXPWM0_SUBMODULE1_IRQn, FLEXPWM0_SUBMODULE2_IRQn, FLEXPWM0_SUBMODULE3_IRQn }, { FLEXPWM1_SUBMODULE0_IRQn, FLEXPWM1_SUBMODULE1_IRQn, FLEXPWM1_SUBMODULE2_IRQn, FLEXPWM1_SUBMODULE3_IRQn } }
+#define PWM_FAULT_IRQS                           { FLEXPWM0_FAULT_IRQn, FLEXPWM1_FAULT_IRQn }
+#define PWM_RELOAD_ERROR_IRQS                    { FLEXPWM0_RELOAD_ERROR_IRQn, FLEXPWM1_RELOAD_ERROR_IRQn }
 
 /*!
  * @}

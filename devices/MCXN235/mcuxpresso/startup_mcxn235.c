@@ -1,7 +1,7 @@
 //*****************************************************************************
 // MCXN235 startup code for use with MCUXpresso IDE
 //
-// Version : 090424
+// Version : 090724
 //*****************************************************************************
 //
 // Copyright 2016-2024 NXP
@@ -141,7 +141,7 @@ WEAK void SAI0_IRQHandler(void);
 WEAK void SAI1_IRQHandler(void);
 WEAK void Reserved77_IRQHandler(void);
 WEAK void CAN0_IRQHandler(void);
-WEAK void Reserved79_IRQHandler(void);
+WEAK void CAN1_IRQHandler(void);
 WEAK void Reserved80_IRQHandler(void);
 WEAK void Reserved81_IRQHandler(void);
 WEAK void USB1_HS_PHY_IRQHandler(void);
@@ -196,12 +196,12 @@ WEAK void FLEXPWM0_SUBMODULE0_IRQHandler(void);
 WEAK void FLEXPWM0_SUBMODULE1_IRQHandler(void);
 WEAK void FLEXPWM0_SUBMODULE2_IRQHandler(void);
 WEAK void FLEXPWM0_SUBMODULE3_IRQHandler(void);
-WEAK void Reserved134_IRQHandler(void);
-WEAK void Reserved135_IRQHandler(void);
-WEAK void Reserved136_IRQHandler(void);
-WEAK void Reserved137_IRQHandler(void);
-WEAK void Reserved138_IRQHandler(void);
-WEAK void Reserved139_IRQHandler(void);
+WEAK void FLEXPWM1_RELOAD_ERROR_IRQHandler(void);
+WEAK void FLEXPWM1_FAULT_IRQHandler(void);
+WEAK void FLEXPWM1_SUBMODULE0_IRQHandler(void);
+WEAK void FLEXPWM1_SUBMODULE1_IRQHandler(void);
+WEAK void FLEXPWM1_SUBMODULE2_IRQHandler(void);
+WEAK void FLEXPWM1_SUBMODULE3_IRQHandler(void);
 WEAK void QDC0_COMPARE_IRQHandler(void);
 WEAK void QDC0_HOME_IRQHandler(void);
 WEAK void QDC0_WDG_SAB_IRQHandler(void);
@@ -303,7 +303,7 @@ void SAI0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void SAI1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved77_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void CAN0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Reserved79_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void CAN1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved80_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void Reserved81_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void USB1_HS_PHY_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -358,12 +358,12 @@ void FLEXPWM0_SUBMODULE0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void FLEXPWM0_SUBMODULE1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void FLEXPWM0_SUBMODULE2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void FLEXPWM0_SUBMODULE3_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Reserved134_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Reserved135_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Reserved136_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Reserved137_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Reserved138_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
-void Reserved139_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void FLEXPWM1_RELOAD_ERROR_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void FLEXPWM1_FAULT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void FLEXPWM1_SUBMODULE0_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void FLEXPWM1_SUBMODULE1_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void FLEXPWM1_SUBMODULE2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
+void FLEXPWM1_SUBMODULE3_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void QDC0_COMPARE_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void QDC0_HOME_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void QDC0_WDG_SAB_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
@@ -507,7 +507,7 @@ void (* const g_pfnVectors[])(void) = {
     SAI1_IRQHandler,                   // 76 : Serial Audio Interface 1 interrupt
     Reserved77_IRQHandler,             // 77 : Reserved interrupt
     CAN0_IRQHandler,                   // 78 : Controller Area Network 0 interrupt
-    Reserved79_IRQHandler,             // 79 : Reserved interrupt
+    CAN1_IRQHandler,                   // 79 : Controller Area Network 1 interrupt
     Reserved80_IRQHandler,             // 80 : Reserved interrupt
     Reserved81_IRQHandler,             // 81 : Reserved interrupt
     USB1_HS_PHY_IRQHandler,            // 82 : USBHS DCD or USBHS Phy interrupt
@@ -562,12 +562,12 @@ void (* const g_pfnVectors[])(void) = {
     FLEXPWM0_SUBMODULE1_IRQHandler,    // 131: FlexPWM0 Submodule 1 capture/compare/reload interrupt
     FLEXPWM0_SUBMODULE2_IRQHandler,    // 132: FlexPWM0 Submodule 2 capture/compare/reload interrupt
     FLEXPWM0_SUBMODULE3_IRQHandler,    // 133: FlexPWM0 Submodule 3 capture/compare/reload interrupt
-    Reserved134_IRQHandler,            // 134: Reserved interrupt
-    Reserved135_IRQHandler,            // 135: Reserved interrupt
-    Reserved136_IRQHandler,            // 136: Reserved interrupt
-    Reserved137_IRQHandler,            // 137: Reserved interrupt
-    Reserved138_IRQHandler,            // 138: Reserved interrupt
-    Reserved139_IRQHandler,            // 139: Reserved interrupt
+    FLEXPWM1_RELOAD_ERROR_IRQHandler,  // 134: FlexPWM1_reload_error interrupt
+    FLEXPWM1_FAULT_IRQHandler,         // 135: FlexPWM1_fault interrupt
+    FLEXPWM1_SUBMODULE0_IRQHandler,    // 136: FlexPWM1 Submodule 0 capture/compare/reload interrupt
+    FLEXPWM1_SUBMODULE1_IRQHandler,    // 137: FlexPWM1 Submodule 1 capture/compare/reload interrupt
+    FLEXPWM1_SUBMODULE2_IRQHandler,    // 138: FlexPWM1 Submodule 2 capture/compare/reload interrupt
+    FLEXPWM1_SUBMODULE3_IRQHandler,    // 139: FlexPWM1 Submodule 3 capture/compare/reload interrupt
     QDC0_COMPARE_IRQHandler,           // 140: QDC0_Compare interrupt
     QDC0_HOME_IRQHandler,              // 141: QDC0_Home interrupt
     QDC0_WDG_SAB_IRQHandler,           // 142: QDC0_WDG_IRQ/SAB interrupt
@@ -1034,8 +1034,8 @@ WEAK void CAN0_IRQHandler(void)
 {   CAN0_DriverIRQHandler();
 }
 
-WEAK void Reserved79_IRQHandler(void)
-{   Reserved79_DriverIRQHandler();
+WEAK void CAN1_IRQHandler(void)
+{   CAN1_DriverIRQHandler();
 }
 
 WEAK void Reserved80_IRQHandler(void)
@@ -1254,28 +1254,28 @@ WEAK void FLEXPWM0_SUBMODULE3_IRQHandler(void)
 {   FLEXPWM0_SUBMODULE3_DriverIRQHandler();
 }
 
-WEAK void Reserved134_IRQHandler(void)
-{   Reserved134_DriverIRQHandler();
+WEAK void FLEXPWM1_RELOAD_ERROR_IRQHandler(void)
+{   FLEXPWM1_RELOAD_ERROR_DriverIRQHandler();
 }
 
-WEAK void Reserved135_IRQHandler(void)
-{   Reserved135_DriverIRQHandler();
+WEAK void FLEXPWM1_FAULT_IRQHandler(void)
+{   FLEXPWM1_FAULT_DriverIRQHandler();
 }
 
-WEAK void Reserved136_IRQHandler(void)
-{   Reserved136_DriverIRQHandler();
+WEAK void FLEXPWM1_SUBMODULE0_IRQHandler(void)
+{   FLEXPWM1_SUBMODULE0_DriverIRQHandler();
 }
 
-WEAK void Reserved137_IRQHandler(void)
-{   Reserved137_DriverIRQHandler();
+WEAK void FLEXPWM1_SUBMODULE1_IRQHandler(void)
+{   FLEXPWM1_SUBMODULE1_DriverIRQHandler();
 }
 
-WEAK void Reserved138_IRQHandler(void)
-{   Reserved138_DriverIRQHandler();
+WEAK void FLEXPWM1_SUBMODULE2_IRQHandler(void)
+{   FLEXPWM1_SUBMODULE2_DriverIRQHandler();
 }
 
-WEAK void Reserved139_IRQHandler(void)
-{   Reserved139_DriverIRQHandler();
+WEAK void FLEXPWM1_SUBMODULE3_IRQHandler(void)
+{   FLEXPWM1_SUBMODULE3_DriverIRQHandler();
 }
 
 WEAK void QDC0_COMPARE_IRQHandler(void)

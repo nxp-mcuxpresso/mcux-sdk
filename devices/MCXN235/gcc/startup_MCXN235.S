@@ -4,7 +4,7 @@
 /*            MCXN235                                                        */
 /*  @version: 1.0                                                            */
 /*  @date:    2023-10-1                                                      */
-/*  @build:   b240409                                                        */
+/*  @build:   b240709                                                        */
 /* ------------------------------------------------------------------------- */
 /*                                                                           */
 /* Copyright 1997-2016 Freescale Semiconductor, Inc.                         */
@@ -101,7 +101,7 @@ __Vectors:
     .long   SAI1_IRQHandler                                 /* Serial Audio Interface 1 interrupt*/
     .long   Reserved77_IRQHandler                           /* Reserved interrupt*/
     .long   CAN0_IRQHandler                                 /* Controller Area Network 0 interrupt*/
-    .long   Reserved79_IRQHandler                           /* Reserved interrupt*/
+    .long   CAN1_IRQHandler                                 /* Controller Area Network 1 interrupt*/
     .long   Reserved80_IRQHandler                           /* Reserved interrupt*/
     .long   Reserved81_IRQHandler                           /* Reserved interrupt*/
     .long   USB1_HS_PHY_IRQHandler                          /* USBHS DCD or USBHS Phy interrupt*/
@@ -156,12 +156,12 @@ __Vectors:
     .long   FLEXPWM0_SUBMODULE1_IRQHandler                  /* FlexPWM0 Submodule 1 capture/compare/reload interrupt*/
     .long   FLEXPWM0_SUBMODULE2_IRQHandler                  /* FlexPWM0 Submodule 2 capture/compare/reload interrupt*/
     .long   FLEXPWM0_SUBMODULE3_IRQHandler                  /* FlexPWM0 Submodule 3 capture/compare/reload interrupt*/
-    .long   Reserved134_IRQHandler                          /* Reserved interrupt*/
-    .long   Reserved135_IRQHandler                          /* Reserved interrupt*/
-    .long   Reserved136_IRQHandler                          /* Reserved interrupt*/
-    .long   Reserved137_IRQHandler                          /* Reserved interrupt*/
-    .long   Reserved138_IRQHandler                          /* Reserved interrupt*/
-    .long   Reserved139_IRQHandler                          /* Reserved interrupt*/
+    .long   FLEXPWM1_RELOAD_ERROR_IRQHandler                /* FlexPWM1_reload_error interrupt*/
+    .long   FLEXPWM1_FAULT_IRQHandler                       /* FlexPWM1_fault interrupt*/
+    .long   FLEXPWM1_SUBMODULE0_IRQHandler                  /* FlexPWM1 Submodule 0 capture/compare/reload interrupt*/
+    .long   FLEXPWM1_SUBMODULE1_IRQHandler                  /* FlexPWM1 Submodule 1 capture/compare/reload interrupt*/
+    .long   FLEXPWM1_SUBMODULE2_IRQHandler                  /* FlexPWM1 Submodule 2 capture/compare/reload interrupt*/
+    .long   FLEXPWM1_SUBMODULE3_IRQHandler                  /* FlexPWM1 Submodule 3 capture/compare/reload interrupt*/
     .long   QDC0_COMPARE_IRQHandler                         /* QDC0_Compare interrupt*/
     .long   QDC0_HOME_IRQHandler                            /* QDC0_Home interrupt*/
     .long   QDC0_WDG_SAB_IRQHandler                         /* QDC0_WDG_IRQ/SAB interrupt*/
@@ -939,12 +939,12 @@ CAN0_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak Reserved79_IRQHandler
-    .type Reserved79_IRQHandler, %function
-Reserved79_IRQHandler:
-    ldr   r0,=Reserved79_DriverIRQHandler
+    .weak CAN1_IRQHandler
+    .type CAN1_IRQHandler, %function
+CAN1_IRQHandler:
+    ldr   r0,=CAN1_DriverIRQHandler
     bx    r0
-    .size Reserved79_IRQHandler, . - Reserved79_IRQHandler
+    .size CAN1_IRQHandler, . - CAN1_IRQHandler
 
     .align 1
     .thumb_func
@@ -1434,57 +1434,57 @@ FLEXPWM0_SUBMODULE3_IRQHandler:
 
     .align 1
     .thumb_func
-    .weak Reserved134_IRQHandler
-    .type Reserved134_IRQHandler, %function
-Reserved134_IRQHandler:
-    ldr   r0,=Reserved134_DriverIRQHandler
+    .weak FLEXPWM1_RELOAD_ERROR_IRQHandler
+    .type FLEXPWM1_RELOAD_ERROR_IRQHandler, %function
+FLEXPWM1_RELOAD_ERROR_IRQHandler:
+    ldr   r0,=FLEXPWM1_RELOAD_ERROR_DriverIRQHandler
     bx    r0
-    .size Reserved134_IRQHandler, . - Reserved134_IRQHandler
+    .size FLEXPWM1_RELOAD_ERROR_IRQHandler, . - FLEXPWM1_RELOAD_ERROR_IRQHandler
 
     .align 1
     .thumb_func
-    .weak Reserved135_IRQHandler
-    .type Reserved135_IRQHandler, %function
-Reserved135_IRQHandler:
-    ldr   r0,=Reserved135_DriverIRQHandler
+    .weak FLEXPWM1_FAULT_IRQHandler
+    .type FLEXPWM1_FAULT_IRQHandler, %function
+FLEXPWM1_FAULT_IRQHandler:
+    ldr   r0,=FLEXPWM1_FAULT_DriverIRQHandler
     bx    r0
-    .size Reserved135_IRQHandler, . - Reserved135_IRQHandler
+    .size FLEXPWM1_FAULT_IRQHandler, . - FLEXPWM1_FAULT_IRQHandler
 
     .align 1
     .thumb_func
-    .weak Reserved136_IRQHandler
-    .type Reserved136_IRQHandler, %function
-Reserved136_IRQHandler:
-    ldr   r0,=Reserved136_DriverIRQHandler
+    .weak FLEXPWM1_SUBMODULE0_IRQHandler
+    .type FLEXPWM1_SUBMODULE0_IRQHandler, %function
+FLEXPWM1_SUBMODULE0_IRQHandler:
+    ldr   r0,=FLEXPWM1_SUBMODULE0_DriverIRQHandler
     bx    r0
-    .size Reserved136_IRQHandler, . - Reserved136_IRQHandler
+    .size FLEXPWM1_SUBMODULE0_IRQHandler, . - FLEXPWM1_SUBMODULE0_IRQHandler
 
     .align 1
     .thumb_func
-    .weak Reserved137_IRQHandler
-    .type Reserved137_IRQHandler, %function
-Reserved137_IRQHandler:
-    ldr   r0,=Reserved137_DriverIRQHandler
+    .weak FLEXPWM1_SUBMODULE1_IRQHandler
+    .type FLEXPWM1_SUBMODULE1_IRQHandler, %function
+FLEXPWM1_SUBMODULE1_IRQHandler:
+    ldr   r0,=FLEXPWM1_SUBMODULE1_DriverIRQHandler
     bx    r0
-    .size Reserved137_IRQHandler, . - Reserved137_IRQHandler
+    .size FLEXPWM1_SUBMODULE1_IRQHandler, . - FLEXPWM1_SUBMODULE1_IRQHandler
 
     .align 1
     .thumb_func
-    .weak Reserved138_IRQHandler
-    .type Reserved138_IRQHandler, %function
-Reserved138_IRQHandler:
-    ldr   r0,=Reserved138_DriverIRQHandler
+    .weak FLEXPWM1_SUBMODULE2_IRQHandler
+    .type FLEXPWM1_SUBMODULE2_IRQHandler, %function
+FLEXPWM1_SUBMODULE2_IRQHandler:
+    ldr   r0,=FLEXPWM1_SUBMODULE2_DriverIRQHandler
     bx    r0
-    .size Reserved138_IRQHandler, . - Reserved138_IRQHandler
+    .size FLEXPWM1_SUBMODULE2_IRQHandler, . - FLEXPWM1_SUBMODULE2_IRQHandler
 
     .align 1
     .thumb_func
-    .weak Reserved139_IRQHandler
-    .type Reserved139_IRQHandler, %function
-Reserved139_IRQHandler:
-    ldr   r0,=Reserved139_DriverIRQHandler
+    .weak FLEXPWM1_SUBMODULE3_IRQHandler
+    .type FLEXPWM1_SUBMODULE3_IRQHandler, %function
+FLEXPWM1_SUBMODULE3_IRQHandler:
+    ldr   r0,=FLEXPWM1_SUBMODULE3_DriverIRQHandler
     bx    r0
-    .size Reserved139_IRQHandler, . - Reserved139_IRQHandler
+    .size FLEXPWM1_SUBMODULE3_IRQHandler, . - FLEXPWM1_SUBMODULE3_IRQHandler
 
     .align 1
     .thumb_func
@@ -1851,7 +1851,7 @@ Reserved171_IRQHandler:
     def_irq_handler    SAI1_DriverIRQHandler
     def_irq_handler    Reserved77_DriverIRQHandler
     def_irq_handler    CAN0_DriverIRQHandler
-    def_irq_handler    Reserved79_DriverIRQHandler
+    def_irq_handler    CAN1_DriverIRQHandler
     def_irq_handler    Reserved80_DriverIRQHandler
     def_irq_handler    Reserved81_DriverIRQHandler
     def_irq_handler    USB1_HS_PHY_DriverIRQHandler
@@ -1906,12 +1906,12 @@ Reserved171_IRQHandler:
     def_irq_handler    FLEXPWM0_SUBMODULE1_DriverIRQHandler
     def_irq_handler    FLEXPWM0_SUBMODULE2_DriverIRQHandler
     def_irq_handler    FLEXPWM0_SUBMODULE3_DriverIRQHandler
-    def_irq_handler    Reserved134_DriverIRQHandler
-    def_irq_handler    Reserved135_DriverIRQHandler
-    def_irq_handler    Reserved136_DriverIRQHandler
-    def_irq_handler    Reserved137_DriverIRQHandler
-    def_irq_handler    Reserved138_DriverIRQHandler
-    def_irq_handler    Reserved139_DriverIRQHandler
+    def_irq_handler    FLEXPWM1_RELOAD_ERROR_DriverIRQHandler
+    def_irq_handler    FLEXPWM1_FAULT_DriverIRQHandler
+    def_irq_handler    FLEXPWM1_SUBMODULE0_DriverIRQHandler
+    def_irq_handler    FLEXPWM1_SUBMODULE1_DriverIRQHandler
+    def_irq_handler    FLEXPWM1_SUBMODULE2_DriverIRQHandler
+    def_irq_handler    FLEXPWM1_SUBMODULE3_DriverIRQHandler
     def_irq_handler    QDC0_COMPARE_DriverIRQHandler
     def_irq_handler    QDC0_HOME_DriverIRQHandler
     def_irq_handler    QDC0_WDG_SAB_DriverIRQHandler

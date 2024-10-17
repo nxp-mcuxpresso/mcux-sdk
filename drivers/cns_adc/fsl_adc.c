@@ -48,7 +48,7 @@ static uint32_t ADC_GetInstance(ADC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < adcArrayCount; instance++)
     {
-        if (s_adcBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_adcBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

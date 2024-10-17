@@ -888,6 +888,12 @@
 #  # description: lwIP - A Lightweight TCP/IP Stack
 #  set(CONFIG_USE_middleware_lwip true)
 
+#  # description: lwIP System Abstraction Layer using either FreeRTOS dynamic memory allocation APIs or bare-metal
+#  set(CONFIG_USE_middleware_lwip_sys_arch_dynamic true)
+
+#  # description: Experimental lwIP System Abstraction Layer using FreeRTOS static memory allocation APIs - it is not supported and not guaranteed to work, also might be removed in future
+#  set(CONFIG_USE_middleware_lwip_sys_arch_static true)
+
 #  # description: Enet ethernet interface
 #  set(CONFIG_USE_middleware_lwip_enet_ethernetif true)
 

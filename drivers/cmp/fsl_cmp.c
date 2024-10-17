@@ -43,7 +43,7 @@ static uint32_t CMP_GetInstance(CMP_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_cmpBases); instance++)
     {
-        if (s_cmpBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_cmpBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

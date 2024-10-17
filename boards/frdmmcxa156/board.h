@@ -112,6 +112,10 @@
 #define LED_BLUE_TOGGLE() \
     GPIO_PortToggle(BOARD_LED_BLUE_GPIO, 1U << BOARD_LED_BLUE_GPIO_PIN)       /*!< Toggle on target LED_BLUE */
 
+#if defined(__cplusplus)
+extern "C" {
+#endif /* __cplusplus */
+
 /*******************************************************************************
  * API
  ******************************************************************************/
@@ -132,5 +136,9 @@ status_t BOARD_LPI2C_Receive(LPI2C_Type *base,
                              uint8_t *rxBuff,
                              uint8_t rxBuffSize);
 #endif /* SDK_I2C_BASED_COMPONENT_USED */
+
+#if defined(__cplusplus)
+}
+#endif /* __cplusplus */
 
 #endif /* _BOARD_H_ */

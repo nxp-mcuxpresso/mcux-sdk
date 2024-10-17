@@ -1,6 +1,5 @@
 /*
  * Copyright 2022-2023 NXP
- * All rights reserved.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -33,7 +32,8 @@ extern mcux_mutex_t els_pkc_hwcrypto_mutex;
 extern "C" {
 #endif
 
-extern bool g_isCryptoHWInitialized;
+#define ELS_PKC_CRYPTOHW_INITIALIZED   (0xF0F0F0F0U)
+#define ELS_PKC_CRYPTOHW_UNINITIALIZED (0x0F0F0F0FU)
 
 /*!
  * @brief Application init for Crypto blocks.
@@ -43,6 +43,16 @@ extern bool g_isCryptoHWInitialized;
  */
 status_t CRYPTO_InitHardware(void);
 
+/*!
+ * @brief Application Re-init for various Crypto blocks.
+ *
+ * This function is provided to be called by MCUXpresso SDK applications after
+ * wake up from different power modes. Mutex re-init is not required as RAM is
+ * retained and mutexes are already available.
+ * It calls basic init for Crypto Hw acceleration and Hw entropy modules.
+ * NOTE: The function must be called in single thread context
+ */
+status_t CRYPTO_ReInitHardware(void);
 /*!
  * @brief Application Deinit for Crypto blocks.
  *
@@ -69,7 +79,8 @@ psa_status_t els_pkc_to_psa_status(status_t els_pkc_status);
 #if defined(PSA_CRYPTO_DRIVER_THREAD_EN)
 static inline int mcux_els_mutex_lock(void)
 {
-    if (mcux_mutex_lock(&els_pkc_hwcrypto_mutex)) {
+    if (mcux_mutex_lock(&els_pkc_hwcrypto_mutex))
+    {
         return PSA_ERROR_GENERIC_ERROR;
     }
     return PSA_SUCCESS;
@@ -77,7 +88,8 @@ static inline int mcux_els_mutex_lock(void)
 
 static inline int mcux_els_mutex_unlock(void)
 {
-    if (mcux_mutex_unlock(&els_pkc_hwcrypto_mutex)) {
+    if (mcux_mutex_unlock(&els_pkc_hwcrypto_mutex))
+    {
         return PSA_ERROR_GENERIC_ERROR;
     }
     return PSA_SUCCESS;

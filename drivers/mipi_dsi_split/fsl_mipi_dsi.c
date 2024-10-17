@@ -231,7 +231,7 @@ static uint32_t DSI_GetInstance(const MIPI_DSI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_dsiBases); instance++)
     {
-        if (s_dsiBases[instance] == base->host)
+        if (MSDK_REG_SECURE_ADDR(s_dsiBases[instance]) == MSDK_REG_SECURE_ADDR(base->host))
         {
             break;
         }

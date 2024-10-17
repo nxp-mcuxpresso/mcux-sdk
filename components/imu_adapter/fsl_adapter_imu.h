@@ -326,9 +326,12 @@ hal_imumc_status_t HAL_ImumcExitLowpower(hal_imumc_handle_t handle);
 
 #if defined(CONFIG_IMU_GDMA) && (CONFIG_IMU_GDMA == 1)
 #define IMU_GDMA_ENABLE (1U)
+
 #else
+
 #define IMU_GDMA_ENABLE (0U)
 #endif
+
 /*! @brief IMU initialization state. */
 enum imu_init_state_t
 {

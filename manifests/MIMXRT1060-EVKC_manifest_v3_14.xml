@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1060-EVKC_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_MIMXRT1060-EVKC_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="evkmimxrt1060"/>
@@ -9,13 +9,12 @@
     <definition extID="middleware.maestro_framework.MIMXRT1062"/>
     <definition extID="middleware.wifi.MIMXRT1062"/>
     <definition extID="middleware.freertos-kernel.MIMXRT1062"/>
-    <definition extID="middleware.multicore.erpc.MIMXRT1062"/>
     <definition extID="middleware.multicore.MIMXRT1062"/>
     <definition extID="middleware.azure_rtos.tx.MIMXRT1062"/>
     <definition extID="middleware.azure_rtos.tx.sp.MIMXRT1062"/>
     <definition extID="middleware.usb.device.cdc.external.MIMXRT1062"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
+  <ksdk id="MCUXpressoSDK216100" name="MCUXpresso SDK216100" version="2.16.100" revision="2.16.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/evkcmimxrt1060/evkcmimxrt1060_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/maestro/manifests/middleware_nxp_maestro_audio_framework_MIMXRT1062_manifest_v3_14.xml"/>
@@ -344,7 +343,6 @@ ${load}</script>
         <files mask="MCUXSDKEFBP_Abstraction Layer User Guide.pdf"/>
         <files mask="Hardware Rework Guide for EdgeFast BT PAL.pdf"/>
         <files mask="EFBTPALAPIRM.pdf"/>
-        <files mask="Enabling_Additional_Edgefast_BT_PAL_Examples_on_RT1064.pdf"/>
         <files mask="Enabling_Additional_Edgefast_BT_PAL_Examples_on_RT1064.pdf"/>
       </source>
     </component>
@@ -3130,7 +3128,7 @@ ${load}</script>
         <files mask="MCUXpresso SDK Azure RTOS Release Notes.pdf"/>
       </source>
     </component>
-    <component id="docs.maestro.MIMXRT1062" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
+    <component id="docs.maestro.MIMXRT1062" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.8.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
       <dependencies>
         <all>
           <any_of>
@@ -3781,8 +3779,6 @@ ${load}</script>
         </any_of>
       </dependencies>
       <source relative_path="./" type="doc">
-        <files mask="Getting Started with MCUXpresso SDK for EVK-MIMXRT1060.pdf"/>
-        <files mask="MCUXpresso SDK Release Notes for EVK-MIMXRT1060.pdf"/>
         <files mask="Getting Started with MCUXpresso SDK for MIMXRT1060-EVKB.pdf"/>
         <files mask="MCUXpresso SDK Release Notes for MIMXRT1060-EVKB.pdf"/>
         <files mask="Getting Started with MCUXpresso SDK for MIMXRT1060-EVKC.pdf"/>
@@ -4923,31 +4919,14 @@ ${load}</script>
         <files mask="Getting Started with MCUXpressoSDK and FreeRTOS OS.pdf"/>
       </source>
     </component>
-    <component id="docs.multicore.erpc.MIMXRT1062" name="docs_multicore_erpc" brief="embedded Remote Procedure (eRPC) documentation" version="1.11.0" full_name="embedded Remote Procedure (eRPC) documentation" category="docs/erpc" user_visible="true" type="documentation" package_base_path="../middleware/multicore/docs" project_base_path="docs">
-      <dependencies>
-        <all>
-          <any_of>
-            <device_dependency value="MIMXRT1062xxxxA"/>
-            <device_dependency value="MIMXRT1062xxxxB"/>
-          </any_of>
-          <component_dependency value="middleware.multicore.erpc.MIMXRT1062"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="doc">
-        <files mask="eRPC Getting Started User's Guide.pdf"/>
-      </source>
-    </component>
     <component id="docs.multicore.MIMXRT1062" name="docs_multicore" brief="Collection of Multicore SDK documentation" version="2.16.0" full_name="Multicore SDK documentation" category="docs/multicore" user_visible="true" type="documentation" package_base_path="../middleware/multicore/docs" project_base_path="docs">
       <dependencies>
         <all>
           <any_of>
-            <component_dependency value="middleware.multicore.MIMXRT1062"/>
-            <component_dependency value="middleware.multicore.erpc.MIMXRT1062"/>
-          </any_of>
-          <any_of>
             <device_dependency value="MIMXRT1062xxxxA"/>
             <device_dependency value="MIMXRT1062xxxxB"/>
           </any_of>
+          <component_dependency value="middleware.multicore.MIMXRT1062"/>
         </all>
       </dependencies>
       <source relative_path="./" type="doc">
@@ -5810,31 +5789,6 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.flexspi_nor_flash_adapter_rt1060.MIMXRT1062" name="flexspi_nor_flash_adapter_rt1060" brief="Component flexspi_nor_flash_adapter_rt1060" version="1.0.0" full_name="Component flexspi_nor_flash_adapter_rt1060" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/internal_flash" project_base_path="component/internal_flash">
-      <dependencies>
-        <all>
-          <any_of>
-            <device_dependency value="MIMXRT1062xxxxA"/>
-            <device_dependency value="MIMXRT1062xxxxB"/>
-          </any_of>
-          <component_dependency value="platform.drivers.common.MIMXRT1062"/>
-          <component_dependency value="platform.drivers.flexspi.MIMXRT1062"/>
-          <board_dependency value="evkmimxrt1060"/>
-        </all>
-      </dependencies>
-      <source relative_path="./" type="src">
-        <files mask="fsl_adapter_flexspi_nor_flash.c"/>
-      </source>
-      <source relative_path="./" type="c_include">
-        <files mask="fsl_adapter_flash.h"/>
-      </source>
-      <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_flexspi_nor_flash_adapter_rt1060.MIMXRT1062.cmake" hidden="true"/>
-      </source>
-      <include_paths>
-        <include_path relative_path="./" type="c_include"/>
-      </include_paths>
-    </component>
     <component id="component.flexspi_nor_flash_adapter_rt1060evkb.MIMXRT1062" name="flexspi_nor_flash_adapter_rt1060evkb" brief="Component flexspi_nor_flash_adapter_rt1060evkb" version="1.0.0" full_name="Component flexspi_nor_flash_adapter_rt1060evkb" category="Device/SDK Drivers" user_visible="true" type="abstraction_layer" package_base_path="../components/internal_flash" project_base_path="component/internal_flash">
       <dependencies>
         <all>
@@ -6160,16 +6114,13 @@ ${load}</script>
       <dependencies>
         <all>
           <any_of>
-            <board_dependency value="evkmimxrt1060"/>
-            <board_dependency value="evkbmimxrt1060"/>
-          </any_of>
-          <any_of>
             <device_dependency value="MIMXRT1062xxxxA"/>
             <device_dependency value="MIMXRT1062xxxxB"/>
           </any_of>
           <component_dependency value="component.mflash.common.MIMXRT1062"/>
           <component_dependency value="platform.drivers.flexspi.MIMXRT1062"/>
           <component_dependency value="platform.drivers.cache_armv7_m7.MIMXRT1062"/>
+          <board_dependency value="evkbmimxrt1060"/>
         </all>
       </dependencies>
       <source relative_path="./" type="c_include">
@@ -6810,7 +6761,6 @@ ${load}</script>
       <dependencies>
         <all>
           <any_of>
-            <board_dependency value="evkmimxrt1060"/>
             <board_dependency value="evkbmimxrt1060"/>
             <board_dependency value="evkcmimxrt1060"/>
           </any_of>
@@ -7079,7 +7029,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.MIMXRT1062" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.MIMXRT1062" name="common" brief="COMMON Driver" version="2.4.2" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <any_of>

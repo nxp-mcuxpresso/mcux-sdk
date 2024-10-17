@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_FRDM-MCXA156_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_FRDM-MCXA156_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="middleware.usb.device.controller.driver.MCXA156"/>
     <definition extID="middleware.freertos-kernel.MCXA156"/>
     <definition extID="middleware.usb.device.cdc.external.MCXA156"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
+  <ksdk id="MCUXpressoSDK216100" name="MCUXpresso SDK216100" version="2.16.100" revision="2.16.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/frdmmcxa156/frdmmcxa156_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/mcuboot_opensource/manifests/middleware_mcuboot_opensource_MCXA156_manifest_v3_14.xml"/>
@@ -118,6 +118,8 @@ ${load}</script>
       <package id="MCXA156VPJ" name="MCXA156VPJ"/>
       <package id="MCXA156VLL" name="MCXA156VLL"/>
       <package id="MCXA156VMP" name="MCXA156VMP"/>
+      <package id="MCXA156VLH" name="MCXA156VLH"/>
+      <package id="MCXA156VFT" name="MCXA156VFT"/>
       <evaluation_boards>
         <evaluation_board name="frdmmcxa156"/>
       </evaluation_boards>
@@ -2535,53 +2537,53 @@ ${load}</script>
         <files mask="bdwn.png"/>
         <files mask="closed.png"/>
         <files mask="customdoxygen.css"/>
-        <files mask="dir_0534674285b3c10246b91848b55703d2.html"/>
-        <files mask="dir_13fdba5d47fa93eb6e73244cbda63f3c.html"/>
-        <files mask="dir_1522b9e800e5bcad811d94e26df5738e.html"/>
-        <files mask="dir_1caccb9c8f4a2bfa1d32d8f3bf72c22f.html"/>
-        <files mask="dir_22eead78af4144eab534ccda3e304bd0.html"/>
-        <files mask="dir_285dfe777d4c36a731117772eba9f926.html"/>
-        <files mask="dir_287eb67e6707f3b1164a6dae32236144.html"/>
-        <files mask="dir_28840bd0d4c3380ed678c9a44ee5a9fc.html"/>
-        <files mask="dir_2a3aad7da90c4e7c80cf9d77da5af76a.html"/>
-        <files mask="dir_2c4a9d9fefc4a24e1979441fe6a88270.html"/>
-        <files mask="dir_31832ddefaaf82af07b48c628435ec4d.html"/>
-        <files mask="dir_37ea206754600fcfaf605fbd85072a5d.html"/>
-        <files mask="dir_393dd06882b4d73d4dbbd43ca3ecc7cb.html"/>
-        <files mask="dir_39c31cd41c757278d4cdd6663e5ff43c.html"/>
-        <files mask="dir_3a61ae0c06401cef3b8ed7b7711b4fb4.html"/>
-        <files mask="dir_3c710d92d950e5a3409efd88424a8668.html"/>
-        <files mask="dir_3dded393e5195814741161625babcd77.html"/>
-        <files mask="dir_3df9f9920c9a48e3e67f9213e5f751a5.html"/>
-        <files mask="dir_3e6bf87472eb67fb6592f2bbf11483e3.html"/>
-        <files mask="dir_40094d286e0db9c5e56092dc141d2e9a.html"/>
-        <files mask="dir_40fe32d88482aaa0653317d50102c57b.html"/>
-        <files mask="dir_4eb59935a624fe6c85f071ff8225fdbb.html"/>
-        <files mask="dir_5adbf9c69084e9621c6450ac177bcf68.html"/>
-        <files mask="dir_5bf2abe9f020422a7685038d597cb591.html"/>
-        <files mask="dir_5fa41e7a3680f806be993afbc097e462.html"/>
-        <files mask="dir_655c6d58540ddc533e5c62e48d7263cb.html"/>
-        <files mask="dir_661be7032667232429384089e7088579.html"/>
-        <files mask="dir_68e35a575ba5c2a7d2d3c3823f9fbf6f.html"/>
-        <files mask="dir_7909fe153f98ccde1e39bf926738f3ea.html"/>
-        <files mask="dir_7b00fc7144fa65bbdc9dd5baa2d64cc9.html"/>
-        <files mask="dir_8017b184e7455071d4460a31dae8dd8e.html"/>
-        <files mask="dir_80b66214db2a6f2c1ded5a4e13f75cf0.html"/>
-        <files mask="dir_83ef8262af940851b32994e0128187ae.html"/>
-        <files mask="dir_91499bf87c5c829f732faa7d253c654f.html"/>
-        <files mask="dir_9a888ffca9a21649fb34da3661f9ae2a.html"/>
-        <files mask="dir_9d99ce5d499c2151d2c11a56cb37f789.html"/>
-        <files mask="dir_a5072b5e1dec47151bc98863221b7dd9.html"/>
-        <files mask="dir_a8f1fc0d754021e5f4781b7367ee6c9c.html"/>
-        <files mask="dir_b3f55caf06ab95fa8ba679020d78115d.html"/>
-        <files mask="dir_b5b308ac62861bc4b2456a408032d998.html"/>
-        <files mask="dir_b925a353643ea6a19cbc28e4bea19e76.html"/>
-        <files mask="dir_bbd2701a27ffeb751adef50f7376176e.html"/>
-        <files mask="dir_bbf43d3cc47bf4587996da51db94b88f.html"/>
-        <files mask="dir_c775b4e0218ab4021019b3190c4642ed.html"/>
-        <files mask="dir_c950c01bc95c9770b1bcff75092f1496.html"/>
-        <files mask="dir_ec31e0f695c09e1526ccc8f6473a8242.html"/>
-        <files mask="dir_fd56991fc2df4db089ec861fb62ca332.html"/>
+        <files mask="dir_00b8e1dae651194443bd9888f2a4493b.html"/>
+        <files mask="dir_038dbe8d634d9db67d5340fd03855796.html"/>
+        <files mask="dir_10e4f41c1894823a4ebb31d860f38a16.html"/>
+        <files mask="dir_11cc436fd45372fe514295b1278a3f5a.html"/>
+        <files mask="dir_11d1d2cb3b73c275777b375d562263f6.html"/>
+        <files mask="dir_12ee8d122e1f7909dfb369d4e7e634d2.html"/>
+        <files mask="dir_1624d8b38f3ae9cac7786a3abb7f4709.html"/>
+        <files mask="dir_1abb04bb608b08cbbf0ffefdca41d0b4.html"/>
+        <files mask="dir_21d512e173ab96b5ba9524b224532342.html"/>
+        <files mask="dir_2dc577937af61d68e8f894a3be510186.html"/>
+        <files mask="dir_31528c1a0c761ae7697ccf58a28d0c5d.html"/>
+        <files mask="dir_35d83ff85ea39ab23fa2b81d160e48c3.html"/>
+        <files mask="dir_372c791574dbc363eba8625f79985ec1.html"/>
+        <files mask="dir_3f4befae1c2b910b09058b3a882479b1.html"/>
+        <files mask="dir_44c03f0af927446d0bf596dfe015ac1f.html"/>
+        <files mask="dir_4624af087f416ae97ddd1c66cc3c61c0.html"/>
+        <files mask="dir_50ef629f52ad749dfe6d46e9ed1d46fa.html"/>
+        <files mask="dir_51780322e0ca73f99c1edc2d03313369.html"/>
+        <files mask="dir_6150f4bea5ede9786b88a107ca29f4b6.html"/>
+        <files mask="dir_6a903a0e8c32fc1b8b1b5732a76c4fc2.html"/>
+        <files mask="dir_6c04492dba380d74e43ff2e9ce5163b0.html"/>
+        <files mask="dir_6c4d94da42c2b909d0ca46b5faa5b0a6.html"/>
+        <files mask="dir_6eca5536b10566ad0d407d51d56337ad.html"/>
+        <files mask="dir_6f5f5e069e6f99bc598f97c63733fab5.html"/>
+        <files mask="dir_76cf3461a8a488566ae1fd2b30809c0c.html"/>
+        <files mask="dir_7ba1938b2efda2b035fd2322ea473e74.html"/>
+        <files mask="dir_7e5de0bdab157f0830493ab16aefd907.html"/>
+        <files mask="dir_86c6d9882ee7add4c21a0d71abf53772.html"/>
+        <files mask="dir_97ef7e83fe678676f0363ff2c203ec34.html"/>
+        <files mask="dir_9e5cbc8a535b497364edf5f115202dd9.html"/>
+        <files mask="dir_a41228251a903e619fdae6083ccde0f8.html"/>
+        <files mask="dir_aaaafc2a9f4e560f8971f4fec9a5d828.html"/>
+        <files mask="dir_ab2cf6c122126d5ca577c70c3aeb1b1c.html"/>
+        <files mask="dir_adccf87b6bd3216cbfd343569e171a3a.html"/>
+        <files mask="dir_b100db0010c4ba1d78884498a3897f88.html"/>
+        <files mask="dir_bf373d1ca96df1fb6dd89486242d02c1.html"/>
+        <files mask="dir_c647ff4f6aca47d2093e2a1d732a40fd.html"/>
+        <files mask="dir_c6b03973221d46a3c7b0aeea82b702b2.html"/>
+        <files mask="dir_c825d983540771d0f5057a13456bab43.html"/>
+        <files mask="dir_cd39be920d6c41a20140b1008d476300.html"/>
+        <files mask="dir_d4c031fc7b0e205063d9434730d3bbd3.html"/>
+        <files mask="dir_deddd99c545b0a09d398c8a1e5238b29.html"/>
+        <files mask="dir_e8e5b164dc61d95ad97b05fa5b540ee1.html"/>
+        <files mask="dir_ea031779bf73dcfe8882b1a885b0b5eb.html"/>
+        <files mask="dir_f598be6d826119c8e37c469482f0e64d.html"/>
+        <files mask="dir_f614c1efc1189cdf1389c1af14d5d4d9.html"/>
+        <files mask="dir_f6ca19dce975ecaafc0ebca723260d55.html"/>
         <files mask="doxygen.css"/>
         <files mask="doxygen.png"/>
         <files mask="dynsections.js"/>
@@ -3223,7 +3225,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.MCXA156" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.MCXA156" name="common" brief="COMMON Driver" version="2.4.2" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.reset.MCXA156"/>
@@ -3938,7 +3940,7 @@ ${load}</script>
         <include_path relative_path="./" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.glikey.MCXA156" name="glikey" brief="GLIKEY Driver" version="2.0.0" full_name="GLIKEY Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/glikey" project_base_path="drivers">
+    <component id="platform.drivers.glikey.MCXA156" name="glikey" brief="GLIKEY Driver" version="2.0.1" full_name="GLIKEY Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/glikey" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.common.MCXA156"/>

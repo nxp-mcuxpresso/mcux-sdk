@@ -25,7 +25,7 @@
 /*! @name Control and status bit masks of the transmit buffer descriptor. */
 /*! @{ */
 /*! @brief Defines for read format. */
-#define NETC_SI_TXDESCRIP_RD_TXSTART(n) ((uint32_t)(n)&0x1fffffUL)
+#define NETC_SI_TXDESCRIP_RD_TXSTART(n) ((uint32_t)(n)&0x1ffffffUL)
 #define NETC_SI_TXDESCRIP_RD_DR(n)      (((uint32_t)(n)&0x3U) << 10U)
 #define NETC_SI_TXDESCRIP_RD_IPV(n)     (((uint32_t)(n)&0x7U) << 12U)
 #define NETC_SI_TXDESCRIP_RD_PORT(n)    (((uint32_t)(n)&0x1fU) << 16U)

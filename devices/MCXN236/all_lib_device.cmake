@@ -623,8 +623,14 @@
 #  # description: OS Abstraction Layer for PSA crypto driver
 #  set(CONFIG_USE_component_psa_crypto_driver_osal true)
 
-#  # description: Oracle of PSA crypto driver for els_pkc
-#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle true)
+#  # description: Threading Alt implementation for mbedtls layer via PSA crypto driver
+#  set(CONFIG_USE_component_psa_crypto_driver_mbedtls_thread_alt true)
+
+#  # description: Key Recipes for rw61x for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle_rw61x true)
+
+#  # description: Key Recipes for mcxn for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle_mcxn true)
 
 #  # description: Common files of PSA crypto driver for els_pkc
 #  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_common true)
@@ -646,6 +652,9 @@
 
 #  # description: OS Abstraction Layer for PSA crypto driver on bare metal
 #  set(CONFIG_USE_component_psa_crypto_driver_osal_baremetal true)
+
+#  # description: Oracle of PSA crypto driver for els_pkc
+#  set(CONFIG_USE_component_psa_crypto_driver_els_pkc_oracle true)
 
 #set.component.els_pkc
 #  # description: Component els_pkc.core

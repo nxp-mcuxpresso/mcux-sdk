@@ -47,7 +47,7 @@ static uint8_t SINC_GetInstance(SINC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_sincBases); instance++)
     {
-        if (s_sincBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_sincBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

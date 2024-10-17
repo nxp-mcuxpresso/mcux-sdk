@@ -57,7 +57,7 @@ static uint32_t WAKETIMER_GetInstance(WAKETIMER_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_waketimerBases); instance++)
     {
-        if (s_waketimerBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_waketimerBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

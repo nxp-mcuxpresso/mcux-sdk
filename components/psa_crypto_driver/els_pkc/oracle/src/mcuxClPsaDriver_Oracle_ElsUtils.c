@@ -1,6 +1,5 @@
 /*
  * Copyright 2022-2024 NXP
- * All rights reserved.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -226,5 +225,58 @@ psa_status_t mcuxClPsaDriver_Oracle_ElsUtils_Cipher_Decrypt(
     }
     MCUX_CSSL_FP_FUNCTION_CALL_END();
 
+    return PSA_SUCCESS;
+}
+
+psa_status_t mcxClPsaDriver_Oracle_ElsUtils_Key_Export(
+    mcuxClEls_KeyIndex_t wrappingKeyIdx,
+    mcuxClEls_KeyIndex_t exportKeyIdx,
+    uint8_t * pOutput)
+{
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(
+        result, token,
+        mcuxClEls_KeyExport_Async(wrappingKeyIdx, exportKeyIdx, pOutput));
+
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_KeyExport_Async) != token) || (MCUXCLELS_STATUS_OK_WAIT != result))
+    {
+        PRINTF("mcuxClEls_KeyExport_Async failed: 0x%x\r\n", result);
+        return PSA_ERROR_HARDWARE_FAILURE;
+    }
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_WaitForOperation(MCUXCLELS_ERROR_FLAGS_CLEAR));
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation) != token) || (MCUXCLELS_STATUS_OK != result))
+    {
+        PRINTF("mcuxClEls_KeyExport_Async LimitedWaitForOperation failed: 0x%x", result);
+        return PSA_ERROR_HARDWARE_FAILURE;
+    }
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    return PSA_SUCCESS;
+}
+
+psa_status_t mcuxClPsaDriver_Oracle_ElsUtils_EccKeyAgreement(
+                                                       mcuxClEls_KeyIndex_t privateKeyIdx,
+                                                       uint8_t *pPublicKey,
+                                                       mcuxClEls_KeyIndex_t sharedSecretIdx,
+                                                       mcuxClEls_KeyProp_t sharedSecretProperties)
+{
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token,
+                                     mcuxClEls_EccKeyExchange_Async(privateKeyIdx, pPublicKey, sharedSecretIdx, sharedSecretProperties));
+
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_EccKeyExchange_Async) != token) || (MCUXCLELS_STATUS_OK_WAIT != result))
+    {
+        PRINTF("mcuxClEls_EccKeyExchange_Async failed: 0x%x\r\n", result);
+        return PSA_ERROR_HARDWARE_FAILURE;
+    }
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
+
+    MCUX_CSSL_FP_FUNCTION_CALL_BEGIN(result, token, mcuxClEls_WaitForOperation(MCUXCLELS_ERROR_FLAGS_CLEAR));
+    if ((MCUX_CSSL_FP_FUNCTION_CALLED(mcuxClEls_WaitForOperation) != token) || (MCUXCLELS_STATUS_OK != result))
+    {
+        PRINTF("mcuxClEls_EccKeyExchange_Async WaitForOperation failed: 0x%x\r\n", result);
+        return PSA_ERROR_HARDWARE_FAILURE;
+    }
+    MCUX_CSSL_FP_FUNCTION_CALL_END();
     return PSA_SUCCESS;
 }

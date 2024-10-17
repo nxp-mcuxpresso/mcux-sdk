@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2023 NXP
+ * Copyright 2016-2024 NXP
  * SPDX-License-Identifier: BSD-3-Clause
  *
  */
@@ -13,7 +13,7 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MCXN236VDF) || defined(CPU_MCXN236VNL))
+#if (defined(CPU_MCXN236VDF) || defined(CPU_MCXN236VNL) || defined(CPU_MCXN236VPB))
 
 #define MCXN236_SERIES
 

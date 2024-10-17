@@ -1,13 +1,15 @@
 /*
 ** ###################################################################
-**     Processors:          MCXA154VLL
+**     Processors:          MCXA154VFT
+**                          MCXA154VLH
+**                          MCXA154VLL
 **                          MCXA154VMP
 **                          MCXA154VPJ
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    MCXA18 User manual
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240104
+**     Build:               b240627
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler

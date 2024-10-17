@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b240407
+**     Build:               b240709
 **
 **     Abstract:
 **         Chip specific module features.
@@ -42,7 +42,7 @@
 /* @brief EWM availability on the SoC. */
 #define FSL_FEATURE_SOC_EWM_COUNT (1)
 /* @brief FLEXCAN availability on the SoC. */
-#define FSL_FEATURE_SOC_FLEXCAN_COUNT (1)
+#define FSL_FEATURE_SOC_FLEXCAN_COUNT (2)
 /* @brief FLEXIO availability on the SoC. */
 #define FSL_FEATURE_SOC_FLEXIO_COUNT (1)
 /* @brief FMC availability on the SoC. */
@@ -88,7 +88,7 @@
 /* @brief PORT availability on the SoC. */
 #define FSL_FEATURE_SOC_PORT_COUNT (6)
 /* @brief PWM availability on the SoC. */
-#define FSL_FEATURE_SOC_PWM_COUNT (1)
+#define FSL_FEATURE_SOC_PWM_COUNT (2)
 /* @brief PUF availability on the SoC. */
 #define FSL_FEATURE_SOC_PUF_COUNT (4)
 /* @brief QDC availability on the SoC. */
@@ -451,6 +451,8 @@
 #define FSL_FEATURE_I3C_HAS_NO_SLAVE_IBI_MR_HJ (0)
 /* @brief Has ERRATA_051617. */
 #define FSL_FEATURE_I3C_HAS_ERRATA_051617 (1)
+/* @brief Has SCL delay after START. */
+#define FSL_FEATURE_I3C_HAS_START_SCL_DELAY (1)
 
 /* INPUTMUX module features */
 

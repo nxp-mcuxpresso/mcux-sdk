@@ -2,11 +2,12 @@
 ** ###################################################################
 **     Processors:          MCXN235VDF
 **                          MCXN235VNL
+**                          MCXN235VPB
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    MCXN23XRM
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b240320
+**     Build:               b240613
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler

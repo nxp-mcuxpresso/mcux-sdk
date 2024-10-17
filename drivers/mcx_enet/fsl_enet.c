@@ -504,7 +504,7 @@ uint32_t ENET_GetInstance(ENET_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < (uint32_t)FSL_FEATURE_SOC_MCX_ENET_COUNT; instance++)
     {
-        if (s_enetBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_enetBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

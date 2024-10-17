@@ -108,7 +108,7 @@ static uint32_t EDMA_GetInstance(DMA_Type *base)
          * (s_edmaBases[instance] != base) not covered.
          * $ref edma_c_ref_1$.
          */
-        if (s_edmaBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_edmaBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

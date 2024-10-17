@@ -544,6 +544,8 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     return PSA_SUCCESS;
 }
 
+// Keeping the implementation for future reference and use.
+#if 0
 static inline psa_status_t mcuxClPsaDriver_psa_driver_wrapper_generate_s50_key(
     const psa_key_attributes_t *attributes,
     mcuxClEls_KeyIndex_t key_index_private_key,
@@ -606,7 +608,7 @@ static inline psa_status_t mcuxClPsaDriver_psa_driver_wrapper_generate_s50_key(
 
     return PSA_SUCCESS;
 }
-
+#endif
 
 MCUX_CSSL_ANALYSIS_START_PATTERN_DESCRIPTIVE_IDENTIFIER()
 psa_status_t mcuxClPsaDriver_psa_driver_wrapper_key_generate(
@@ -618,7 +620,7 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     psa_key_type_t type = psa_get_key_type(attributes);
     psa_key_location_t location =
         PSA_KEY_LIFETIME_GET_LOCATION(psa_get_key_lifetime(attributes));
-    
+    mcuxClEls_KeyIndex_t index;
     /* Step 1:
        Allocate storage for a key to be generated
     */
@@ -655,20 +657,23 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
     */
     if(MCUXCLKEY_LOADSTATUS_COPRO == mcuxClKey_getLoadStatus(&key))
     {
-        /* LoadedKeyData serves as a throw-away buffer for the public key.
-           The private key will be kept in the given key slot of the keystore. */
-
-        status = mcuxClPsaDriver_psa_driver_wrapper_generate_s50_key(
+        /* We can't use direct KEYGEN command over here as the RFC3394
+         * blob which will be generated only contains ECC Private key and
+         * we don't have a way to recreate the public key after unload/reset.
+         * Hence we indirectly create this random key in ELS slot.
+         */
+        status = mcuxClPsaDriver_Oracle_generate_s50_random_key(
             /* const psa_key_attributes_t *attributes:     */ attributes,
-            /* mcuxClEls_KeyIndex_t key_index_private_key:  */ mcuxClKey_getLoadedKeySlot(&key),
-            /* uint8_t *public_key_buffer:                 */ mcuxClKey_getLoadedKeyData(&key),
-            /* uint32_t public_key_buffer_size:            */ mcuxClKey_getLoadedKeyLength(&key)
-        );
+            /* mcuxClEls_KeyIndex_t key_index_private_key:  */ &index);
 
         if(status != PSA_SUCCESS)
         {
+             /* key stored in orace - call Orcale to free memory reserved for the key */
+            mcuxClPsaDriver_Oracle_FreeKey(&key);
             return status;
         }
+        
+        mcuxClKey_setLoadedKeySlot(&key, index);
     }
     else /* MCUXCLKEY_LOADSTATUS_MEMORY */
     {
@@ -721,6 +726,17 @@ MCUX_CSSL_ANALYSIS_STOP_PATTERN_DESCRIPTIVE_IDENTIFIER()
             return status;
         }
         *key_buffer_length = mcuxClKey_getKeyContainerUsedSize(&key);
+        
+        /* Unload the Key from slot after usage.
+         * We have limited ELS Slots so unload the key at this point.
+         * RFC blob of the key has been stored in key buffer which can
+         * be loaded at time of use. This can be removed once we have the capability
+         * in key slot manager to free a slot automatically */
+        status = mcuxClPsaDriver_Oracle_UnloadKey(&key);
+        if(PSA_SUCCESS != status)
+        {
+            return status;
+        }
     }
     /* Note: For keys in local storage no additional store or copy operation is needed,
              because the key_buffer was already used during the key generation. */

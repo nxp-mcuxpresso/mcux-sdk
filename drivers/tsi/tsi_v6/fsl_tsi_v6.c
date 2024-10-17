@@ -38,7 +38,7 @@ uint32_t TSI_GetInstance(TSI_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0U; instance < ARRAY_SIZE(s_tsiBases); instance++)
     {
-        if (s_tsiBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_tsiBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

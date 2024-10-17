@@ -1,5 +1,5 @@
 /*
- *     Copyright 2020-2023 NXP
+ *     Copyright 2020-2024 NXP
  *     All rights reserved.
  *
  *     SPDX-License-Identifier: BSD-3-Clause
@@ -14,7 +14,7 @@
 #include "fsl_common.h"
 #include "fsl_mem_interface.h"
 #include "fsl_flash_ffr.h"
-#include "mcux_els.h"                // Power Down Wake-up Init
+#include "mcux_els.h"               // Power Down Wake-up Init
 #include <mcuxClEls.h>              // Interface to the entire nxpClEls component
 #include <mcuxCsslFlowProtection.h> // Code flow protection
 
@@ -28,11 +28,14 @@
  ******************************************************************************/
 /*! @name Driver version */
 /*! @{ */
-/*! @brief IPED driver version. Version 2.2.0.
+/*! @brief IPED driver version. Version 2.3.0.
  *
- * Current version: 2.2.0
+ * Current version: 2.3.0
  *
  * Change log:
+ * - Version 2.3.0
+ *   - Add support for more regions
+ *   - Add support for GCM mode
  * - Version 2.2.0
  *   - Renamed CSS to ELS
  * - Version 2.1.1
@@ -42,28 +45,56 @@
  * - Version 2.0.0
  *   - Initial version
  */
-#define FSL_IPED_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_IPED_DRIVER_VERSION (MAKE_VERSION(2, 3, 0))
 /*! @} */
 
-#define kIPED_Region0 (0U) /*!< IPED region 0 */
-#define kIPED_Region1 (1U) /*!< IPED region 1 */
-#define kIPED_Region2 (2U) /*!< IPED region 2 */
-#define kIPED_Region3 (3U) /*!< IPED region 3 */
+#define kIPED_Region0  (0U)  /*!< IPED region  0 */
+#define kIPED_Region1  (1U)  /*!< IPED region  1 */
+#define kIPED_Region2  (2U)  /*!< IPED region  2 */
+#define kIPED_Region3  (3U)  /*!< IPED region  3 */
+#define kIPED_Region4  (4U)  /*!< IPED region  4 */
+#define kIPED_Region5  (5U)  /*!< IPED region  5 */
+#define kIPED_Region6  (6U)  /*!< IPED region  6 */
+#define kIPED_Region7  (7U)  /*!< IPED region  7 */
+#define kIPED_Region8  (8U)  /*!< IPED region  8 */
+#define kIPED_Region9  (9U)  /*!< IPED region  9 */
+#define kIPED_Region10 (10U) /*!< IPED region 10 */
+#define kIPED_Region11 (11U) /*!< IPED region 11 */
+#define kIPED_Region12 (12U) /*!< IPED region 12 */
+#define kIPED_Region13 (13U) /*!< IPED region 13 */
+#define kIPED_Region14 (14U) /*!< IPED region 14 */
+#define kIPED_Region15 (15U) /*!< IPED region 15 */
 typedef uint32_t iped_region_t;
 
 #define kIPED_PrinceRounds12 (0U)
 #define kIPED_PrinceRounds22 (1U)
 typedef uint32_t iped_prince_rounds_t;
 
+#define kIPED_ModeCtr     (0U)
+#define kIPED_ModeGcm     (1U)
+#define kIPED_ModeInvalid (2U)
+typedef uint32_t iped_mode_t;
+
+#define kIPED_AhbBusErrorEnable  (0U)
+#define kIPED_AhbBusErrorDisable (1U)
+typedef uint32_t iped_ahb_bus_err_cfg_t;
+
 /*! @brief IPED fixed tag in flexspi_iped_region_arg_t structure */
 #define IPED_TAG       0x49
 #define IPED_TAG_SHIFT 24u
 
 /*! @brief IPED region count */
+#if defined(FSL_FEATURE_FLEXSPI_IPED_REGION_COUNT) && (FSL_FEATURE_FLEXSPI_IPED_REGION_COUNT > 1)
+#define IPED_REGION_COUNT FSL_FEATURE_FLEXSPI_IPED_REGION_COUNT
+#else
 #define IPED_REGION_COUNT 4u
+#endif /* FSL_FEATURE_FLEXSPI_IPED_REGION_COUNT */
 
 #define IPED_RW_ENABLE_VAL  0x2
 #define IPED_RW_DISABLE_VAL 0x1
+
+// The IPED context registers in the register map are spaced this distance apart.
+#define IPED_CTX_REG_OFFSET 0x20U
 
 enum _iped_status
 {
@@ -84,9 +115,10 @@ typedef enum _iped_cmpa
 
 typedef struct _flexspi_iped_region_option
 {
-    uint32_t iped_region : 2; // 0/1/2/3
-    uint32_t reserved : 22;
-    uint32_t tag : 8; // Fixed to 0x49 ('I')
+    iped_region_t iped_region : 4; // 0/1/2/3/4 up to IPED_REGION_COUNT define
+    uint32_t reserved : 19;
+    iped_mode_t iped_mode : 1;     // operation mode of IPED
+    uint32_t tag : 8;              // Fixed to 0x49 ('I')
 } flexspi_iped_prot_region_option_t;
 typedef struct _flexspi_iped_region_arg
 {
@@ -94,21 +126,6 @@ typedef struct _flexspi_iped_region_arg
     uint32_t start;
     uint32_t end;
 } flexspi_iped_region_arg_t;
-
-/*! @brief IPED - CMPA page layout */
-typedef struct
-{
-    uint8_t RESERVED_0[144];   /**< Reserved 0, offset: 0x00 */
-    __IO uint32_t IPED0_START; /**< IPED0_START, offset: 0x90 */
-    __IO uint32_t IPED0_END;   /**< IPED0_END, offset: 0x94 */
-    __IO uint32_t IPED1_START; /**< IPED1_START, offset: 0x98 */
-    __IO uint32_t IPED1_END;   /**< IPED1_END, offset: 0x9C */
-    __IO uint32_t IPED2_START; /**< IPED2_START, offset: 0xA0 */
-    __IO uint32_t IPED2_END;   /**< IPED2_END, offset: 0xA4 */
-    __IO uint32_t IPED3_START; /**< IPED3_START, offset: 0xA8 */
-    __IO uint32_t IPED3_END;   /**< IPED3_END, offset: 0xAC */
-    uint8_t RESERVED_1[336];   /**< Reserved 1, offset: 0xB0 */
-} IPED_CMPA_page;              /* 144 + (8*4) + 336 = 512 Byte CMPA page */
 
 /*! @brief Define for ELS key store indexes */
 #define NXP_DIE_EXT_MEM_ENC_SK 3u
@@ -131,8 +148,6 @@ typedef struct
 #define IPED_ADDRESS_MASK 0xFFFFFF00u
 /*! @brief CMPA Start address enable/lock mask bits (see Protected Flash Region table) */
 #define IPED_ENABLE_MASK 0x3u
-/*! @brief CMPA page size (see Protected Flash Region table) */
-#define CMPA_PAGE_SIZE 512u
 
 /*******************************************************************************
  * API
@@ -151,9 +166,9 @@ extern "C" {
 static inline void IPED_EncryptEnable(FLEXSPI_Type *base)
 {
     base->IPEDCTRL |= FLEXSPI_IPEDCTRL_IPED_EN_MASK | FLEXSPI_IPEDCTRL_IPWR_EN_MASK | FLEXSPI_IPEDCTRL_AHBWR_EN_MASK |
-                      FLEXSPI_IPEDCTRL_AHBRD_EN_MASK;
+                      FLEXSPI_IPEDCTRL_AHBRD_EN_MASK | FLEXSPI_IPEDCTRL_IPGCMWR_MASK | FLEXSPI_IPEDCTRL_AHGCMWR_MASK |
+                      FLEXSPI_IPEDCTRL_AHBGCMRD_MASK;
 }
-
 /*!
  * @brief Disable data encryption.
  *
@@ -164,7 +179,8 @@ static inline void IPED_EncryptEnable(FLEXSPI_Type *base)
 static inline void IPED_EncryptDisable(FLEXSPI_Type *base)
 {
     base->IPEDCTRL &= ~(FLEXSPI_IPEDCTRL_IPED_EN_MASK | FLEXSPI_IPEDCTRL_IPWR_EN_MASK | FLEXSPI_IPEDCTRL_AHBWR_EN_MASK |
-                        FLEXSPI_IPEDCTRL_AHBRD_EN_MASK);
+                        FLEXSPI_IPEDCTRL_AHBRD_EN_MASK | FLEXSPI_IPEDCTRL_IPGCMWR_MASK | FLEXSPI_IPEDCTRL_AHGCMWR_MASK |
+                        FLEXSPI_IPEDCTRL_AHBGCMRD_MASK);
 }
 
 /*!
@@ -189,6 +205,31 @@ static inline void IPED_SetLock(FLEXSPI_Type *base, iped_region_t region)
     base->IPEDCTXCTRL[0] =
         (base->IPEDCTXCTRL[0] & ~(FLEXSPI_IPEDCTXCTRLX_IPEDCTXCTRL_CTX0_FREEZE0_MASK << (region * 2u))) |
         (IPED_RW_DISABLE_VAL << (region * 2u));
+}
+
+/*!
+ * @brief Gets info whether IPED region is locked.
+ *
+ * @param base IPED peripheral address.
+ * @param region Selection of the IPED region to be queried.
+ */
+static inline bool IPED_IsRegionLocked(FLEXSPI_Type *base, iped_region_t region)
+{
+    uint32_t freeze_mask    = (FLEXSPI_IPEDCTXCTRLX_IPEDCTXCTRL_CTX0_FREEZE1_MASK << (region * 2UL));
+    uint32_t rw_enable_mask = (IPED_RW_ENABLE_VAL << (region * 2UL));
+    return ((base->IPEDCTXCTRL[1] & freeze_mask) != (rw_enable_mask));
+}
+
+/*!
+ * @brief Gets info whether IPED region encryption is enabled.
+ *
+ * @param base IPED peripheral address.
+ * @param region Selection of the IPED region to be queried.
+ */
+static inline bool IPED_IsRegionEnabled(FLEXSPI_Type *base, iped_region_t region)
+{
+    __IO uint32_t *reg_start = (__IO uint32_t *)(((uint32_t) & (base->IPEDCTX0START)) + (IPED_CTX_REG_OFFSET * region));
+    return (*reg_start & FLEXSPI_IPEDCTX0START_GCM_MASK) != 0u;
 }
 
 /*!
@@ -233,6 +274,31 @@ status_t IPED_GetRegionAddressRange(FLEXSPI_Type *base,
 status_t IPED_SetRegionIV(FLEXSPI_Type *base, iped_region_t region, const uint8_t iv[8]);
 
 /*!
+ * @brief Sets the IPED region AAD.
+ *
+ * This function sets specified AAD for the given region.
+ *
+ * @param base IPED peripheral address.
+ * @param region Selection of the IPED region to be configured.
+ * @param iv 64-bit AAD in little-endian byte order.
+ */
+status_t IPED_SetRegionAad(FLEXSPI_Type *base, iped_region_t region, const uint8_t aad[8]);
+
+/*!
+ * @brief Sets the IPED region configuration.
+ *
+ * This function sets specified configuration for the given region.
+ *
+ * @param base IPED peripheral address.
+ * @param region Selection of the IPED region to be configured.
+ * @param mode Selection  of IPED encryption mode. Should be either kIPED_ModeCtr or kIPED_ModeGcm.
+ * @param ahbErr AHB bus error enable/disale. Should be either kIPED_AhbBusErrorEnable or kIPED_AhbBusErrorDisable.
+ */
+status_t IPED_SetRegionConfig(FLEXSPI_Type *base,
+                              iped_region_t region,
+                              iped_mode_t mode,
+                              iped_ahb_bus_err_cfg_t ahbErr);
+/*!
  * @brief Sets the IPED region IV.
  *
  * This function sets specified AES IV for the given region.
@@ -262,6 +328,7 @@ static inline void IPED_SetPrinceRounds(FLEXSPI_Type *base, iped_prince_rounds_t
  * Note: This function is expected to be called once in the device lifetime,
  * typically during the initial device provisioning (especially if programming the CMPA pages in PFR flash is enabled).
  *
+ * @param base IPED peripheral address.
  * @param coreCtx The pointer to the ROM API driver context structure.
  * @param config The pointer to the IPED driver configuration structure.
  * @param lock Locks the IPED configuration, if CMPA write enabled, also sets the IPEDx_START bits[1:0] 01 - Enabled,
@@ -279,7 +346,8 @@ static inline void IPED_SetPrinceRounds(FLEXSPI_Type *base, iped_prince_rounds_t
  * @retval #kStatus_OutOfRange
  * @retval #kStatus_SPI_BaudrateNotSupport
  */
-status_t IPED_Configure(api_core_context_t *coreCtx,
+status_t IPED_Configure(FLEXSPI_Type *base,
+                        api_core_context_t *coreCtx,
                         flexspi_iped_region_arg_t *config,
                         iped_lock_t lock,
                         iped_cmpa_t writeCmpa);
@@ -293,6 +361,7 @@ status_t IPED_Configure(api_core_context_t *coreCtx,
  * during erase and write operations to encrypted regions of internal flash memory
  * (dependency for correct operation of MEM_Erase() and MEM_Write() after wake up from power-down mode).
  *
+ * @param base IPED peripheral address.
  * @param coreCtx The pointer to the ROM API driver context structure.
  * @param config The pointer to the IPED driver configuration structure. If NULL CMPA cinfiguration is read and used.
  * Note: when providing config structure, you have to call Reconfigure for each IPED region individually starting with
@@ -301,7 +370,7 @@ status_t IPED_Configure(api_core_context_t *coreCtx,
  * @retval #kStatus_Success
  * @retval #kStatus_Fail
  */
-status_t IPED_Reconfigure(api_core_context_t *coreCtx, flexspi_iped_region_arg_t *config);
+status_t IPED_Reconfigure(FLEXSPI_Type *base, api_core_context_t *coreCtx, flexspi_iped_region_arg_t *config);
 
 #if defined(__cplusplus)
 }

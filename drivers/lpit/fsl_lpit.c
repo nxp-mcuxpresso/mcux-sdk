@@ -75,7 +75,7 @@ uint32_t LPIT_GetInstance(LPIT_Type *base)
          * (s_lpitBases[instance] != base) not covered. The peripheral base
          * address is always valid and checked by assert.
          */
-        if (s_lpitBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_lpitBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

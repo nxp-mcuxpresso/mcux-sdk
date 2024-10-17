@@ -98,7 +98,7 @@ uint32_t ASRC_GetInstance(ASRC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_asrcBases); instance++)
     {
-        if (s_asrcBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_asrcBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

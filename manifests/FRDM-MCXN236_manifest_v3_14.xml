@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_FRDM-MCXN236_manifest_v3_14" name="SDK Version Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
+<ksdk:manifest xmlns:ksdk="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="SDK_2.x_FRDM-MCXN236_manifest_v3_14" name="SDK 2.16.100 Superset" brief="SDK Superset" format_version="3.14" api_version="2.0.0" configuration="37bbf4eb706f3814bfad8f3a27525c83" xsi:schemaLocation="http://nxp.com/ksdk/2.0/ksdk_manifest_v3.0.xsd http://nxp.com/mcuxpresso/sdk/sdk_manifest_v3.14.xsd">
 
   <externalDefinitions>
     <definition extID="PROGRAM_FLASH_MCXN236"/>
@@ -11,7 +11,7 @@
     <definition extID="middleware.multicore.MCXN236"/>
     <definition extID="middleware.usb.device.cdc.external.MCXN236"/>
   </externalDefinitions>
-  <ksdk id="MCUXpressoSDK216000" name="MCUXpresso SDK216000" version="2.16.000" revision="2.16.000"/>
+  <ksdk id="MCUXpressoSDK216100" name="MCUXpresso SDK216100" version="2.16.100" revision="2.16.100"/>
   <manifest_includes>
     <manifest_include path="../../examples/frdmmcxn236/frdmmcxn236_example_manifest_v3_14.xml"/>
     <manifest_include path="../../middleware/mbedtls/manifests/middleware_arm_mbedtls_MCXN236_manifest_v3_14.xml"/>
@@ -124,6 +124,7 @@ ${load}</script>
       </memory>
       <total_memory flash_size_kb="1024" ram_size_kb="320"/>
       <package id="MCXN236VDF" name="MCXN236VDF"/>
+      <package id="MCXN236VPB" name="MCXN236VPB"/>
       <package id="MCXN236VNL" name="MCXN236VNL"/>
       <evaluation_boards>
         <evaluation_board name="frdmmcxn236"/>
@@ -2727,27 +2728,52 @@ ${load}</script>
         <include_path relative_path="osal" type="c_include"/>
       </include_paths>
     </component>
-    <component id="component.psa_crypto_driver.els_pkc.oracle.MCXN236" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+    <component id="component.psa_crypto_driver.mbedtls_thread_alt.MCXN236" name="psa_crypto_driver mbedtls_threading_alt" brief="Threading Alt implementation for mbedtls layer via PSA crypto driver" version="1.0.0" full_name="PSA crypto driver threading alt layer for mbedtls threading based" category="psa_crypto_driver/psa_dri_mbed_thrd_alt" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
       <dependencies>
         <device_dependency value="MCXN236"/>
       </dependencies>
-      <source relative_path="els_pkc/oracle/inc" type="c_include">
-        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
-        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      <source relative_path="mbedtls_thread_alt" type="src">
+        <files mask="threading_alt.c"/>
       </source>
-      <source relative_path="els_pkc/oracle/src" type="src">
-        <files mask="mcuxClPsaDriver_Oracle.c"/>
-        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
-        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      <source relative_path="mbedtls_thread_alt" type="c_include">
+        <files mask="threading_alt.h"/>
       </source>
       <source toolchain="armgcc" relative_path="./" type="workspace">
-        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+        <files mask="component_psa_crypto_driver_mbedtls_thread_alt.cmake" hidden="true"/>
       </source>
       <include_paths>
-        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
+        <include_path relative_path="mbedtls_thread_alt" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.rw61x.MCXN236" name="psa_crypto_driver els_pkc_oracle_rw61x" brief="Key Recipes for rw61x for els_pkc" version="1.0.0" full_name="Key Recipes for rw61x for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="MCXN236"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/platforms/rw61x" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes.h"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle_rw61x.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/platforms/rw61x" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.mcxn.MCXN236" name="psa_crypto_driver els_pkc_oracle_mxcn" brief="Key Recipes for mcxn for els_pkc" version="1.0.0" full_name="Key Recipes for mcxn for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <device_dependency value="MCXN236"/>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/platforms/mcxn" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/platforms/mcxn" type="src">
+        <files mask="mcuxClPsaDriver_Oracle_KeyRecipes_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle_mcxn.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/platforms/mcxn" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.psa_crypto_driver.els_pkc.common.MCXN236" name="psa_crypto_driver els_pkc_common" brief="Common files of PSA crypto driver for els_pkc" version="1.0.0" full_name="Common files of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_common" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
@@ -3402,23 +3428,23 @@ ${load}</script>
         <files mask="bdwn.png"/>
         <files mask="closed.png"/>
         <files mask="customdoxygen.css"/>
-        <files mask="dir_1522b9e800e5bcad811d94e26df5738e.html"/>
-        <files mask="dir_22eead78af4144eab534ccda3e304bd0.html"/>
-        <files mask="dir_287eb67e6707f3b1164a6dae32236144.html"/>
-        <files mask="dir_2a3aad7da90c4e7c80cf9d77da5af76a.html"/>
-        <files mask="dir_2bd1ad2db585ede1a3b2b53adb8c3b7b.html"/>
-        <files mask="dir_31832ddefaaf82af07b48c628435ec4d.html"/>
-        <files mask="dir_40094d286e0db9c5e56092dc141d2e9a.html"/>
-        <files mask="dir_5adbf9c69084e9621c6450ac177bcf68.html"/>
-        <files mask="dir_661be7032667232429384089e7088579.html"/>
-        <files mask="dir_68e35a575ba5c2a7d2d3c3823f9fbf6f.html"/>
-        <files mask="dir_6a69ea9b436bcf0d8ecd9d5c357faa54.html"/>
-        <files mask="dir_83ef8262af940851b32994e0128187ae.html"/>
-        <files mask="dir_9a888ffca9a21649fb34da3661f9ae2a.html"/>
-        <files mask="dir_a5072b5e1dec47151bc98863221b7dd9.html"/>
-        <files mask="dir_b09bc91a9c39e2b49b0642f5ee018d4b.html"/>
-        <files mask="dir_b5b308ac62861bc4b2456a408032d998.html"/>
-        <files mask="dir_ec31e0f695c09e1526ccc8f6473a8242.html"/>
+        <files mask="dir_00b8e1dae651194443bd9888f2a4493b.html"/>
+        <files mask="dir_10e4f41c1894823a4ebb31d860f38a16.html"/>
+        <files mask="dir_12ee8d122e1f7909dfb369d4e7e634d2.html"/>
+        <files mask="dir_1624d8b38f3ae9cac7786a3abb7f4709.html"/>
+        <files mask="dir_21d512e173ab96b5ba9524b224532342.html"/>
+        <files mask="dir_2f834fa554e25e83fce9723d55c37c77.html"/>
+        <files mask="dir_31528c1a0c761ae7697ccf58a28d0c5d.html"/>
+        <files mask="dir_35d83ff85ea39ab23fa2b81d160e48c3.html"/>
+        <files mask="dir_3f4befae1c2b910b09058b3a882479b1.html"/>
+        <files mask="dir_44c03f0af927446d0bf596dfe015ac1f.html"/>
+        <files mask="dir_4727dc57b48946bb6e3239cc2a734467.html"/>
+        <files mask="dir_6c4d94da42c2b909d0ca46b5faa5b0a6.html"/>
+        <files mask="dir_6eca5536b10566ad0d407d51d56337ad.html"/>
+        <files mask="dir_7c9e761d4f8e19484f217fab4f1cba10.html"/>
+        <files mask="dir_7e5de0bdab157f0830493ab16aefd907.html"/>
+        <files mask="dir_aaaafc2a9f4e560f8971f4fec9a5d828.html"/>
+        <files mask="dir_f6ca19dce975ecaafc0ebca723260d55.html"/>
         <files mask="doxygen.css"/>
         <files mask="doxygen.png"/>
         <files mask="dynsections.js"/>
@@ -4261,7 +4287,7 @@ ${load}</script>
         <include_path relative_path="RTX/Config" type="c_include"/>
       </include_paths>
     </component>
-    <component id="platform.drivers.common.MCXN236" name="common" brief="COMMON Driver" version="2.4.1" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
+    <component id="platform.drivers.common.MCXN236" name="common" brief="COMMON Driver" version="2.4.2" full_name="COMMON Driver" category="Device/SDK Drivers" user_visible="true" type="driver" package_base_path="../drivers/common" project_base_path="drivers">
       <dependencies>
         <all>
           <component_dependency value="platform.drivers.reset.MCXN236"/>
@@ -4453,6 +4479,32 @@ ${load}</script>
       </source>
       <include_paths>
         <include_path relative_path="osal/baremetal" type="c_include"/>
+      </include_paths>
+    </component>
+    <component id="component.psa_crypto_driver.els_pkc.oracle.MCXN236" name="psa_crypto_driver els_pkc_oracle" brief="Oracle of PSA crypto driver for els_pkc" version="1.0.0" full_name="Oracle of PSA crypto driver for els_pkc" category="psa_crypto_driver/psa_crypto_driver_els_pkc_oracle" user_visible="false" type="software_component" package_base_path="../components/psa_crypto_driver" project_base_path="component/psa_crypto_driver">
+      <dependencies>
+        <all>
+          <component_dependency value="component.psa_crypto_driver.els_pkc.oracle.mcxn.MCXN236"/>
+          <device_dependency value="MCXN236"/>
+        </all>
+      </dependencies>
+      <source relative_path="els_pkc/oracle/inc" type="c_include">
+        <files mask="mcuxClPsaDriver_Oracle_Interface_builtin_key_ids.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Interface_key_locations.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Macros.h"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.h"/>
+      </source>
+      <source relative_path="els_pkc/oracle/src" type="src">
+        <files mask="mcuxClPsaDriver_Oracle.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_ElsUtils.c"/>
+        <files mask="mcuxClPsaDriver_Oracle_Utils.c"/>
+      </source>
+      <source toolchain="armgcc" relative_path="./" type="workspace">
+        <files mask="component_psa_crypto_driver_els_pkc_oracle.cmake" hidden="true"/>
+      </source>
+      <include_paths>
+        <include_path relative_path="els_pkc/oracle/inc" type="c_include"/>
       </include_paths>
     </component>
     <component id="component.els_pkc.doc.mcxn.MCXN236" name="els_pkc.doc.mcxn" brief="Component els_pkc.doc.mcxn" version="1.9.0" full_name="Component els_pkc.doc.mcxn" category="els_pkc/doc" user_visible="true" type="software_component" package_base_path="../components/els_pkc/" project_base_path="component/els_pkc/">
@@ -8246,7 +8298,7 @@ ${load}</script>
         <files mask="Getting Started with MCUXpressoSDK and FreeRTOS OS.pdf"/>
       </source>
     </component>
-    <component id="docs.maestro.MCXN236" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.7.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
+    <component id="docs.maestro.MCXN236" name="maestro_rn" brief="Maestro SDK Release Notes" version="1.8.0" full_name="Maestro SDK Release Notes" category="docs/maestro" user_visible="true" type="documentation" package_base_path="../middleware/maestro/docs" project_base_path="maestro">
       <dependencies>
         <all>
           <component_dependency value="middleware.maestro_framework.MCXN236"/>

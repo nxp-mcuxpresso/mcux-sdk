@@ -2,17 +2,18 @@
 ** ###################################################################
 **     Processors:          MCXN946VDF_cm33_core1
 **                          MCXN946VNL_cm33_core1
+**                          MCXN946VPB_cm33_core1
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b231116
+**     Build:               b240612
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,8 +34,8 @@ RPMSG_SHMEM_SIZE = DEFINED(__use_shmem__) ? 0x2000 : 0;
 /* Specify the memory areas */
 MEMORY
 {
-  m_interrupts          (RX)  : ORIGIN = 0x000C0000, LENGTH = 0x00000400
-  m_text                (RX)  : ORIGIN = 0x000C0400, LENGTH = 0x0003FC00
+  m_interrupts          (RX)  : ORIGIN = 0x00060000, LENGTH = 0x00000400
+  m_text                (RX)  : ORIGIN = 0x00060400, LENGTH = 0x0001FC00
   m_data                (RW)  : ORIGIN = 0x20030000, LENGTH = 0x00010000
   rpmsg_sh_mem          (RW)  : ORIGIN = 0x20030000 - RPMSG_SHMEM_SIZE, LENGTH = RPMSG_SHMEM_SIZE
   m_usb_sram            (RW)  : ORIGIN = 0x400BA000, LENGTH = 0x00001000

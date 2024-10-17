@@ -45,7 +45,7 @@ static uint32_t KPP_GetInstance(KPP_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_kppBases); instance++)
     {
-        if (s_kppBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_kppBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

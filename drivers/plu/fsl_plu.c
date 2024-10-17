@@ -52,7 +52,7 @@ static uint32_t PLU_GetInstance(PLU_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < pluArrayCount; instance++)
     {
-        if (s_pluBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_pluBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

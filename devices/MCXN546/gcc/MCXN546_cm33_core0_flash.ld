@@ -2,17 +2,18 @@
 ** ###################################################################
 **     Processors:          MCXN546VDF_cm33_core0
 **                          MCXN546VNL_cm33_core0
+**                          MCXN546VPB_cm33_core0
 **
 **     Compiler:            GNU C Compiler
 **     Reference manual:    MCXNx4x Reference Manual
 **     Version:             rev. 1.0, 2021-08-03
-**     Build:               b231116
+**     Build:               b240612
 **
 **     Abstract:
 **         Linker file for the GNU C Compiler
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2023 NXP
+**     Copyright 2016-2024 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -31,16 +32,17 @@ STACK_SIZE = DEFINED(__stack_size__) ? __stack_size__ : 0x0800;
 RPMSG_SHMEM_SIZE = DEFINED(__use_shmem__) ? 0x2000 : 0;
 
 TEXT_START = DEFINED(__qspi_xip__)  ? 0x80001000 : 0x00000000; /* flexspi boot image start with 0x80000000 */
-TEXT_SIZE = DEFINED(__qspi_xip__)  ? 0x0FFFF000 : 0x000C0000; /* flexspi boot image offset at 0x80001000 */
+TEXT_SIZE = DEFINED(__qspi_xip__)  ? 0x0FFFF000 : 0x00060000; /* flexspi boot image offset at 0x80001000 */
 
 /* Specify the memory areas */
 MEMORY
 {
   m_interrupts          (RX)  : ORIGIN = TEXT_START, LENGTH = 0x00000400
   m_text                (RX)  : ORIGIN = TEXT_START + 0x00000400, LENGTH = TEXT_SIZE - 0x00000400
-  m_core1_image         (RX)  : ORIGIN = 0x000C0000, LENGTH = 0x00040000
+  m_core1_image         (RX)  : ORIGIN = 0x00060000, LENGTH = 0x00020000
   m_data                (RW)  : ORIGIN = 0x20000000, LENGTH = 0x00030000 - RPMSG_SHMEM_SIZE
   rpmsg_sh_mem          (RW)  : ORIGIN = 0x20030000 - RPMSG_SHMEM_SIZE, LENGTH = RPMSG_SHMEM_SIZE
+  m_flash1              (RX)  : ORIGIN = 0x00080000, LENGTH = 0x00080000
   m_sramx               (RW)  : ORIGIN = 0x04000000, LENGTH = 0x00018000
   m_flash_config        (RX)  : ORIGIN = 0x80000400, LENGTH = 0x00000200
   m_usb_sram            (RW)  : ORIGIN = 0x400BA000, LENGTH = 0x00001000

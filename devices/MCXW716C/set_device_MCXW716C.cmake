@@ -208,20 +208,12 @@ message("device_MCXW716C_startup component is included from ${CMAKE_CURRENT_LIST
 if(CONFIG_USE_device_MCXW716C_system)
 
 if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MCXW716C.S
-  )
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MCXW716C.S "" device_MCXW716C_startup.MCXW716C)
 endif()
 
 if(CONFIG_TOOLCHAIN STREQUAL mcux)
-  target_sources(${MCUX_SDK_PROJECT_NAME} PRIVATE
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mcxw716.c
-      ${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mcxw716.cpp
-  )
-endif()
-
-if(CONFIG_TOOLCHAIN STREQUAL armgcc)
-  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./gcc/startup_MCXW716C.S "" device_MCXW716C_startup.MCXW716C)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mcxw716.c "" device_MCXW716C_startup.MCXW716C)
+  add_config_file(${CMAKE_CURRENT_LIST_DIR}/./mcuxpresso/startup_mcxw716.cpp "" device_MCXW716C_startup.MCXW716C)
 endif()
 
 else()

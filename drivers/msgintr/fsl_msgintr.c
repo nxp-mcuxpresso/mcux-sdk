@@ -34,7 +34,7 @@ static uint32_t MSGINTR_GetInstance(MSGINTR_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_msgintrBases); instance++)
     {
-        if (s_msgintrBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_msgintrBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

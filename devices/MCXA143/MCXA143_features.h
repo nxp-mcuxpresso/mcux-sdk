@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240428
+**     Build:               b240830
 **
 **     Abstract:
 **         Chip specific module features.
@@ -296,6 +296,8 @@
 #define FSL_FEATURE_EDMA_HAS_NO_CH_SBR_SEC (1)
 /* @brief edma5 has different tcd type. */
 #define FSL_FEATURE_EDMA_TCD_TYPEn(x) (0)
+/* @brief Number of DMA channels with asynchronous request capability. (Valid only for eDMA modules.) */
+#define FSL_FEATURE_EDMA_ASYNCHRO_REQUEST_CHANNEL_COUNT (4)
 
 /* PWM module features */
 
@@ -329,7 +331,7 @@
 /* GLIKEY module features */
 
 /* @brief GLIKEY has 8 step FSM configuration */
-#define FSL_FEATURE_GLIKEY_HAS_EIGHT_STEPS (1)
+#define FSL_FEATURE_GLIKEY_HAS_EIGHT_STEPS (0)
 
 /* GPIO module features */
 
@@ -362,6 +364,8 @@
 #define FSL_FEATURE_I3C_HAS_IBI_PAYLOAD_SIZE_OPTIONAL_BYTE (1)
 /* @brief Has SCL delay after START. */
 #define FSL_FEATURE_I3C_HAS_START_SCL_DELAY (1)
+/* @brief Has no the master write data register for DMA. */
+#define FSL_FEATURE_I3C_HAS_NO_MASTER_DMA_WDATA_REG (0)
 
 /* LPI2C module features */
 
@@ -613,7 +617,7 @@
 /* @brief Has the Dynamic SOF threshold compare support */
 #define FSL_FEATURE_USB_KHCI_DYNAMIC_SOF_THRESHOLD_COMPARE_ENABLED (0)
 /* @brief Has the VBUS detect support */
-#define FSL_FEATURE_USB_KHCI_VBUS_DETECT_ENABLED (1)
+#define FSL_FEATURE_USB_KHCI_VBUS_DETECT_ENABLED (0)
 /* @brief Has the IRC48M module clock support */
 #define FSL_FEATURE_USB_KHCI_IRC48M_MODULE_CLOCK_ENABLED (1)
 /* @brief Number of endpoints supported */

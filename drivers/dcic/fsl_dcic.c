@@ -50,7 +50,7 @@ static uint32_t DCIC_GetInstance(const DCIC_Type *base)
     /* Find the instance index from base address mappings. */
     for (instance = 0; instance < ARRAY_SIZE(s_dcicBases); instance++)
     {
-        if (s_dcicBases[instance] == base)
+        if (MSDK_REG_SECURE_ADDR(s_dcicBases[instance]) == MSDK_REG_SECURE_ADDR(base))
         {
             break;
         }

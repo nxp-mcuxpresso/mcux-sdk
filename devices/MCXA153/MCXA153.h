@@ -12,7 +12,7 @@
 **
 **     Reference manual:    MCXA1 User manual
 **     Version:             rev. 1.0, 2022-03-29
-**     Build:               b240403
+**     Build:               b240704
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MCXA153
