@@ -521,6 +521,13 @@ typedef struct _netc_port_tg_config
     uint32_t holdSkew;  /*!< Hold-Skew in ns, not effective on ports connected to a pseudo-MAC */
 } netc_port_tg_config_t;
 
+/*! @brief Port time gate config when used with Frame Preemption */
+typedef struct _netc_port_tg_preemption_config
+{
+    uint16_t holdAdvance;  /*!< the amount of time in ns prior to the Set-And-Hold-MAC time slot for asserting a Hold request. Used with frame Preemption. */
+    uint16_t releaseAdvance; /*!< the amount of time in ns prior to the Set-And-Release-MAC time slot for asserting a Release request. Used with Frame Preemption. */
+} netc_port_tg_preemption_config;
+
 /*! @brief Port MAC preemption mode */
 typedef enum _netc_hw_preemption_mode
 {
@@ -528,6 +535,29 @@ typedef enum _netc_hw_preemption_mode
     kNETC_PreemptOn64B,        /*!< Frame preemption is enabled, but transmit only preempts frames on 64B boundaries */
     kNETC_PreemptOn4B          /*!< Frame preemption is enabled, but transmit only preempts frames on 4B boundaries */
 } netc_hw_preemption_mode_t;
+
+/*! @brief Port MAC Remote Additional Fragment Size */
+typedef enum _netc_hw_raf_size
+{
+    kNETC_RafSize64 = 0U, /*!< Additional Fragment Size of 64 octets */
+    kNETC_RafSize128,     /*!< Additional Fragment Size of 128 octets */
+    kNETC_RafSize256,     /*!< Additional Fragment Size of 256 octets */
+    kNETC_RafSize512,     /*!< Additional Fragment Size of 512 octets */
+} netc_hw_raf_size_t;
+
+/*! @brief Frame Preemption Portconfig */
+typedef struct _netc_port_preemption_config
+{
+    bool enMergeVerify : 1; /*!< Enable verify the merged preemption frame, need to enable when preemptMode is not zero
+                             */
+    uint8_t mergeVerifyTime : 7; /*!< The nominal wait time between verification attempts in milliseconds, range in 1 ~
+                                    128 */
+    netc_hw_preemption_mode_t preemptMode : 2; /*!< When set to not zero, PMAC frames may be preempted by EMAC frames */
+    netc_hw_raf_size_t raf_size : 2; /*!< Additional Fragment Size. Indicates the smallest sized fragments that can
+                                        be sent on Tx */
+    bool PreemptionActive : 1; /*!< Local preemption active. Indicates whether preemption is active for this port. This 
+                                    bit will be set if preemption is both enabled and has completed the verification process*/
+} netc_port_preemption_config;
 
 /*! @brief Configuration for the Credit Based Shaped for port TC.
  *
@@ -655,11 +685,7 @@ typedef struct _netc_port_ethmac
                                    shorter than 18B are discarded silently. Both for express MAC and preemptable MAC. */
     uint16_t rxMaxFrameSize;    /*!< Receive Maximum Frame Length size in bytes, up to 2000, received frames that exceed
                                    this stated maximum are truncated. Both for express MAC and preemptable MAC. */
-    bool enMergeVerify : 1; /*!< Enable verify the merged preemption frame, need to enable when preemptMode is not zero
-                             */
-    uint8_t mergeVerifyTime : 7; /*!< The nominal wait time between verification attempts in milliseconds, range in 1 ~
-                                    128 */
-    netc_hw_preemption_mode_t preemptMode : 2; /*!< When set to not zero, PMAC frames may be preempted by EMAC frames */
+    netc_port_preemption_config PreemptionConfig; /*!< Frame Preemption configuration */
     bool rgmiiClkStop : 1; /*!< True: RGMII transmit clock is stoppable during low power idle. False: It's not stoppable. */
 #if !(defined(FSL_FEATURE_NETC_HAS_ERRATA_051255) && FSL_FEATURE_NETC_HAS_ERRATA_051255)
     bool enOneStepTS : 1;        /*!< Enable IEEE-1588 Single-Step timestamp */

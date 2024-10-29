@@ -1943,6 +1943,88 @@ status_t SWT_TxETMConfigClassQueue(swt_handle_t *handle, netc_tb_etmcq_config_t 
  */
 status_t SWT_TxETMConfigCongestionGroup(swt_handle_t *handle, netc_tb_etmcg_config_t *config);
 
+/*!
+ * @brief Config Preemption for each port TC (traffic class)
+ *
+ * @param handle
+ * @param portIdx
+ * @param tcIdx
+ * @param enable
+ */
+static inline void SWT_TxTcConfigPreemption(swt_handle_t *handle,
+                                                netc_hw_port_idx_t portIdx,
+                                                netc_hw_tc_idx_t tcIdx,
+                                                const bool enable)
+{
+    NETC_PORT_Type *base;
+
+    base = handle->hw.ports[portIdx].port;
+    if (!NETC_PortIsPseudo(base))
+    {
+        NETC_PortConfigTcPreemption(base, tcIdx, enable);
+    }
+}
+
+/*!
+ * @brief Get Preemption configuration for each port TC (traffic class)
+ *
+ * @param handle
+ * @param portIdx
+ * @param tcIdx
+ * @param enabled
+ */
+static inline void SWT_TxGetTcPreemption(swt_handle_t *handle,
+                                                netc_hw_port_idx_t portIdx,
+                                                netc_hw_tc_idx_t tcIdx,
+                                                bool *enabled)
+{
+    NETC_PORT_Type *base;
+
+    base = handle->hw.ports[portIdx].port;
+    if (!NETC_PortIsPseudo(base))
+    {
+        NETC_PortGetTcPreemption(base, tcIdx, enabled);
+    }
+}
+
+/*!
+ * @brief Configure Preemption control configuration for an ethernet MAC
+ *
+ * @param handle
+ * @param portIdx
+ * @param config
+ */
+static inline void SWT_TxPortEthMacConfigPreemption(swt_handle_t *handle,
+                                                        netc_hw_port_idx_t portIdx,
+                                                        const netc_port_preemption_config *config)
+{
+    NETC_ETH_LINK_Type *base;
+
+    base = handle->hw.ports[portIdx].eth;
+    NETC_PortConfigEthMacPreemption(base, config);
+}
+
+/*!
+ * @brief Get Preemption control configuration from ethernet MAC port
+ *
+ * @param handle
+ * @param portIdx
+ * @param config
+ */
+static inline void SWT_TxPortGetEthMacPreemption(swt_handle_t *handle,
+                                                     netc_hw_port_idx_t portIdx,
+                                                     netc_port_preemption_config *config,
+                                                     netc_port_phy_mac_preemption_status_t *status)
+{
+    NETC_ETH_LINK_Type *base;
+
+    base = handle->hw.ports[portIdx].eth;
+
+    NETC_PortGetPhyMacPreemptionControl(base, config);
+
+    NETC_PortGetPhyMacPreemptionStatus(base, status);
+}
+
 /*! @} */ // end of netc_swt_tx
 #if !(defined(__GNUC__) || defined(__ICCARM__))
 #pragma endregion netc_swt_tx

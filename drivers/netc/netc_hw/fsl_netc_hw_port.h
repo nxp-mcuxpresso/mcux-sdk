@@ -253,6 +253,51 @@ static inline status_t NETC_PortGetTcMaxSDU(NETC_PORT_Type *base,
     return kStatus_Success;
 }
 
+/*!
+ * @brief Config Frame Preemption for specified Port Traffic Class
+ *
+ * @param base NETC PORT base peripheral address
+ * @param tcIdx traffic class index
+ * @param enable enable/disable feature on traffic class
+ */
+static inline void NETC_PortConfigTcPreemption(NETC_PORT_Type *base,
+                                                   netc_hw_tc_idx_t tcIdx,
+                                                   const bool enable)
+{
+    uint32_t temp = base->PFPCR;
+
+    temp &= (~((uint32_t)1U << (uint8_t)tcIdx));
+    temp |= ((uint32_t)enable << (uint8_t)tcIdx);
+    base->PFPCR = temp;
+}
+
+/*!
+ * @brief Get Frame Preemption configuration for specified Port Traffic Class
+ *
+ * @param base NETC PORT base peripheral address
+ * @param tcIdx traffic class index
+ * @param enabled port tx traffic class enabled flag
+ */
+static inline void NETC_PortGetTcPreemption(NETC_PORT_Type *base,
+                                                netc_hw_tc_idx_t tcIdx,
+                                                bool *enabled)
+{
+    *enabled = (base->PFPCR & ((uint32_t)1U << (uint8_t)tcIdx)) ? true : false;
+}
+
+/*!
+ * @brief Get the port time gating Scheduling configuration specifc for when
+ * used with Frame Preemption
+ *
+ * @param base NETC PORT base peripheral address
+ * @param config
+ */
+static inline void NETC_PortGetTGSFPConfig(NETC_PORT_Type *base, netc_port_tg_preemption_config *config)
+{
+    config->holdAdvance = (base->PTGSHAR & NETC_PORT_PTGSHAR_HOLDADVANCE_MASK) >> NETC_PORT_PTGSHAR_HOLDADVANCE_SHIFT;
+    config->releaseAdvance = (base->PTGSRAR & NETC_PORT_PTGSRAR_RELEASEADVANCE_MASK) >> NETC_PORT_PTGSRAR_RELEASEADVANCE_SHIFT;
+}
+
 /*! @} */ // end of netc_hw_port_tx
 #if !(defined(__GNUC__) || defined(__ICCARM__))
 #pragma endregion netc_hw_port_tx
@@ -436,6 +481,23 @@ status_t NETC_PortSetMaxFrameSize(NETC_ETH_LINK_Type *base, uint16_t size);
 status_t NETC_PortConfigEthMac(NETC_ETH_LINK_Type *base, const netc_port_ethmac_t *config);
 
 /*!
+ * @brief Configure ethernet MAC for Frame preemption
+ * on specified PORT.
+ *
+ * @param base Ethernet MAC port peripheral base address.
+ * @param config The Ethernet MAC configuration.
+ * @return status_t
+ */
+static inline void NETC_PortConfigEthMacPreemption(NETC_ETH_LINK_Type *base, const netc_port_preemption_config *config)
+{
+    base->MAC_MERGE_MMCSR = (base->MAC_MERGE_MMCSR & NETC_ETH_LINK_MAC_MERGE_MMCSR_LINK_FAIL(1U)) |
+                            NETC_ETH_LINK_MAC_MERGE_MMCSR_VT(config->mergeVerifyTime) |
+                            NETC_ETH_LINK_MAC_MERGE_MMCSR_VDIS(!config->enMergeVerify) |
+                            NETC_ETH_LINK_MAC_MERGE_MMCSR_ME(config->preemptMode) |
+                            NETC_ETH_LINK_MAC_MERGE_MMCSR_RAFS(config->raf_size);
+}
+
+/*!
  * @brief Do software reset for Ethernet MAC.
  *
  * @note This can reset all statistic counters.
@@ -466,6 +528,33 @@ static inline void NETC_PortGetPhyMacPreemptionStatus(NETC_ETH_LINK_Type *base,
     status->verifyStatus = (netc_port_preemption_verify_status_t)(uint32_t)(
         (base->MAC_MERGE_MMCSR & NETC_ETH_LINK_MAC_MERGE_MMCSR_VSTS_MASK) >> NETC_ETH_LINK_MAC_MERGE_MMCSR_VSTS_SHIFT);
     status->mergeActive = ((base->MAC_MERGE_MMCSR & NETC_ETH_LINK_MAC_MERGE_MMCSR_TXSTS_MASK) != 0U) ? true : false;
+}
+
+/*!
+ * @brief Get Ethernet MAC preemption control parameters.
+ *
+ * @param base  PORT MAC peripheral base address.
+ * @param config Pointer to the NETC port preemption configuration.
+ */
+static inline void NETC_PortGetPhyMacPreemptionControl(NETC_ETH_LINK_Type *base, netc_port_preemption_config *config)
+{
+    uint32_t mmcsr;
+
+    mmcsr = base->MAC_MERGE_MMCSR;
+    config->enMergeVerify = (
+        (mmcsr & NETC_ETH_LINK_MAC_MERGE_MMCSR_VDIS_MASK) >> NETC_ETH_LINK_MAC_MERGE_MMCSR_VDIS_SHIFT) ? false : true;
+
+    config->mergeVerifyTime = (uint8_t)(
+        (mmcsr & NETC_ETH_LINK_MAC_MERGE_MMCSR_VT_MASK) >> NETC_ETH_LINK_MAC_MERGE_MMCSR_VT_SHIFT);
+
+    config->preemptMode = (netc_hw_preemption_mode_t)(
+        (mmcsr & NETC_ETH_LINK_MAC_MERGE_MMCSR_ME_MASK) >> NETC_ETH_LINK_MAC_MERGE_MMCSR_ME_SHIFT);
+
+    config->raf_size = (netc_hw_raf_size_t)(
+        (mmcsr & NETC_ETH_LINK_MAC_MERGE_MMCSR_RAFS_MASK) >> NETC_ETH_LINK_MAC_MERGE_MMCSR_RAFS_SHIFT);
+
+    config->PreemptionActive = (
+        (mmcsr & NETC_ETH_LINK_MAC_MERGE_MMCSR_LPA_MASK) >> NETC_ETH_LINK_MAC_MERGE_MMCSR_LPA_SHIFT) ? true : false;
 }
 
 /*!

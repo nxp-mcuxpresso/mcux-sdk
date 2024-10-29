@@ -205,9 +205,10 @@ status_t SWT_GetDefaultConfig(swt_config_t *config)
         config->ports[i].commonCfg.parser.enableL3Parser  = true;
         config->ports[i].commonCfg.parser.l4PayloadCount  = 24;
         config->ports[i].commonCfg.parser.enableL4Parser  = true;
-        config->ports[i].ethMac.preemptMode          = kNETC_PreemptDisable;
-        config->ports[i].ethMac.enMergeVerify        = false;
-        config->ports[i].ethMac.mergeVerifyTime      = 10U;
+        config->ports[i].ethMac.PreemptionConfig.preemptMode          = kNETC_PreemptDisable;
+        config->ports[i].ethMac.PreemptionConfig.enMergeVerify        = false;
+        config->ports[i].ethMac.PreemptionConfig.mergeVerifyTime      = 10U;
+        config->ports[i].ethMac.PreemptionConfig.raf_size             = kNETC_RafSize64;
         config->ports[i].ethMac.enTxPad              = true;
         config->ports[i].ethMac.rxMinFrameSize       = 64U;
         config->ports[i].ethMac.rxMaxFrameSize       = 0x600U;
@@ -2178,8 +2179,7 @@ status_t SWT_TxTrafficClassConfig(swt_handle_t *handle,
 
     if (!NETC_PortIsPseudo(base))
     {
-        temp = base->PFPCR & (~((uint32_t)1U << (uint8_t)tcIdx));
-        base->PFPCR   = temp | ((uint32_t)config->enPreemption << (uint8_t)tcIdx);
+        NETC_PortConfigTcPreemption(base, tcIdx, config->enPreemption);
     }
     temp        = base->PDGSR & (~((uint32_t)1U << (uint32_t)tcIdx));
     base->PDGSR = temp | ((uint32_t)config->enTcGate << (uint32_t)tcIdx);

@@ -431,15 +431,16 @@ status_t EP_GetDefaultConfig(ep_config_t *config)
     config->port.common.parser.l4PayloadCount  = 24;
     config->port.common.parser.enableL4Parser  = true;
     config->port.ethMac.enableRevMii           = false;
-    config->port.ethMac.preemptMode            = kNETC_PreemptDisable;
-    config->port.ethMac.enMergeVerify          = false;
-    config->port.ethMac.mergeVerifyTime        = 10U;
     config->port.ethMac.txTsSelect             = kNETC_SyncTime;
     config->port.ethMac.enTxPad                = true;
     config->port.ethMac.rxMinFrameSize         = 64U;
     config->port.ethMac.rxMaxFrameSize         = 0x600U;
     config->port.ethMac.maxBackPressOn         = 3036U;
     config->port.ethMac.minBackPressOff        = 20U;
+    config->port.ethMac.PreemptionConfig.preemptMode            = kNETC_PreemptDisable;
+    config->port.ethMac.PreemptionConfig.enMergeVerify          = false;
+    config->port.ethMac.PreemptionConfig.mergeVerifyTime        = 10U;
+    config->port.ethMac.PreemptionConfig.raf_size               = kNETC_RafSize64;
     config->port.enPseudoMacTxPad              = true;
     config->psfpCfg.isiPortConfig.defaultISEID = 0xFFFFU;
     config->siConfig.ringPerBdrGroup           = 0x1U;
@@ -2190,8 +2191,7 @@ status_t EP_TxTrafficClassConfig(ep_handle_t *handle, netc_hw_tc_idx_t tcIdx, co
 
     if (!NETC_PortIsPseudo(handle->hw.portGroup.port))
     {
-        temp                             = handle->hw.portGroup.port->PFPCR & (~((uint32_t)1U << (uint32_t)tcIdx));
-        handle->hw.portGroup.port->PFPCR = temp | ((uint32_t)config->enPreemption << (uint32_t)tcIdx);
+        NETC_PortConfigTcPreemption(handle->hw.portGroup.port, tcIdx, config->enPreemption);
     }
     temp                             = handle->hw.portGroup.port->PDGSR & (~((uint32_t)1U << (uint32_t)tcIdx));
     handle->hw.portGroup.port->PDGSR = temp | ((uint32_t)config->enTcGate << (uint32_t)tcIdx);

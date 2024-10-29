@@ -1194,6 +1194,75 @@ status_t EP_TxtTGSGetOperGcl(ep_handle_t *handle, netc_tb_tgs_gcl_t *gcl, uint32
  */
 status_t EP_TxTrafficClassConfig(ep_handle_t *handle, netc_hw_tc_idx_t tcIdx, const netc_port_tx_tc_config_t *config);
 
+/*!
+ * @brief Config Preemption for each port TC (traffic class)
+ *
+ * @param handle
+ * @param tcIdx
+ * @param enable
+ */
+static inline void EP_TxTcConfigPreemption(ep_handle_t *handle, netc_hw_tc_idx_t tcIdx, const bool enable)
+{
+    NETC_PORT_Type *base;
+
+    base = handle->hw.portGroup.port;
+    if (!NETC_PortIsPseudo(base))
+    {
+        NETC_PortConfigTcPreemption(base, tcIdx, enable);
+    }
+}
+
+/*!
+ * @brief Get Preemption configuration for each port TC (traffic class)
+ *
+ * @param handle
+ * @param tcIdx
+ * @param enabled
+ */
+static inline void EP_TxGetTcPreemption(ep_handle_t *handle, netc_hw_tc_idx_t tcIdx, bool *enabled)
+{
+    NETC_PORT_Type *base;
+
+    base = handle->hw.portGroup.port;
+    if (!NETC_PortIsPseudo(base))
+    {
+        NETC_PortGetTcPreemption(base, tcIdx, enabled);
+    }
+}
+
+/*!
+ * @brief Configure Preemption control configuration for an ethernet MAC
+ *
+ * @param handle
+ * @param config
+ */
+static inline void EP_TxPortEthMacConfigPreemption(ep_handle_t *handle, const netc_port_preemption_config *config)
+{
+    NETC_ETH_LINK_Type *base;
+
+    base = handle->hw.portGroup.eth;
+    NETC_PortConfigEthMacPreemption(base, config);
+}
+
+/*!
+ * @brief Get Preemption configuration from ethernet MAC port
+ *
+ * @param handle
+ * @param config
+ * @param status
+ */
+static inline void EP_TxPortGetEthMacPreemption(ep_handle_t *handle,
+                                                    netc_port_preemption_config *config,
+                                                    netc_port_phy_mac_preemption_status_t *status)
+{
+    NETC_ETH_LINK_Type *base;
+
+    base = handle->hw.portGroup.eth;
+    NETC_PortGetPhyMacPreemptionControl(base, config);
+
+    NETC_PortGetPhyMacPreemptionStatus(base, status);
+}
+
 /*! @} */ // end of netc_ep_tx
 #if !(defined(__GNUC__) || defined(__ICCARM__))
 #pragma endregion netc_ep_tx

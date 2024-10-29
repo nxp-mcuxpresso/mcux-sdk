@@ -179,9 +179,7 @@ status_t NETC_PortConfigEthMac(NETC_ETH_LINK_Type *base, const netc_port_ethmac_
     base->PM0_IF_MODE = reg;
     base->PM1_IF_MODE = reg;
 
-    base->MAC_MERGE_MMCSR = NETC_ETH_LINK_MAC_MERGE_MMCSR_VT(config->mergeVerifyTime) |
-                            NETC_ETH_LINK_MAC_MERGE_MMCSR_VDIS(!config->enMergeVerify) |
-                            NETC_ETH_LINK_MAC_MERGE_MMCSR_ME(config->preemptMode);
+    NETC_PortConfigEthMacPreemption(base, &config->PreemptionConfig);
 
 #if !(defined(FSL_FEATURE_NETC_HAS_ERRATA_051255) && FSL_FEATURE_NETC_HAS_ERRATA_051255)
     reg = NETC_ETH_LINK_PM0_SINGLE_STEP_CH(config->enChUpdate) |
