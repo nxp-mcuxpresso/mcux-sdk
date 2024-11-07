@@ -673,11 +673,11 @@ osa_status_t OSA_TaskDestroy(osa_task_handle_t taskHandle);
  *
  * This function suspends the execution of the given task.
  *
- * @param[in] TaskToSuspend The handle of the task to suspend.
+ * @param[in] taskHandle The handle of the task to suspend.
  *
  * @return None.
  */
-void OSA_TaskSuspend(osa_task_handle_t TaskToSuspend);
+void OSA_TaskSuspend(osa_task_handle_t taskHandle);
 #endif /* FSL_OSA_TASK_ENABLE */
 
 #if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
@@ -686,11 +686,11 @@ void OSA_TaskSuspend(osa_task_handle_t TaskToSuspend);
  *
  * This function resumes the execution of a previously suspended task.
  *
- * @param[in] TaskToResume The handle of the task to resume.
+ * @param[in] taskHandle The handle of the task to resume.
  *
  * @return None.
  */
-void OSA_TaskResume(osa_task_handle_t TaskToResume);
+void OSA_TaskResume(osa_task_handle_t taskHandle);
 #endif /* FSL_OSA_TASK_ENABLE */
 
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))

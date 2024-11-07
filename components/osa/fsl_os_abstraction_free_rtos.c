@@ -1257,9 +1257,9 @@ void OSA_DisableIRQGlobal(void)
  * This function will suspend any task
  *
  *END**************************************************************************/
-void OSA_TaskSuspend(osa_task_handle_t TaskToSuspend)
+void OSA_TaskSuspend(osa_task_handle_t taskHandle)
 {
-    vTaskSuspend(TaskToSuspend);
+    vTaskSuspend(taskHandle);
 }
 
 /*FUNCTION**********************************************************************
@@ -1269,7 +1269,7 @@ void OSA_TaskSuspend(osa_task_handle_t TaskToSuspend)
  * This function will resume any task
  *
  *END**************************************************************************/
-void OSA_TaskResume(osa_task_handle_t TaskToResume)
+void OSA_TaskResume(osa_task_handle_t taskHandle)
 {
     if (0U != __get_IPSR())
     {
@@ -1278,7 +1278,7 @@ void OSA_TaskResume(osa_task_handle_t TaskToResume)
     }
     else
     {
-        vTaskResume(TaskToResume);
+        vTaskResume(taskHandle);
     }
 }
 

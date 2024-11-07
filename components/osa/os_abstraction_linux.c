@@ -110,17 +110,17 @@ void OSA_TimeDelay(uint32_t millisec)
     usleep(millisec * 1000);  //usleep is in microseconds
 }
 
-void OSA_TaskSuspend(osa_task_handle_t TaskToSuspend)
+void OSA_TaskSuspend(osa_task_handle_t taskHandle)
 {
-    struct osa_task_t* task = (struct osa_task_t*)TaskToSuspend;
+    struct osa_task_t* task = (struct osa_task_t*)taskHandle;
     pthread_mutex_lock(&task->suspendMutex);
     task->isSuspended = true;
     pthread_mutex_unlock(&task->suspendMutex);
 }
 
-void OSA_TaskResume(osa_task_handle_t TaskToResume)
+void OSA_TaskResume(osa_task_handle_t taskHandle)
 {
-    struct osa_task_t* task = (struct osa_task_t*)TaskToResume;
+    struct osa_task_t* task = (struct osa_task_t*)taskHandle;
     pthread_mutex_lock(&task->suspendMutex);
     task->isSuspended = false;
     pthread_cond_signal(&task->suspendCond);
