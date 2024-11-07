@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2020, 2024 NXP
+ * Copyright 2024 ACRIOS Systems s.r.o.
  *
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -131,6 +132,8 @@ typedef enum _osa_status
 #include "fsl_os_abstraction_threadx.h"
 #elif defined(__ZEPHYR__)
 #include "fsl_os_abstraction_zephyr.h"
+#elif defined(OS_LINUX)
+#include "os_abstraction_linux.h"
 #else
 #include "fsl_os_abstraction_bm.h"
 #endif
@@ -192,7 +195,9 @@ extern const uint8_t gUseRtos_c;
 #define USE_RTOS (1)
 #else
 #define USE_RTOS (0)
-#if (defined(GENERIC_LIST_LIGHT) && (GENERIC_LIST_LIGHT > 0U))
+#if defined(OS_LINUX)
+#define OSA_TASK_HANDLE_SIZE (sizeof(struct osa_task_t))
+#elif defined(GENERIC_LIST_LIGHT) && (GENERIC_LIST_LIGHT > 0U)
 #define OSA_TASK_HANDLE_SIZE (24U)
 #else
 #define OSA_TASK_HANDLE_SIZE (28U)
@@ -205,6 +210,8 @@ extern const uint8_t gUseRtos_c;
 #if (defined(FSL_OSA_BM_TIMEOUT_ENABLE) && (FSL_OSA_BM_TIMEOUT_ENABLE > 0U))
 #define OSA_SEM_HANDLE_SIZE   (16U)
 #define OSA_MUTEX_HANDLE_SIZE (12U)
+#elif defined(OS_LINUX)
+#define OSA_MUTEX_HANDLE_SIZE sizeof(pthread_mutex_t)
 #else
 #define OSA_SEM_HANDLE_SIZE   (8U)
 #define OSA_MUTEX_HANDLE_SIZE (4U)
@@ -658,6 +665,32 @@ osa_status_t OSA_TaskSetPriority(osa_task_handle_t taskHandle, osa_task_priority
  * @retval KOSA_StatusError   Task destruction failed or invalid parameter.
  */
 osa_status_t OSA_TaskDestroy(osa_task_handle_t taskHandle);
+#endif /* FSL_OSA_TASK_ENABLE */
+
+#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
+/**
+ * @brief Suspends the specified task.
+ *
+ * This function suspends the execution of the given task.
+ *
+ * @param[in] TaskToSuspend The handle of the task to suspend.
+ *
+ * @return None.
+ */
+void OSA_TaskSuspend(osa_task_handle_t TaskToSuspend);
+#endif /* FSL_OSA_TASK_ENABLE */
+
+#if ((defined(FSL_OSA_TASK_ENABLE)) && (FSL_OSA_TASK_ENABLE > 0U))
+/**
+ * @brief Resumes the specified task.
+ *
+ * This function resumes the execution of a previously suspended task.
+ *
+ * @param[in] TaskToResume The handle of the task to resume.
+ *
+ * @return None.
+ */
+void OSA_TaskResume(osa_task_handle_t TaskToResume);
 #endif /* FSL_OSA_TASK_ENABLE */
 
 #if (defined(FSL_OSA_TASK_ENABLE) && (FSL_OSA_TASK_ENABLE > 0U))
