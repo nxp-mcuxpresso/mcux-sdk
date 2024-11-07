@@ -619,7 +619,7 @@
 /* @brief After one or more late collision or excessive collision events, counters PMa_TOCTn and PMa_TFRMn will be higher than expected. */
 #define FSL_FEATURE_NETC_HAS_ERRATA_051710 (1)
 /* @brief MAC statistic counters TEOCT and TOCT are inaccurate after Pause frames are transmitted with flexible preamble enabled and flexible preamble count set to less than 7. */
-#define FSL_FEATURE_NETC_HAS_ERRATA_051711 (1)
+#define FSL_FEATURE_NETC_HAS_ERRATA_051711 (0)
 /* @brief Number of Switch ports. */
 #define FSL_FEATURE_NETC_SWITCH_MAX_PORT_NUMBER (5)
 /* @brief Number of Switch Ethernet MAC ports. */
