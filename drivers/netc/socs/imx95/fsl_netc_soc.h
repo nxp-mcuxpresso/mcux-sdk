@@ -37,6 +37,15 @@ typedef enum _netc_hw_eth_port_idx
 } netc_hw_eth_port_idx_t;
 
 /*!
+ * @brief Enumeration for NETC timer external trigger index
+ */
+typedef enum _netc_timer_exttrig_index
+{
+    kNETC_TimerExtTrig1 = 0,
+    kNETC_TimerExtTrig2,
+} netc_timer_exttrig_index_t;
+
+/*!
  * @brief Get register map resource
  *
  * @param handle  The enetc hw handle.
