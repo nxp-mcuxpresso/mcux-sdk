@@ -24,7 +24,7 @@
 #include "MIMX9352_ca55_features.h"
 
 #elif (defined(CPU_MIMX9352AVTXM_cm33) || defined(CPU_MIMX9352CVVXM_cm33) || defined(CPU_MIMX9352DVVXM_cm33) || \
-     defined(CPU_MIMX9352XVVXM_cm33))
+     defined(CPU_MIMX9352XVVXM_cm33) || defined(CPU_MIMX9352DVUXM_cm33))
 
 
 #define MIMX9352_cm33_SERIES
