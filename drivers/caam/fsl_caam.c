@@ -67,11 +67,14 @@ typedef enum _caam_algorithm
     kCAAM_AlgorithmAES    = 0x10u << 16,
     kCAAM_AlgorithmDES    = 0x20u << 16,
     kCAAM_Algorithm3DES   = 0x21u << 16,
+    kCAAM_AlgorithmMD5    = 0x40u << 16,
     kCAAM_AlgorithmSHA1   = 0x41u << 16,
     kCAAM_AlgorithmSHA224 = 0x42u << 16,
     kCAAM_AlgorithmSHA256 = 0x43u << 16,
     kCAAM_AlgorithmSHA384 = 0x44u << 16,
     kCAAM_AlgorithmSHA512 = 0x45u << 16,
+    kCAAM_AlgorithmSHA512_224 = 0x46u << 16,
+    kCAAM_AlgorithmSHA512_256 = 0x47u << 16,
     kCAAM_AlgorithmCRC    = 0x90u << 16,
 } caam_algorithm_t;
 
@@ -108,6 +111,8 @@ typedef enum _caam_algorithm_state
  ******************************************************************************/
 enum _caam_sha_digest_len
 {
+    kCAAM_RunLenMd5    = 24u,
+    kCAAM_OutLenMd5    = 16u,
     kCAAM_RunLenSha1   = 28u,
     kCAAM_OutLenSha1   = 20u,
     kCAAM_RunLenSha224 = 40u,
@@ -118,6 +123,10 @@ enum _caam_sha_digest_len
     kCAAM_OutLenSha384 = 48u,
     kCAAM_RunLenSha512 = 64u,
     kCAAM_OutLenSha512 = 64u,
+    kCAAM_RunLenSha512_224 = 64u,
+    kCAAM_OutLenSha512_224 = 28u,
+    kCAAM_RunLenSha512_256 = 64u,
+    kCAAM_OutLenSha512_256 = 32u,
 };
 
 /*! Internal states of the HASH creation process */
@@ -2541,6 +2550,7 @@ static status_t caam_hash_check_input_alg(caam_hash_algo_t algo)
 {
     if ((algo != kCAAM_XcbcMac) && (algo != kCAAM_Cmac) && (algo != kCAAM_Sha1) && (algo != kCAAM_Sha224) &&
         (algo != kCAAM_Sha256) && (algo != kCAAM_Sha384) && (algo != kCAAM_Sha512) && (algo != kCAAM_HmacSha1) &&
+        (algo != kCAAM_Sha512_224) && (algo != kCAAM_Sha512_256) && (algo != kCAAM_Md5) &&
         (algo != kCAAM_HmacSha224) && (algo != kCAAM_HmacSha256) && (algo != kCAAM_HmacSha384) &&
         (algo != kCAAM_HmacSha512))
     {
@@ -2560,10 +2570,10 @@ static inline bool caam_hash_alg_is_hmac(caam_hash_algo_t algo)
             (algo == kCAAM_HmacSha384) || (algo == kCAAM_HmacSha512));
 }
 
-static inline bool caam_hash_alg_is_sha(caam_hash_algo_t algo)
+static inline bool caam_hash_alg_is_mda(caam_hash_algo_t algo)
 {
     return ((algo == kCAAM_Sha1) || (algo == kCAAM_Sha224) || (algo == kCAAM_Sha256) || (algo == kCAAM_Sha384) ||
-            (algo == kCAAM_Sha512));
+            (algo == kCAAM_Sha512) || (algo == kCAAM_Sha512_224) || (algo == kCAAM_Sha512_256) || (algo == kCAAM_Md5));
 }
 
 static status_t caam_hash_check_input_args(
@@ -2635,6 +2645,10 @@ static uint32_t caam_hash_algo2mode(caam_hash_algo_t algo, uint32_t algState, ui
             modeReg = (uint32_t)kCAAM_AlgorithmAES | (uint32_t)kCAAM_ModeCMAC;
             outSize = 16u;
             break;
+        case kCAAM_Md5:
+            modeReg = (uint32_t)kCAAM_AlgorithmMD5;
+            outSize = (uint32_t)kCAAM_OutLenMd5;
+            break;
         case kCAAM_Sha1:
             modeReg = (uint32_t)kCAAM_AlgorithmSHA1;
             outSize = (uint32_t)kCAAM_OutLenSha1;
@@ -2654,6 +2668,14 @@ static uint32_t caam_hash_algo2mode(caam_hash_algo_t algo, uint32_t algState, ui
         case kCAAM_Sha512:
             modeReg = (uint32_t)kCAAM_AlgorithmSHA512;
             outSize = (uint32_t)kCAAM_OutLenSha512;
+            break;
+        case kCAAM_Sha512_224:
+            modeReg = (uint32_t)kCAAM_AlgorithmSHA512_224;
+            outSize = (uint32_t)kCAAM_OutLenSha512_224;
+            break;
+        case kCAAM_Sha512_256:
+            modeReg = (uint32_t)kCAAM_AlgorithmSHA512_256;
+            outSize = (uint32_t)kCAAM_OutLenSha512_256;
             break;
         case kCAAM_HmacSha1:
             modeReg = (uint32_t)kCAAM_AlgorithmSHA1 | (uint32_t)HmacMode;
@@ -2726,6 +2748,9 @@ static uint32_t caam_hash_algo2ctx_size(caam_hash_algo_t algo, uint32_t how)
         SHA-256: 32 bytes
         SHA-384: 48 bytes final digest; 64 bytes running digest
         SHA-512: 64 bytes */
+        case kCAAM_Md5:
+            ctxSize = 24u; /* 8 + 16 */
+            break;
         case kCAAM_Sha1:
             ctxSize = 28u; /* 8 + 20 */
             break;
@@ -2735,6 +2760,8 @@ static uint32_t caam_hash_algo2ctx_size(caam_hash_algo_t algo, uint32_t how)
             break;
         case kCAAM_Sha384:
         case kCAAM_Sha512:
+        case kCAAM_Sha512_224:
+        case kCAAM_Sha512_256:
             ctxSize = 72u; /* 8 + 64 */
             break;
         /* Add the context of HMAC: in Init mode the HMAC context includes the derived key
@@ -2911,7 +2938,7 @@ static status_t caam_hash_schedule_input_data(CAAM_Type *base,
     uint32_t descriptorSize = ARRAY_SIZE(templateHash);
     uint32_t algOutSize     = 0;
 
-    bool isSha = caam_hash_alg_is_sha(algo); /* MDHA engine */
+    bool isSha = caam_hash_alg_is_mda(algo); /* MDHA engine */
                                              /* how many bytes to read from context register
                                               * we need caam_hash_algo2ctx_size() to return
                                               * full context size (to be used for context restore in descriptor[3])
