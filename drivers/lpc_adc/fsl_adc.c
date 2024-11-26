@@ -96,6 +96,13 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
         tmp32 |= ADC_CTRL_TSAMP(config->sampleTimeNumber);
 #if (defined(FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL) && FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL)
     }
+    else
+    {
+        uint32_t tmp_ctrl0 = base->GPADC_CTRL0;
+        tmp_ctrl0 &= ~ADC_GPADC_CTRL0_GPADC_TSAMP_MASK;
+        tmp_ctrl0 |= ADC_GPADC_CTRL0_GPADC_TSAMP(config->sampleTimeNumber);
+        base->GPADC_CTRL0 = tmp_ctrl0;
+    }
 #endif /* FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL */
 #endif /* FSL_FEATURE_ADC_HAS_CTRL_TSAMP. */
 #if defined(FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE) & FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE
@@ -109,10 +116,6 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
 
 #if defined(FSL_FEATURE_ADC_HAS_GPADC_CTRL0_LDO_POWER_EN) && FSL_FEATURE_ADC_HAS_GPADC_CTRL0_LDO_POWER_EN
     base->GPADC_CTRL0 |= ADC_GPADC_CTRL0_LDO_POWER_EN_MASK;
-    if (config->clockMode == kADC_ClockSynchronousMode)
-    {
-        base->GPADC_CTRL0 |= ADC_GPADC_CTRL0_PASS_ENABLE(config->sampleTimeNumber);
-    }
     SDK_DelayAtLeastUs(300, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 #endif /* FSL_FEATURE_ADC_HAS_GPADC_CTRL0_LDO_POWER_EN */
 
