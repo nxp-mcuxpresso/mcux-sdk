@@ -1,3 +1,6 @@
+> [!CAUTION]
+> __Please move to our new SDK project [mcuxsdk](https://github.com/nxp-mcuxpresso/mcuxsdk-manifests). We have stopped updating this mcux-sdk project, the repo will be archived in 6 months.__
+
 # MCUXpresso SDK: mcux-sdk
 
 ![NXP_logo](docs/nxp_logo_small.png)[EN](./README.md)|[中文](./README_CN.md)

@@ -1,3 +1,5 @@
+> [!CAUTION]
+> __ 请移步我们全新的MCUXpresso SDK 项目[mcuxsdk](https://github.com/nxp-mcuxpresso/mcuxsdk-manifests)，当前的MCUXpresso SDK项目已停止维护，6个月之后我们会将代码仓库设置成未归档状态__
 # MCUXpresso SDK：mcux-sdk
 
 ![NXP_logo](docs/nxp_logo_small.png)[中文](./README_CN.md)|[EN](./README.md)
