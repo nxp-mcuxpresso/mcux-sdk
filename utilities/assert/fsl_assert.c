@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2017, 2022-2023 NXP
  * All rights reserved.
  *
  *
@@ -8,7 +8,29 @@
  */
 
 #include "fsl_common.h"
+#include "fsl_assert.h"
 #include "fsl_debug_console.h"
+
+__attribute__ ((weak)) int fsl_assert_hook(const char *failedExpr, const char *file, int line)
+{
+    (void)failedExpr;
+    (void)file;
+    (void)line;
+
+    return 0;
+}
+
+__attribute__ ((weak)) int fsl_assert_epilog_hook(void)
+{
+    for (;;)
+    {
+#if defined(__has_builtin) && __has_builtin(__builtin_trap)
+        __builtin_trap();
+#else
+        __BKPT(0);
+#endif
+    }
+}
 
 #ifndef NDEBUG
 #if (defined(__CC_ARM)) || (defined(__ARMCC_VERSION)) || (defined(__ICCARM__))
@@ -20,30 +42,32 @@ void __aeabi_assert(const char *failedExpr, const char *file, int line)
     (void)PRINTF("ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" \n", failedExpr, file, line);
 #endif
 
-    for (;;)
-    {
-        __BKPT(0);
-    }
+    (void)fsl_assert_hook(failedExpr, file, line);
+
+    fsl_assert_epilog_hook();
 }
 #elif (defined(__GNUC__))
 #if defined(__REDLIB__)
 void __assertion_failed(char *failedExpr)
 {
+    const char *file = NULL;
+    int line = -1;
+
     (void)PRINTF("ASSERT ERROR \" %s \n", failedExpr);
-    for (;;)
-    {
-        __BKPT(0);
-    }
+
+    (void)fsl_assert_hook(failedExpr, file, line);
+
+    fsl_assert_epilog_hook();
 }
 #else
 void __assert_func(const char *file, int line, const char *func, const char *failedExpr)
 {
     (void)PRINTF("ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" function name \"%s\" \n", failedExpr, file, line,
                  func);
-    for (;;)
-    {
-        __BKPT(0);
-    }
+
+    (void)fsl_assert_hook(failedExpr, file, line);
+
+    fsl_assert_epilog_hook();
 }
 #endif /* defined(__REDLIB__) */
 #else  /* (defined(__CC_ARM) || (defined(__ICCARM__)) || (defined(__ARMCC_VERSION)) */
