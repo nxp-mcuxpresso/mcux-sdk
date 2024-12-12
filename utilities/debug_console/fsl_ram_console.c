@@ -74,7 +74,7 @@ int RamConsole_Vprintf(const char *fmt_s, va_list formatStringArg)
     /* print log */
     for (i = 0; i < logLength; i++)
     {
-        header->ram_console_buf_addr[header->pos] = printBuf[i];
+        header->ram_console_buf_addr[header->pos % header->ram_console_buf_size] = printBuf[i];
         header->pos++;
         /* In case of pos overflow from 0xFFFFFFFF to 0 */
         if (header->pos == 0)
