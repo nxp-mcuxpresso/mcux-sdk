@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,7 +22,6 @@ static IRQn_Type const s_muIrqs[] = MU_IRQS;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-
 /*!
  * @brief Initialize channel and MU interface for communication with SM.
  */
@@ -35,6 +34,9 @@ void SM_Platform_Init(void)
     SMT_ChannelConfig(SM_PLATFORM_A2P, SM_PLATFORM_MU_INST, SM_PLATFORM_DBIR_A2P, SM_PLATFORM_SMA_ADDR);
     SMT_ChannelConfig(SM_PLATFORM_NOTIFY, SM_PLATFORM_MU_INST, SM_PLATFORM_DBIR_NOTIFY, SM_PLATFORM_SMA_ADDR);
     SMT_ChannelConfig(SM_PLATFORM_PRIORITY, SM_PLATFORM_MU_INST, SM_PLATFORM_DBIR_PRIORITY, SM_PLATFORM_SMA_ADDR);
+    SMT_ChannelSetFree(SM_PLATFORM_A2P);
+    SMT_ChannelSetFree(SM_PLATFORM_NOTIFY);
+    SMT_ChannelSetFree(SM_PLATFORM_PRIORITY);
 
     /* Configure MU */
     MU_Init(base);

@@ -148,6 +148,19 @@ bool SMT_ChannelFree(uint32_t smtChannel)
 }
 
 /*--------------------------------------------------------------------------*/
+/* Set SMT channel to be Free status                                        */
+/*--------------------------------------------------------------------------*/
+void SMT_ChannelSetFree(uint32_t smtChannel)
+{
+    smt_buf_t *buf = (smt_buf_t*) SMT_SmaGet(smtChannel);
+
+    if (buf != NULL)
+    {
+        buf->channelStatus |= SMT_FREE;
+    }
+}
+
+/*--------------------------------------------------------------------------*/
 /* Set abort state                                                          */
 /*--------------------------------------------------------------------------*/
 int32_t SMT_AbortSet(uint32_t smtChannel, bool state)

@@ -150,6 +150,17 @@ void *SMT_HdrAddrGet(uint32_t smtChannel);
 bool SMT_ChannelFree(uint32_t smtChannel);
 
 /*!
+ * Set SMT channel Free status.
+ *
+ * @param[in]     smtChannel  Channel for comms
+ *
+ * Set SMT channel to be Free status.
+ *
+ * @return No return.
+ */
+void SMT_ChannelSetFree(uint32_t smtChannel);
+
+/*!
  * Set abort state.
  *
  * @param[in]     smtChannel  Channel for comms
