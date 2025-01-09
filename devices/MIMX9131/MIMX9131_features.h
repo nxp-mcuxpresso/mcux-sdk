@@ -662,5 +662,10 @@
 /* @brief Has NONCACHEABLE section. */
 #define FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION (0)
 
+/* MEMORY module features */
+
+/* @brief Memory map doesn't have offset between subsystems. */
+#define FSL_FEATURE_MEMORY_HAS_ADDRESS_OFFSET (0)
+
 #endif /* _MIMX9131_FEATURES_H_ */
 
