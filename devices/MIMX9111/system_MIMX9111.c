@@ -62,6 +62,8 @@ void SystemInit (void) {
                  "msr cpacr_el1, x0");
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
   SystemInitHook();
+
+  ARM_TIMER_GetFreq(&SystemCoreClock);
 }
 
 /* ----------------------------------------------------------------------------
