@@ -614,5 +614,14 @@
 /* @brief WDOG_CNT can be 32-bit written. */
 #define FSL_FEATURE_WDOG_HAS_32BIT_ACCESS (1)
 
+/* CACHE module features */
+
+/* @brief L1 ICACHE line size in byte. */
+#define FSL_FEATURE_L1ICACHE_LINESIZE_BYTE (64)
+/* @brief L1 DCACHE line size in byte. */
+#define FSL_FEATURE_L1DCACHE_LINESIZE_BYTE (64)
+/* @brief Has NONCACHEABLE section. */
+#define FSL_FEATURE_HAS_NO_NONCACHEABLE_SECTION (0)
+
 #endif /* _MIMX9111_FEATURES_H_ */
 
