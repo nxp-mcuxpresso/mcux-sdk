@@ -39,6 +39,11 @@ extern "C" {
  */
 int fsl_assert_hook(const char *failedExpr, const char *file, int line);
 
+/*!
+ * @brief Function called usually to freeze/exit application
+ */
+void fsl_assert_epilog_hook(void);
+
 /*! @} */
 
 #if defined(__cplusplus)
@@ -48,4 +53,3 @@ int fsl_assert_hook(const char *failedExpr, const char *file, int line);
 /*! @} */
 
 #endif /* _FSL_DEBUGCONSOLE_H_ */
-
