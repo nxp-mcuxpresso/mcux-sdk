@@ -257,11 +257,14 @@ typedef enum _caam_hash_algo_t
 {
     kCAAM_XcbcMac = 0, /*!< XCBC-MAC (AES engine) */
     kCAAM_Cmac,        /*!< CMAC (AES engine) */
+    kCAAM_Md5,         /*!< MD5     (MDHA engine)  */
     kCAAM_Sha1,        /*!< SHA_1   (MDHA engine)  */
     kCAAM_Sha224,      /*!< SHA_224 (MDHA engine)  */
     kCAAM_Sha256,      /*!< SHA_256 (MDHA engine)  */
     kCAAM_Sha384,      /*!< SHA_384 (MDHA engine)  */
     kCAAM_Sha512,      /*!< SHA_512 (MDHA engine)  */
+    kCAAM_Sha512_224,  /*!< SHA_512_224 (MDHA engine)  */
+    kCAAM_Sha512_256,  /*!< SHA_512_256 (MDHA engine)  */
     kCAAM_HmacSha1,    /*!< HMAC_SHA_1   (MDHA engine)  */
     kCAAM_HmacSha224,  /*!< HMAC_SHA_224 (MDHA engine)  */
     kCAAM_HmacSha256,  /*!< HMAC_SHA_256 (MDHA engine)  */
