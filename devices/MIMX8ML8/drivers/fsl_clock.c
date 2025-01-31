@@ -920,25 +920,27 @@ void CLOCK_EnableClock(clock_ip_name_t ccmGate)
 {
     uint32_t clockType = CLOCK_GATE_TYPE(ccmGate);
     uint32_t ccgr      = CCM_TUPLE_CCGR(ccmGate);
-    uint32_t rootClk   = 0U;
+    uint32_t rootClk     = 0U;
+    uint32_t rootClkId   = 0U;
 
     if (CLOCK_GATE_IN_AUDIOMIX == clockType)
     {
         uint32_t offset = AUDIOMIX_TUPLE_OFFSET(ccmGate);
         uint32_t gate   = AUDIOMIX_TUPLE_GATE(ccmGate);
-        rootClk         = AUDIOMIX_TUPLE_ROOT(ccmGate);
+        rootClkId       = AUDIOMIX_TUPLE_ROOT_ID(ccmGate);
 
         *(volatile uint32_t *)((uintptr_t)AUDIOMIX + offset) |= (uint32_t)1U << gate;
     }
     else
     {
         CCM_REG_SET(ccgr) = (uint32_t)kCLOCK_ClockNeededAll;
-        rootClk           = CCM_TUPLE_ROOT(ccmGate);
+        rootClkId         = CCM_TUPLE_ROOT_ID(ccmGate);
     }
 
     /* if root clock is 0xFFFFU, then skip enable root clock */
-    if (rootClk != 0xFFFFU)
+    if (rootClkId != 0xFFFFU)
     {
+        rootClk = CCM_TUPLE_ROOT(rootClkId);
         CCM_REG_SET(rootClk) = CCM_TARGET_ROOT_SET_ENABLE_MASK;
     }
 }
@@ -957,24 +959,26 @@ void CLOCK_DisableClock(clock_ip_name_t ccmGate)
     uint32_t ccgr      = CCM_TUPLE_CCGR(ccmGate);
     uint32_t clockType = CLOCK_GATE_TYPE(ccmGate);
     uint32_t rootClk   = 0U;
+    uint32_t rootClkId = 0U;
 
     if (CLOCK_GATE_IN_AUDIOMIX == clockType)
     {
         uint32_t offset = AUDIOMIX_TUPLE_OFFSET(ccmGate);
         uint32_t gate   = AUDIOMIX_TUPLE_GATE(ccmGate);
-        rootClk         = AUDIOMIX_TUPLE_ROOT(ccmGate);
+        rootClkId       = AUDIOMIX_TUPLE_ROOT_ID(ccmGate);
 
         *(volatile uint32_t *)((uintptr_t)AUDIOMIX + offset) &= ~((uint32_t)1U << gate);
     }
     else
     {
         CCM_REG(ccgr) = (uint32_t)kCLOCK_ClockNotNeeded;
-        rootClk       = CCM_TUPLE_ROOT(ccmGate);
+        rootClkId     = CCM_TUPLE_ROOT(ccmGate);
     }
 
     /* if root clock is 0xFFFFU, then skip disable root clock */
-    if (rootClk != 0xFFFFU)
+    if (rootClkId != 0xFFFFU)
     {
+        rootClk = CCM_TUPLE_ROOT(rootClkId);
         CCM_REG_CLR(rootClk) = CCM_TARGET_ROOT_CLR_ENABLE_MASK;
     }
 }
