@@ -636,7 +636,7 @@ typedef enum _clock_ip_name
     kCLOCK_Sai3_Mclk3 = AUDIOMIX_TUPLE(0U, 11U, 0xFFFF), /*!< SAI3 MCLK3 clock gate */
     kCLOCK_Sai3_Mclk2 = AUDIOMIX_TUPLE(0U, 10U, 0xFFFF), /*!< SAI3 MCLK2 clock gate */
     kCLOCK_Sai3_Mclk1 = AUDIOMIX_TUPLE(0U, 9U, 0xFFFF),  /*!< SAI3 MCLK1 clock gate */
-    kCLOCK_Sai3       = AUDIOMIX_TUPLE(0U, 8U, 77U),     /*!< SAI3 clock gate */
+    kCLOCK_Sai3       = AUDIOMIX_TUPLE(0U, 8U, 0xFFFF),     /*!< SAI3 clock gate */
 
     kCLOCK_Sai2_Mclk3 = AUDIOMIX_TUPLE(0U, 7U, 0xFFFF), /*!< SAI2 MCLK3 clock gate */
     kCLOCK_Sai2_Mclk2 = AUDIOMIX_TUPLE(0U, 6U, 0xFFFF), /*!< SAI2 MCLK2 clock gate */
