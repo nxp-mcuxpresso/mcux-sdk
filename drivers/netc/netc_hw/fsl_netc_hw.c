@@ -129,7 +129,7 @@ status_t NETC_CmdBDRInit(netc_cbdr_hw_t *base, const netc_cmd_bdr_config_t *conf
     status_t status = kStatus_Success;
     uint64_t address;
 
-    if ((0U != ((uint32_t)config->bdBase % 128U)) || (0U != (config->bdLength % 8U)))
+    if ((0U != ((uintptr_t)config->bdBase % 128U)) || (0U != (config->bdLength % 8U)))
     {
         status = kStatus_InvalidArgument;
     }
