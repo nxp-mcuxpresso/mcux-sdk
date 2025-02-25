@@ -60,7 +60,6 @@ else
 	is_win_package_installed "pip3"
 fi
 
-is_python_package_installed "pycrypto"
 is_python_package_installed "pycryptodome"
 
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

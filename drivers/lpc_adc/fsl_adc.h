@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
- * All rights reserved.
+ * Copyright 2016-2019, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -24,8 +23,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief ADC driver version 2.3.1. */
-#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 3, 2))
+/*! @brief ADC driver version 2.4.0. */
+#define FSL_ADC_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
 /*@}*/
 
 /*!
@@ -94,6 +93,19 @@ enum _adc_interrupt_enable
                                                                the channel data registers will cause an overrun
                                                                interrupt/DMA trigger. */
 };
+
+#if (defined(FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP) && FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP)
+/*!
+ * @brief Extend ADC sampling time according to source impedance.
+ */
+typedef enum _adc_extend_sample_time
+{
+    kADC_ExtendSampleTimeNotUsed = 0x0U,    /* Not Used */
+    kADC_ExtendSampleTime1 = 0x1U,          /* 0.621kΩ */
+    kADC_ExtendSampleTime2 = 0x14U,         /* 55kΩ */
+    kADC_ExtendSampleTime3 = 0x1fU,         /* 87kΩ */
+}adc_extend_sample_time_t;
+#endif /* FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP */
 
 #if defined(FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE) & FSL_FEATURE_ADC_HAS_CTRL_ASYNMODE
 /*!
@@ -275,6 +287,11 @@ typedef struct _adc_config
     uint32_t sampleTimeNumber; /*!< By default, with value as "0U", the sample period would be 2.5 ADC clocks. Then,
                                     to plus the "sampleTimeNumber" value here. The available value range is in 3 bits.*/
 #endif                         /* FSL_FEATURE_ADC_HAS_CTRL_TSAMP. */
+
+#if (defined(FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP) && FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP)
+    adc_extend_sample_time_t extendSampleTimeNumber; /*!< Extend ADC sampling time according to source impedance.*/
+#endif /* FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP */
+
 #if defined(FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE) & FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE
     bool enableLowPowerMode; /*!< If disable low-power mode, ADC remains activated even when no conversions are
                               requested.
@@ -359,6 +376,7 @@ void ADC_Deinit(ADC_Type *base);
  *   config->resolution = kADC_Resolution12bit;
  *   config->enableBypassCalibration = false;
  *   config->sampleTimeNumber = 0U;
+ *   config->extendSampleTimeNumber = kADC_ExtendSampleTimeNotUsed;
  * @endcode
  * @param config Pointer to configuration structure.
  */

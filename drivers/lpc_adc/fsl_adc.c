@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
- * All rights reserved.
+ * Copyright 2016-2019, 2024 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -87,8 +86,13 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
     }
 #endif /* FSL_FEATURE_ADC_HAS_CTRL_BYPASSCAL. */
 
+#if (defined(FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP) && FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP)
+    base->GPADC_CTRL0 = ((base->GPADC_CTRL0 & ~ADC_GPADC_CTRL0_GPADC_TSAMP_MASK) |
+                         (ADC_GPADC_CTRL0_GPADC_TSAMP(config->extendSampleTimeNumber)));
+#endif /* FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP */
+
 #if defined(FSL_FEATURE_ADC_HAS_CTRL_TSAMP) & FSL_FEATURE_ADC_HAS_CTRL_TSAMP
-/* Sample time clock count. */
+    /* Sample time clock count. */
 #if (defined(FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL) && FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL)
     if (config->clockMode == kADC_ClockAsynchronousMode)
     {
@@ -97,7 +101,8 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
 #if (defined(FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL) && FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL)
     }
 #endif /* FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL */
-#endif /* FSL_FEATURE_ADC_HAS_CTRL_TSAMP. */
+#endif /* FSL_FEATURE_ADC_HAS_CTRL_TSAMP */
+
 #if defined(FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE) & FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE
     if (config->enableLowPowerMode)
     {
@@ -109,10 +114,6 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
 
 #if defined(FSL_FEATURE_ADC_HAS_GPADC_CTRL0_LDO_POWER_EN) && FSL_FEATURE_ADC_HAS_GPADC_CTRL0_LDO_POWER_EN
     base->GPADC_CTRL0 |= ADC_GPADC_CTRL0_LDO_POWER_EN_MASK;
-    if (config->clockMode == kADC_ClockSynchronousMode)
-    {
-        base->GPADC_CTRL0 |= ADC_GPADC_CTRL0_PASS_ENABLE(config->sampleTimeNumber);
-    }
     SDK_DelayAtLeastUs(300, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 #endif /* FSL_FEATURE_ADC_HAS_GPADC_CTRL0_LDO_POWER_EN */
 
@@ -143,6 +144,7 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
  *   config->resolution = kADC_Resolution12bit;
  *   config->enableBypassCalibration = false;
  *   config->sampleTimeNumber = 0U;
+ *   config->extendSampleTimeNumber = kADC_ExtendSampleTimeNotUsed;
  * endcode
  * param config Pointer to configuration structure.
  */
@@ -166,6 +168,9 @@ void ADC_GetDefaultConfig(adc_config_t *config)
 #if defined(FSL_FEATURE_ADC_HAS_CTRL_TSAMP) & FSL_FEATURE_ADC_HAS_CTRL_TSAMP
     config->sampleTimeNumber = 0U;
 #endif /* FSL_FEATURE_ADC_HAS_CTRL_TSAMP. */
+#if (defined(FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP) && FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP)
+    config->extendSampleTimeNumber = kADC_ExtendSampleTimeNotUsed;
+#endif /* FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP */
 #if defined(FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE) & FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE
     config->enableLowPowerMode = false;
 #endif /* FSL_FEATURE_ADC_HAS_CTRL_LPWRMODE. */

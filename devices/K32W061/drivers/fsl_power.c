@@ -83,8 +83,7 @@
      ((Vflashcore << LOWPOWER_VOLTAGE_LDO_FLASH_CORE_INDEX) & LOWPOWER_VOLTAGE_LDO_FLASH_CORE_MASK))
 
 /*
- * Recommended Voltage settings from
- * https://www.collabnet.nxp.com/svn/lprfprojects/JN5189/Documents/17_Architecture/17_n_Digital/Block_Specification/jn5189_settings.xlsx
+ * Recommended Voltage settings
  */
 #define VOLTAGE_PMU_DOWN 0x5      /* 0.8V  */
 #define VOLTAGE_PMUBOOST_DOWN 0x3 /* 0.75V */
@@ -1080,6 +1079,11 @@ void POWER_SetDcdc1v8(void)
 
     PMC->DCDC0 = myDCDC0;
     PMC->DCDC1 = myDCDC1;
+
+    /* Measurements show that setting time for DCDC is around 40 us.
+     * User needs to take this into account when handling other voltage
+     * sensible components like the radio transceiver.
+     */
 }
 
 /*!
@@ -1093,8 +1097,8 @@ void POWER_SetDcdc1v3(void)
     uint32_t myDCDC1 = PMC->DCDC1;
     uint32_t valueRegister;
 
-    // Set DCDC1.FORCEFULLCYCLE = 0x1
-    myDCDC1 |= 0x04000000;
+    // Reset the FORCEFULLCYCLE bit
+    myDCDC1 &= ~0x04000000;
 
     // Set DCDC1.LCENABLE = 0x1
     myDCDC1 |= 0x02000000;
