@@ -1,7 +1,7 @@
 /*
 ** ###################################################################
 **     Version:             rev. 1.0, 2019-11-05
-**     Build:               b200803
+**     Build:               b241205
 **
 **     Abstract:
 **         Chip specific module features.
@@ -116,6 +116,8 @@
 #define FSL_FEATURE_ADC_HAS_TRIM_REG (0)
 /* @brief Has Calibration register. */
 #define FSL_FEATURE_ADC_HAS_CALIB_REG (0)
+/* @brief Has GPADC_TSAMP bitfile in GPADC_CTRL0 register. */
+#define FSL_FEATURE_ADC_HAS_GPADC_CTRL0_GPADC_TSAMP (1)
 
 /* ASYNC_SYSCON module features */
 

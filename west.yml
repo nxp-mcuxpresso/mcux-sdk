@@ -39,7 +39,3 @@ manifest:
     path: rtos/amazon-freertos
     revision: fb74168634e716fb5f0a61714e5c0d1ac6246bac
     remote: nxp
-  - name: mbedtls
-    path: middleware/mbedtls
-    revision: 15458495823165de372f62c3dad621a8da6c86e3
-    remote: nxp-mcuxpresso

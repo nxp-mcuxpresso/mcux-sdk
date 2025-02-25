@@ -1,5 +1,5 @@
 Release Name: MCUXpresso Software Development Kit (SDK)
-Release Version: 2.6.15
+Release Version: 2.6.16
 Package License: LA_OPT_NXP_Software_License.txt - Additional Distribution License, Section 2.3 applies
 
 KSDK_Peripheral_Driver     Description: Peripheral drivers are designed for  
@@ -149,7 +149,7 @@ mbedtls                    Author: ARM
 
 ZigBee 3.0                 Author: NXP                                       
                            Name: JN518x ZigBee 3.0 Stack                     
-                           Version: 1.0.15                                   
+                           Version: 1.0.16                                   
                            Location: middleware/wireless/zigbee              
                            Description: ZigBee 3.0 protocol stack for JN518x 
                            License: Proprietary, See EULA                    
@@ -158,7 +158,7 @@ ZigBee 3.0                 Author: NXP
 
 ZigBee 3.0 ECB decrypt     Author: Niyaz PK                                  
                            Name: ECB decryption                              
-                           Version: 1.0.15                                   
+                           Version: 1.0.16                                   
                            Location:                                         
                            middleware/wireless/zigbee/BDB/Source/TouchLink   
                            Description: ECB decryption implementation        
@@ -170,7 +170,7 @@ ZigBee 3.0 ECB decrypt     Author: Niyaz PK
 
 ZigBee 3.0 Eclipse Plugins Author: NXP                                       
                            Name: ZigBee 3.0 Eclipse Plugins                  
-                           Version: 1.0.15                                   
+                           Version: 1.0.16                                   
                            Location: middleware/wireless/zigbee/tools        
                            Description: ZigBee 3.0 plugins for Eclipse for   
                            configuration of stack parameters                 
@@ -180,7 +180,7 @@ ZigBee 3.0 Eclipse Plugins Author: NXP
 
 ZigBee 3.0 PDUMConfig tool Author: NXP                                       
                            Name: ZigBee 3.0 PDU Manager Configuration Tool   
-                           Version: 1.0.15                                   
+                           Version: 1.0.16                                   
                            Location: middleware/wireless/zigbee/tools        
                            Description: Converts configuration data file into
                            C source and header files. Built with MS .NET     
@@ -191,7 +191,7 @@ ZigBee 3.0 PDUMConfig tool Author: NXP
 
 ZigBee 3.0 ZPSConfig tool  Author: NXP                                       
                            Name: ZigBee 3.0 ZPS Configuration Tool           
-                           Version: 1.0.15                                   
+                           Version: 1.0.16                                   
                            Location: middleware/wireless/zigbee/tools        
                            Description: Converts configuration data file into
                            C source and header files. Built with MS .NET     

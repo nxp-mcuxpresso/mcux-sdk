@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 1.0, 2019-11-05
+**     Version:             rev. 1.0, 2018-07-31
 **     Build:               b241205
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2021 NXP
+**     Copyright 2016-2019 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -16,14 +16,14 @@
 **     mail:                 support@nxp.com
 **
 **     Revisions:
-**     - rev. 1.0 (2019-11-05)
+**     - rev. 1.0 (2018-07-31)
 **         Initial version.
 **
 ** ###################################################################
 */
 
-#ifndef _K32W041A_FEATURES_H_
-#define _K32W041A_FEATURES_H_
+#ifndef _JN5189_FEATURES_H_
+#define _JN5189_FEATURES_H_
 
 /* SOC module features */
 
@@ -47,10 +47,8 @@
 #define FSL_FEATURE_SOC_FLEXCOMM_COUNT (7)
 /* @brief GINT availability on the SoC. */
 #define FSL_FEATURE_SOC_GINT_COUNT (1)
-/* @brief HASH availability on the SoC. */
-#define FSL_FEATURE_SOC_HASH_COUNT (1)
 /* @brief I2C availability on the SoC. */
-#define FSL_FEATURE_SOC_I2C_COUNT (2)
+#define FSL_FEATURE_SOC_I2C_COUNT (3)
 /* @brief INPUTMUX availability on the SoC. */
 #define FSL_FEATURE_SOC_INPUTMUX_COUNT (1)
 /* @brief IOCON availability on the SoC. */
@@ -233,8 +231,6 @@
 #define FSL_FEATURE_SPIFI_END_ADDR (0x103FFFFF)
 /* @brief SPIFI DATALEN bitfile in CMD register */
 #define FSL_FEATURE_SPIFI_DATALEN_CTRL (1)
-/* @brief SPIFI use dual mode read to access the flash */
-#define FSL_FEATURE_SPIFI_DUAL_MODE (1)
 
 /* WWDT module features */
 
@@ -245,5 +241,4 @@
 /* @brief WWDT LOCK bitfile in MOD register */
 #define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (1)
 
-#endif /* _K32W041A_FEATURES_H_ */
-
+#endif /* _JN5189_FEATURES_H_ */
