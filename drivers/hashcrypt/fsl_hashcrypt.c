@@ -75,7 +75,7 @@ static hashcrypt_hash_ctx_t *s_ctx;
 
 /*!< macro for checking build time condition. It is used to assure the hashcrypt_sha_ctx_internal_t can fit into
  * hashcrypt_hash_ctx_t */
-#define BUILD_ASSERT(condition, msg) extern int msg[1 - 2 * (!(condition))] __attribute__((unused))
+#define _FSL_HASHCRYPT_BUILD_ASSERT(condition, msg) extern int msg[1 - 2 * (!(condition))] __attribute__((unused))
 
 /*******************************************************************************
  * Code
@@ -948,7 +948,7 @@ status_t HASHCRYPT_SHA_Init(HASHCRYPT_Type *base, hashcrypt_hash_ctx_t *ctx, has
 
     hashcrypt_sha_ctx_internal_t *ctxInternal;
     /* compile time check for the correct structure size */
-    BUILD_ASSERT(sizeof(hashcrypt_hash_ctx_t) >= sizeof(hashcrypt_sha_ctx_internal_t), hashcrypt_hash_ctx_t_size);
+    _FSL_HASHCRYPT_BUILD_ASSERT(sizeof(hashcrypt_hash_ctx_t) >= sizeof(hashcrypt_sha_ctx_internal_t), hashcrypt_hash_ctx_t_size);
 
     status = hashcrypt_sha_check_input_args(base, ctx, algo);
     if (status != kStatus_Success)
