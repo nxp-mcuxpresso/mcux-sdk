@@ -65,7 +65,7 @@ enum _sha_digest_len
 static sha_ctx_t *s_shaCtx = NULL;
 
 /*!< macro for checking build time condition. It is used to assure the sha_ctx_internal_t can fit into sha_ctx_t */
-#define BUILD_ASSERT(condition, msg) extern int msg[1 - 2 * (!(condition))] __attribute__((unused))
+#define _FSL_SHA_BUILD_ASSERT(condition, msg) extern int msg[1 - 2 * (!(condition))] __attribute__((unused))
 
 /*******************************************************************************
  * Code
@@ -502,7 +502,7 @@ status_t SHA_Init(SHA_Type *base, sha_ctx_t *ctx, sha_algo_t algo)
 
     sha_ctx_internal_t *ctxInternal;
     /* compile time check for the correct structure size */
-    BUILD_ASSERT(sizeof(sha_ctx_t) >= sizeof(sha_ctx_internal_t), sha_ctx_t_size);
+    _FSL_SHA_BUILD_ASSERT(sizeof(sha_ctx_t) >= sizeof(sha_ctx_internal_t), sha_ctx_t_size);
     uint32_t i;
 
     status = sha_check_input_args(base, ctx, algo);
