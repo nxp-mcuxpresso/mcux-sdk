@@ -100,6 +100,13 @@ void ADC_Init(ADC_Type *base, const adc_config_t *config)
         tmp32 |= ADC_CTRL_TSAMP(config->sampleTimeNumber);
 #if (defined(FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL) && FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL)
     }
+    else
+    {
+        uint32_t tmp_ctrl0 = base->GPADC_CTRL0;
+        tmp_ctrl0 &= ~ADC_GPADC_CTRL0_GPADC_TSAMP_MASK;
+        tmp_ctrl0 |= ADC_GPADC_CTRL0_GPADC_TSAMP(config->sampleTimeNumber);
+        base->GPADC_CTRL0 = tmp_ctrl0;
+    }
 #endif /* FSL_FEATURE_ADC_SYNCHRONOUS_USE_GPADC_CTRL */
 #endif /* FSL_FEATURE_ADC_HAS_CTRL_TSAMP */
 
