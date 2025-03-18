@@ -615,7 +615,7 @@
 /* @brief Max number of ENETC SI Tx/Rx BD rings. */
 #define FSL_FEATURE_NETC_SI_RING_NUM_MAX (24)
 /* @brief NETC MSI-X table base address. */
-#define FSL_FEATURE_NETC_MSIX_TABLE_BASE (0x60BC0000)
+#define FSL_FEATURE_NETC_MSIX_TABLE_BASE (0x4CD00000)
 /* @brief No switch support. */
 #define FSL_FEATURE_NETC_HAS_NO_SWITCH (1)
 
