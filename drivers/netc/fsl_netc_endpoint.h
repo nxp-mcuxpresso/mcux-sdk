@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -249,6 +249,9 @@ typedef status_t (*ep_get_link_status_cb_t)(ep_handle_t *handle, uint8_t *link);
 /*! @brief Callback for getting link speed */
 typedef status_t (*ep_get_link_speed_cb_t)(ep_handle_t *handle, netc_hw_mii_speed_t *speed, netc_hw_mii_duplex_t *duplex);
 
+/*! @brief Callback for vsi pre-init */
+typedef status_t (*ep_preinit_vsi_cb_t)(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
+
 /*! @brief Configuration for the endpoint handle. */
 typedef struct _ep_config
 {
@@ -284,6 +287,7 @@ typedef struct _ep_config
     bool rxZeroCopy;                    /*!< Enable/Disable zero-copy receive mode. */
     ep_rx_alloc_cb_t rxBuffAlloc;       /*!< Callback function to alloc memory, must be provided for zero-copy Rx. */
     ep_rx_free_cb_t rxBuffFree;         /*!< Callback function to free memory, must be provided for zero-copy Rx. */
+    ep_preinit_vsi_cb_t preinitVsi;     /*!< Callback function to pre-init VSI */
     netc_cmd_bdr_config_t cmdBdrConfig; /*!< Command BD ring configuration. */
 } ep_config_t;
 

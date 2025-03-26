@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -174,12 +174,4 @@ status_t NETC_SocSetLinkAddr(netc_soc_link_t link, uint8_t phyAddr);
  */
 uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port);
 
-/*!
- * @brief Preinit VSIs
- *
- * @param hw      The enetc hw handle.
- * @param si      The SI object.
- * @return status_t
- */
-status_t NETC_SocPreInitVsi(netc_enetc_hw_t *hw, netc_hw_si_idx_t si);
 #endif /* FSL_NETC_SOC_H_ */

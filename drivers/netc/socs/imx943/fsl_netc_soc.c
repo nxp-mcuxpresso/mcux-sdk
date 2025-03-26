@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 NXP
+ * Copyright 2024-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -47,9 +47,4 @@ uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port)
     uint32_t instance = (uint32_t)port + 1U;
 
     return instance;
-}
-
-status_t NETC_SocPreInitVsi(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
-{
-    return kStatus_Success;
 }

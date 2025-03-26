@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 NXP
+ * Copyright 2021-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -668,9 +668,9 @@ status_t EP_Init(ep_handle_t *handle, uint8_t *macAddr, const ep_config_t *confi
         return result;
     }
 
-    if (siNum == 0U)
+    if (siNum == 0U && config->preinitVsi != NULL)
     {
-        result = NETC_SocPreInitVsi(&handle->hw, config->si);
+        result = config->preinitVsi(&handle->hw, config->si);
     }
     return result;
 }

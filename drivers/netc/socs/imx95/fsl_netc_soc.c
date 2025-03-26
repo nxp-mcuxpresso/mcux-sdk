@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 NXP
+ * Copyright 2023, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -47,84 +47,4 @@ uint32_t NETC_SocGetFuncInstance(netc_hw_eth_port_idx_t port)
     uint32_t instance = (uint32_t)port + 1U;
 
     return instance;
-}
-
-status_t NETC_SocPreInitVsi(netc_enetc_hw_t *hw, netc_hw_si_idx_t si)
-{
-    uint8_t macAddr0[] = { 0x00, 0x00, 0xfa, 0xfa, 0xdd, 0xa0 };
-    uint8_t macAddr1[] = { 0x00, 0x00, 0xfa, 0xfa, 0xdd, 0xa1 };
-    netc_hw_enetc_si_config_t vsi0Config = { .txRingUse = 3U, .rxRingUse = 3U};
-    netc_hw_enetc_si_config_t vsi1Config = { .txRingUse = 4U, .rxRingUse = 4U};
-    uint32_t vsi0MsixNum = 4U;
-    uint32_t vsi1MsixNum = 5U;
-    uint8_t vsi0Num;
-    uint8_t vsi1Num;
-    status_t result;
-
-    switch (si)
-    {
-        case kNETC_ENETC0PSI0:
-            vsi0Num = getSiNum(kNETC_ENETC0VSI0);
-            vsi1Num = getSiNum(kNETC_ENETC0VSI1);
-            break;
-        case kNETC_ENETC1PSI0:
-            vsi0Num = getSiNum(kNETC_ENETC1VSI0);
-            vsi1Num = getSiNum(kNETC_ENETC1VSI1);
-            break;
-        case kNETC_ENETC2PSI0:
-            vsi0Num = getSiNum(kNETC_ENETC2VSI0);
-            vsi1Num = getSiNum(kNETC_ENETC2VSI1);
-            break;
-        default:
-            assert(false);
-            break;
-    }
-
-    /* RSS key init with generated random values */
-    hw->base->PRSSKR0 = 0x995770eaU;
-    hw->base->PRSSKR1 = 0x7e8cbbe3U;
-    hw->base->PRSSKR2 = 0x9ac8285bU;
-    hw->base->PRSSKR3 = 0xce20c189U;
-    hw->base->PRSSKR4 = 0xb7ece3ebU;
-    hw->base->PRSSKR5 = 0xf8bc2513U;
-    hw->base->PRSSKR6 = 0x62613353U;
-    hw->base->PRSSKR7 = 0x4c84ae76U;
-    hw->base->PRSSKR8 = 0x72c890f1U;
-    hw->base->PRSSKR9 = 0xd7a8144bU;
-
-    /* Preinit vsi0 for mac address, BDR num, and MSIX interrupt num */
-    NETC_EnetcSetSIMacAddr(hw->base, vsi0Num, macAddr0);
-
-    result = NETC_EnetcSetMsixEntryNum(hw->base, vsi0Num, vsi0MsixNum);
-    if (result != kStatus_Success)
-    {
-        return result;
-    }
-
-    result = NETC_EnetcConfigureSI(hw->base, vsi0Num, &vsi0Config);
-    if (result != kStatus_Success)
-    {
-        return result;
-    }
-
-    NETC_EnetcEnableSI(hw->base, vsi0Num, true);
-
-    /* Preinit vsi1 for mac address, BDR num, and MSIX interrupt num */
-    NETC_EnetcSetSIMacAddr(hw->base, vsi1Num, macAddr1);
-
-    result = NETC_EnetcSetMsixEntryNum(hw->base, vsi1Num, vsi1MsixNum);
-    if (result != kStatus_Success)
-    {
-        return result;
-    }
-
-    result = NETC_EnetcConfigureSI(hw->base, vsi1Num, &vsi1Config);
-    if (result != kStatus_Success)
-    {
-        return result;
-    }
-
-    NETC_EnetcEnableSI(hw->base, vsi1Num, true);
-
-    return result;
 }
