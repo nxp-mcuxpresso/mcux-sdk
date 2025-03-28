@@ -233,13 +233,14 @@
 #define CLOCK_GATE_TYPE(tuple) ((uint32_t)(tuple) >> 28U)
 #define CCM_TUPLE(ccgr, root)  ((((ccgr)&0xFFFFU) << 16U) | (root))
 #define CCM_TUPLE_CCGR(tuple)  ((uintptr_t)(&(CCM)->CCGR[(uint32_t)(tuple) >> 16U].CCGR))
-#define CCM_TUPLE_ROOT(tuple)  ((uintptr_t)(&(CCM)->ROOT[(uint32_t)(tuple)&0xFFFFU].TARGET_ROOT))
+#define CCM_TUPLE_ROOT_ID(tuple) ((uint32_t)(tuple)&0xFFFFU)
+#define CCM_TUPLE_ROOT(id)  ((uintptr_t)(&(CCM)->ROOT[id].TARGET_ROOT))
 /*!@brief audio mix CCGR */
 #define AUDIOMIX_TUPLE(offset, gate, root) \
     (((CLOCK_GATE_IN_AUDIOMIX) << 28U) | (((offset)&0xFU) << 24U) | (((gate)&0xFFU) << 16U) | ((root)&0xFFFFU))
 #define AUDIOMIX_TUPLE_OFFSET(tuple) (((uint32_t)(tuple) >> 24U) & 0xFU)
 #define AUDIOMIX_TUPLE_GATE(tuple)   (((uint32_t)(tuple) >> 16U) & 0xFFU)
-#define AUDIOMIX_TUPLE_ROOT(tuple)   ((uint32_t)(tuple)&0xFFFFU)
+#define AUDIOMIX_TUPLE_ROOT_ID(tuple)   ((uint32_t)(tuple)&0xFFFFU)
 
 /*!
  * @brief clock root source
@@ -635,7 +636,7 @@ typedef enum _clock_ip_name
     kCLOCK_Sai3_Mclk3 = AUDIOMIX_TUPLE(0U, 11U, 0xFFFF), /*!< SAI3 MCLK3 clock gate */
     kCLOCK_Sai3_Mclk2 = AUDIOMIX_TUPLE(0U, 10U, 0xFFFF), /*!< SAI3 MCLK2 clock gate */
     kCLOCK_Sai3_Mclk1 = AUDIOMIX_TUPLE(0U, 9U, 0xFFFF),  /*!< SAI3 MCLK1 clock gate */
-    kCLOCK_Sai3       = AUDIOMIX_TUPLE(0U, 8U, 77U),     /*!< SAI3 clock gate */
+    kCLOCK_Sai3       = AUDIOMIX_TUPLE(0U, 8U, 0xFFFF),     /*!< SAI3 clock gate */
 
     kCLOCK_Sai2_Mclk3 = AUDIOMIX_TUPLE(0U, 7U, 0xFFFF), /*!< SAI2 MCLK3 clock gate */
     kCLOCK_Sai2_Mclk2 = AUDIOMIX_TUPLE(0U, 6U, 0xFFFF), /*!< SAI2 MCLK2 clock gate */
