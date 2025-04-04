@@ -74,12 +74,6 @@ status_t NETC_TimerInit(netc_timer_handle_t *handle, const netc_timer_config_t *
     handle->entryNum     = config->entryNum;
     handle->timerFreq    = config->refClkHz;
 
-    /* Reset this function */
-    handle->hw.func->PCI_CFC_PCIE_DEV_CTL |= ENETC_PCI_TYPE0_PCI_CFC_PCIE_DEV_CTL_INIT_FLR_MASK;
-    while ((handle->hw.func->PCI_CFC_PCIE_DEV_CTL & ENETC_PCI_TYPE0_PCI_CFC_PCIE_DEV_CTL_INIT_FLR_MASK) != 0U)
-    {
-    }
-
     /* Enable master bus and memory access for PCIe and MSI-X. */
     handle->hw.func->PCI_CFH_CMD |=
         ENETC_PCI_TYPE0_PCI_CFH_CMD_MEM_ACCESS_MASK | ENETC_PCI_TYPE0_PCI_CFH_CMD_BUS_MASTER_EN_MASK;
