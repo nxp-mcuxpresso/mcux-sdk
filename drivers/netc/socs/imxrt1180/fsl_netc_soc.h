@@ -53,6 +53,15 @@ typedef enum _netc_soc_timer_trig_input
     kNETC_SocTimerTrigXbarInput, /*!< Input from XBAR. */
 } netc_soc_timer_trig_input_t;
 
+/*!
+ * @brief Enumeration for NETC timer reference clock
+ */
+typedef enum _netc_timer_ref_clk
+{
+    kNETC_TimerExtRefClk = 0,
+    kNETC_TimerSystemClk,
+} netc_timer_ref_clk_t;
+
 /*! @brief Station interface index enumerator */
 typedef enum _netc_hw_si_idx
 {

@@ -99,15 +99,6 @@ struct _netc_timer_handle
 };
 
 /*!
- * @brief Enumeration for NETC timer reference clock
- */
-typedef enum _netc_timer_ref_clk
-{
-    kNETC_TimerExtRefClk = 0,
-    kNETC_TimerSystemClk,
-} netc_timer_ref_clk_t;
-
-/*!
  * @brief Structure to configure timer
  */
 typedef struct _netc_timer_config

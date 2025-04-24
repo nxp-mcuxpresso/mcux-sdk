@@ -46,6 +46,16 @@ typedef enum _netc_timer_exttrig_index
 } netc_timer_exttrig_index_t;
 
 /*!
+ * @brief Enumeration for NETC timer reference clock
+ */
+typedef enum _netc_timer_ref_clk
+{
+    kNETC_TimerEnetTimer1_Clk = 0,
+    kNETC_TimerSystemClk,
+    kNETC_TimerExtRefClk,
+} netc_timer_ref_clk_t;
+
+/*!
  * @brief Get register map resource
  *
  * @param handle  The enetc hw handle.
