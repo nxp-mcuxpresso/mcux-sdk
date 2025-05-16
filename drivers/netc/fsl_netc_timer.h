@@ -107,7 +107,6 @@ typedef struct _netc_timer_config
     bool clkInputPhase; /*!< True: Inverted frequency tuned timer input clock, False: Non-inverted frequency tuned timer
                            input clock. */
     bool enableTimer;   /*!< True: Enable 1588 timer, False: Disable 1588 timer, use default counter. */
-    bool atomicMode;   /*!< True: Allow atomic updates to TMR_PERIOD and TMR_ADD, False: Disable it. */
     netc_timer_ref_clk_t clockSelect; /*!< Timer reference clock. */
     uint32_t refClkHz;                /*!< Timer reference clock frequency in Hz. */
     int32_t defaultPpb;               /*!< Default ppb. */
