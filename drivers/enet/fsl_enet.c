@@ -2975,7 +2975,7 @@ void ENET_Ptp1588GetTimer(ENET_Type *base, enet_handle_t *handle, enet_ptp_time_
     ENET_Ptp1588GetTimerNoIrqDisable(base, handle, ptpTime);
 
     /* Get PTP timer wrap event. */
-    if (0U != (base->EIR & (uint32_t)kENET_TsTimerInterrupt))
+    if (0U != (base->EIR & (uint32_t)kENET_TsTimerInterrupt) && ptpTime->nanosecond < (ENET_NANOSECOND_ONE_SECOND / 2))
     {
         ptpTime->second++;
     }
