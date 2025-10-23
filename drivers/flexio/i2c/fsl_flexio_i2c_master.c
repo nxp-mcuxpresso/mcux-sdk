@@ -613,12 +613,13 @@ status_t FLEXIO_I2C_CheckForBusyBus(FLEXIO_I2C_Type *base)
    .timerIndex = {0,1}
    };
    flexio_i2c_master_config_t config = {
+   .enableMaster = true;
    .enableInDoze = false,
    .enableInDebug = true,
    .enableFastAccess = false,
    .baudRate_Bps = 100000
    };
-   FLEXIO_I2C_MasterInit(base, &config, srcClock_Hz);
+   FLEXIO_I2C_MasterInit(&base, &config, srcClock_Hz);
    endcode
  *
  * param base Pointer to FLEXIO_I2C_Type structure.
