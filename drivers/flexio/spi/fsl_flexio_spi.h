@@ -557,7 +557,7 @@ status_t FLEXIO_SPI_ReadBlocking(FLEXIO_SPI_Type *base,
                                  size_t size);
 
 /*!
- * @brief Receives a buffer of bytes.
+ * @brief Sends and receives a buffer of bytes.
  *
  * @note This function blocks via polling until all bytes have been received.
  *
