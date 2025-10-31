@@ -129,7 +129,7 @@ Below figure takes 2.9.0 and 2.10.0 release as an example to show the relationsh
 See [Getting Start Guide](docs/Getting_Started.md) to start explore the project.
 
 ## License
-Most of software in the project is open-source and licensed under BSD-3-Clause, see [COPYING_BSD-3](COPYING-BSD-3). Whole license information for the project could be found in [SW-Content-Register.txt](SW-Content-Register.txt)
+This repository is licensed under the [LA_OPT_NXP_Software license](LICENSE). Most of the software components(drivers, devices etc), however, are open source and distributed under the [BSD-3-Clause](licenses/COPYING-BSD-3). For a complete overview of license details for all included content, please refer to [SW-Content-Register.txt](SW-Content-Register.txt)
 
 ## Contribution
 Contributions are greatly welcomed! For detail guideline of contribution please check [Contribution Guide](CONTRIBUTING.md).
