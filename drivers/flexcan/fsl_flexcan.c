@@ -541,60 +541,6 @@ void FLEXCAN_EnterFreezeMode(CAN_Type *base)
 #endif
     }
 }
-#elif (defined(FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341) && FSL_FEATURE_FLEXCAN_HAS_ERRATA_8341)
-void FLEXCAN_EnterFreezeMode(CAN_Type *base)
-{
-    uint32_t u32TimeoutCount = 0U;
-    uint32_t u32TempMCR      = 0U;
-    uint32_t u32TempIMASK1   = 0U;
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
-    uint32_t u32TempIMASK2   = 0U;
-#endif
-
-    /* Step1: set FRZ and HALT bit enable in MCR. */
-    base->MCR |= CAN_MCR_FRZ_MASK;
-    base->MCR |= CAN_MCR_HALT_MASK;
-
-    /* Step2: to check if MDIS bit set in MCR. if yes, clear it. */
-    if (0U != (base->MCR & CAN_MCR_MDIS_MASK))
-    {
-        base->MCR &= ~CAN_MCR_MDIS_MASK;
-    }
-
-    /* Step3: Poll the MCR register until the Freeze Acknowledge (FRZACK) bit is set. */
-    u32TimeoutCount = (uint32_t)FLEXCAN_WAIT_TIMEOUT * 100U;
-    while ((0U == (base->MCR & CAN_MCR_FRZACK_MASK)) && (u32TimeoutCount > 0U))
-    {
-        u32TimeoutCount--;
-    }
-
-    /* Step4: check whether the timeout reached. if no skip step5 to step8. */
-    if (0U == u32TimeoutCount)
-    {
-        /* backup MCR and IMASK register. Errata document not descript it, but we need backup for step 8A and 9A. */
-        u32TempMCR    = base->MCR;
-        u32TempIMASK1 = base->IMASK1;
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
-        u32TempIMASK2 = base->IMASK2;
-#endif
-        /* Step5: Set the Soft Reset bit ((SOFTRST) in the MCR.*/
-        base->MCR |= CAN_MCR_SOFTRST_MASK;
-
-        /* Step6: Poll the MCR register until the Soft Reset (SOFTRST) bit is cleared. */
-        while (CAN_MCR_SOFTRST_MASK == (base->MCR & CAN_MCR_SOFTRST_MASK))
-        {
-        }
-
-        /* Step7: reconfig MCR. */
-        base->MCR = u32TempMCR;
-
-        /* Step8: reconfig IMASK. */
-        base->IMASK1 = u32TempIMASK1;
-#if (defined(FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER)) && (FSL_FEATURE_FLEXCAN_HAS_EXTENDED_FLAG_REGISTER > 0)
-        base->IMASK2 = u32TempIMASK2;
-#endif
-    }
-}
 #else
 void FLEXCAN_EnterFreezeMode(CAN_Type *base)
 {
