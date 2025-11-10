@@ -1252,6 +1252,38 @@ void OSA_DisableIRQGlobal(void)
 
 /*FUNCTION**********************************************************************
  *
+ * Function Name : OSA_TaskSuspend
+ * Description   : Suspend any task
+ * This function will suspend any task
+ *
+ *END**************************************************************************/
+void OSA_TaskSuspend(osa_task_handle_t taskHandle)
+{
+    vTaskSuspend(taskHandle);
+}
+
+/*FUNCTION**********************************************************************
+ *
+ * Function Name : OSA_TaskResume
+ * Description   : Resume any task
+ * This function will resume any task
+ *
+ *END**************************************************************************/
+void OSA_TaskResume(osa_task_handle_t taskHandle)
+{
+    if (0U != __get_IPSR())
+    {
+        BaseType_t xYieldRequired = xTaskResumeFromISR(taskHandle);
+        portYIELD_FROM_ISR(xYieldRequired);
+    }
+    else
+    {
+        vTaskResume(taskHandle);
+    }
+}
+
+/*FUNCTION**********************************************************************
+ *
  * Function Name : OSA_DisableScheduler
  * Description   : Disable the scheduling of any task
  * This function will disable the scheduling of any task
