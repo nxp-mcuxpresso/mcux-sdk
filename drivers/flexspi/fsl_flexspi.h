@@ -850,7 +850,7 @@ void FLEXSPI_TransferCreateHandle(FLEXSPI_Type *base,
  * @brief Performs a interrupt non-blocking transfer on the FLEXSPI bus.
  *
  * @note Calling the API returns immediately after transfer initiates. The user needs
- * to call FLEXSPI_GetTransferCount to poll the transfer status to check whether
+ * to call FLEXSPI_TransferGetCount to poll the transfer status to check whether
  * the transfer is finished. If the return status is not kStatus_FLEXSPI_Busy, the transfer
  * is finished. For FLEXSPI_Read, the dataSize should be multiple of rx watermark level, or
  * FLEXSPI could not read data properly.
